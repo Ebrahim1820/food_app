@@ -1,11 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb; // 💡 ADD THIS IMPORT
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// import '../../../core/api/api_client.dart';
-// import '../../../core/api/api_endpoints.dart';
 import '../data/auth_local_storage.dart';
 import '../models/user_model.dart';
-
 
 // Define the missing apiClientProvider
 final apiClientProvider = Provider<Dio>((ref) {
@@ -16,122 +13,131 @@ final apiClientProvider = Provider<Dio>((ref) {
     ),
   );
 });
-/// All authentication API calls live here.
-/// Screens never call Dio directly — always go through this repository.
-///
-/// MOCK MODE: set [_useMock] to true while the Symfony backend isn't ready.
-/// Flip to false and uncomment the real calls when your API is running.
+
 class AuthRepository {
   const AuthRepository(this._dio, this._storage);
 
-  // ─── toggle this when your Symfony API is ready ───────────────────────────
-  static const bool _useMock = true;
+  // ─── No longer need _useMock since we are using Firebase! ──────────────────
+  static final fb.FirebaseAuth _firebaseAuth = fb.FirebaseAuth.instance;
   // ──────────────────────────────────────────────────────────────────────────
 
   final Dio _dio;
   final AuthLocalStorage _storage;
 
-  /// Login with email + password.
-  /// Returns the authenticated [UserModel] and saves the token.
+  /// Login with email + password using Firebase Auth.
   Future<UserModel> login({
     required String email,
     required String password,
   }) async {
-    if (_useMock) {
-      await Future.delayed(const Duration(milliseconds: 900));
-      // Simulate role based on email for easy testing during development
+    try {
+      // 1. Authenticate with real Firebase engine
+      final fb.UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final fb.User? firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw Exception('User data could not be retrieved from Firebase.');
+      }
+
+      // 2. Fetch the secure JWT token from Firebase to satisfy your local storage setup
+      final String? token = await firebaseUser.getIdToken();
+      await _storage.saveToken(token ?? 'firebase_session_active');
+
+      // Determine role based on email parsing rule for MVP testing
       final role = email.contains('business') ? 'business' : 'customer';
-      const mockToken = 'mock_jwt_token_dev_123';
-      await _storage.saveToken(mockToken);
+
       final user = UserModel(
-        id: 'mock-user-001',
-        name: role == 'business' ? 'Fresh Market GmbH' : 'Anna Müller',
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName ?? (role == 'business' ? 'Fresh Market GmbH' : 'User'),
         email: email,
         role: role,
-        isVerified: true,
+        isVerified: firebaseUser.emailVerified,
       );
+
+      // 3. Sync metadata locally
       await _storage.saveUserMeta(userId: user.id, role: user.role);
       return user;
+    } on fb.FirebaseAuthException catch (e) {
+      throw Exception(_mapFirebaseError(e.code));
+    } catch (e) {
+      throw Exception(e.toString());
     }
-
-    // ── Real Symfony API call (uncomment when backend is ready) ─────────────
-    // try {
-    //   final response = await _dio.post(
-    //     ApiEndpoints.login,
-    //     data: {'email': email, 'password': password},
-    //   );
-    //   final token = response.data['token'] as String;
-    //   final user = UserModel.fromJson(
-    //     response.data['user'] as Map<String, dynamic>,
-    //   );
-    //   await _storage.saveToken(token);
-    //   await _storage.saveUserMeta(userId: user.id, role: user.role);
-    //   return user;
-    // } on DioException catch (e) {
-    //   throw _mapDioError(e);
-    // }
-    throw UnimplementedError('Switch _useMock to false and uncomment real call');
   }
 
-  /// Register a new account.
+  /// Register a new account using Firebase Auth.
   Future<UserModel> register({
     required String name,
     required String email,
     required String password,
     required String role, // 'customer' | 'business'
   }) async {
-    if (_useMock) {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      const mockToken = 'mock_jwt_token_dev_456';
-      await _storage.saveToken(mockToken);
+    try {
+      // 1. Create user in Firebase console dashboard ecosystem
+      final fb.UserCredential credential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final fb.User? firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw Exception('Registration succeeded, but session establishment failed.');
+      }
+
+      // 2. Attach user display name profile parameter
+      await firebaseUser.updateDisplayName(name);
+
+      final String? token = await firebaseUser.getIdToken();
+      await _storage.saveToken(token ?? 'firebase_session_active');
+
       final user = UserModel(
-        id: 'mock-user-002',
+        id: firebaseUser.uid,
         name: name,
         email: email,
         role: role,
         isVerified: false,
       );
+
       await _storage.saveUserMeta(userId: user.id, role: user.role);
       return user;
+    } on fb.FirebaseAuthException catch (e) {
+      throw Exception(_mapFirebaseError(e.code));
+    } catch (e) {
+      throw Exception(e.toString());
     }
-
-    // ── Real call ────────────────────────────────────────────────────────────
-    // try {
-    //   final response = await _dio.post(
-    //     ApiEndpoints.register,
-    //     data: {'name': name, 'email': email, 'password': password, 'role': role},
-    //   );
-    //   final token = response.data['token'] as String;
-    //   final user = UserModel.fromJson(response.data['user']);
-    //   await _storage.saveToken(token);
-    //   await _storage.saveUserMeta(userId: user.id, role: user.role);
-    //   return user;
-    // } on DioException catch (e) {
-    //   throw _mapDioError(e);
-    // }
-    throw UnimplementedError();
   }
 
-  Future<void> logout() => _storage.clearAll();
+  /// Wipe all native instances alongside local token tables
+  Future<void> logout() async {
+    await _firebaseAuth.signOut();
+    await _storage.clearAll();
+  }
 
-  Future<bool> isLoggedIn() => _storage.hasToken();
+  /// Session validation fallback checker
+  Future<bool> isLoggedIn() async {
+    final hasLocalToken = await _storage.hasToken();
+    final hasFirebaseUser = _firebaseAuth.currentUser != null;
+    return hasLocalToken && hasFirebaseUser;
+  }
 
-  /// Maps Dio network errors to human-readable messages.
-  Exception _mapDioError(DioException e) {
-    switch (e.response?.statusCode) {
-      case 401:
-        return Exception('Invalid email or password.');
-      case 422:
-        final msg = e.response?.data?['message'] ?? 'Validation error.';
-        return Exception(msg);
-      case 429:
-        return Exception('Too many attempts. Please wait a moment.');
+  /// Maps native technical Firebase keys to clean customer alert strings
+  String _mapFirebaseError(String errorCode) {
+    switch (errorCode) {
+      case 'user-not-found':
+        return 'No account exists for this email address.';
+      case 'wrong-password':
+        return 'The password you entered is incorrect.';
+      case 'email-already-in-use':
+        return 'This email address is already registered.';
+      case 'weak-password':
+        return 'The password provided is too weak.';
+      case 'invalid-email':
+        return 'The email address format is not valid.';
+      case 'invalid-credential':
+        return 'Invalid login credentials. Please verify your details.';
       default:
-        if (e.type == DioExceptionType.connectionTimeout ||
-            e.type == DioExceptionType.receiveTimeout) {
-          return Exception('Connection timed out. Check your internet.');
-        }
-        return Exception('Something went wrong. Please try again.');
+        return 'Authentication failed ($errorCode). Please try again.';
     }
   }
 }
