@@ -17,7 +17,7 @@ import 'dart:async';
 
 import 'package:food_app/models/mercure_credentials_model.dart';
 import 'package:food_app/services/user_service.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 

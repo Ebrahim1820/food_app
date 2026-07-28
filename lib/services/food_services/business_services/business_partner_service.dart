@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/business_partner_model.dart';
 import 'package:food_app/models/food_models/business_models/team_member_model.dart';
-import 'package:food_app/network/api_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 
 /// Fetches the [BusinessPartnerModel] linked to the currently authenticated user.
 ///

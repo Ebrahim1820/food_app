@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:get/get.dart';
 
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/services/user_service.dart';
 import 'package:food_app/services/image_service.dart';
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
-import 'package:food_app/strings/product_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/controllers/prodcuct_controllers/business_product_controller.dart';
 import 'package:food_app/screens/food_teil/business_views/primary_action_fab.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/product_form_field_label.dart';
@@ -14,7 +14,7 @@ import 'package:food_app/screens/shared_customer_business_screens/business_produ
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/product_photo_picker.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/quantity_stepper.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/weight_or_piece_price_fields.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/email_verification_banner.dart';
 

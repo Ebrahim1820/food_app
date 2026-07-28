@@ -1,5 +1,5 @@
-import 'package:food_app/utils/currency_formatter.dart';
 import 'package:get/get.dart';
+import '../currency_formatter.dart';
 
 /// The five order lifecycle states a `order_status_changed` notification can
 /// represent — see [NotificationCard]'s classifier, which infers this from

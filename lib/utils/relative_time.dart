@@ -1,4 +1,4 @@
-import 'package:food_app/strings/notifications_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:intl/intl.dart';
 
 /// Formats [dateTime] relative to now, e.g. "2m ago", "3h ago", "Yesterday",

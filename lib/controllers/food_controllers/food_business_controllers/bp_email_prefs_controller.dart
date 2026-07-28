@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/food_models/business_models/bp_email_prefs_model.dart';
-import 'package:food_app/network/api_service.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

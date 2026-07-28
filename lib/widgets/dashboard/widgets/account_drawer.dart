@@ -9,12 +9,10 @@
 // role-based shell, out of scope here).
 
 import 'package:flutter/material.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
 import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_addresses_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_bank_account_screen.dart';
@@ -32,7 +30,7 @@ import 'package:food_app/profile_and_orders/profile/views/customer_help_screen.d
 import 'package:food_app/profile_and_orders/profile/views/customer_payment_methods_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/customer_settings_screen.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/app_drawer.dart';
 import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';

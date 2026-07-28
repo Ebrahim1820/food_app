@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/controllers/review_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
@@ -16,7 +16,7 @@ import 'package:food_app/screens/shared_customer_business_screens/customer_dashb
     show isPendingOrderStatus, isTerminalOrderStatus;
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'
     as shared;
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Customer order history screen: search, sort/filter chips, and the order list.

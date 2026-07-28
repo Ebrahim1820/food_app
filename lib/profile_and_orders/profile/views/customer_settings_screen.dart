@@ -12,7 +12,7 @@ import 'package:food_app/services/cache_service.dart';
 import 'package:food_app/services/push_notification_service.dart';
 import 'package:get/get.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/profile_and_orders/profile/views/icon_list_tile.dart';
 import 'package:food_app/widgets/common/language_selector_widget.dart';
 import 'package:food_app/profile_and_orders/profile/views/section_label.dart';

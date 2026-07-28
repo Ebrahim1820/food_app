@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData forLocale(Locale locale) =>

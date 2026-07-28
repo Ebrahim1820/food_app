@@ -1,4 +1,4 @@
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';

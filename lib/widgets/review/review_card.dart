@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/review_model.dart';
-import 'package:food_app/strings/review_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/utils/relative_time.dart';
 
 /// A single review row: reviewer name + relative date, star rating, comment.

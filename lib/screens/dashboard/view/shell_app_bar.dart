@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:food_app/screens/add_to_cart/views/cart_icon_button.dart';
 import 'package:food_app/screens/dashboard/view/shell_leading_avatar_ring.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/notification_bell.dart';
 import 'package:food_app/widgets/language_flag_switcher.dart';
 import 'package:get/get.dart';

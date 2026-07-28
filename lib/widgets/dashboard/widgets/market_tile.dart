@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/dashboard_icons.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// A secondary (non-hero) live market tile, and the base visual style for a

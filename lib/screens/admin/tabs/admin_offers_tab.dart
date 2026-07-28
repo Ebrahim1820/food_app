@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/admin_controller.dart';
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/filter_chip_widget.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 

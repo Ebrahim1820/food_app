@@ -1,24 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:food_app/services/data_cache_service.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_customer_controllers/food_offer_controller.dart';
 import 'package:food_app/controllers/mercure_controller.dart';
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_item_model.dart';
 import 'package:food_app/models/user_model.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
 import 'package:food_app/services/mercure_service.dart';
 import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/strings/error_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

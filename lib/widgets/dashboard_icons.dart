@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/market_colors.dart' as market_colors;
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart' as market_colors;
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 
 /// Icon shown on a market tile (live or coming-soon), keyed by
 /// [DashboardMarket.key] / [DashboardComingSoonEntry.key]. Falls back to a

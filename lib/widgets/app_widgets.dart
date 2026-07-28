@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Rounded text field with a leading icon and optional password toggle,
 /// matching the Perka look.

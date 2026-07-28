@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Wraps the AppBar's leading profile avatar with consistent edge padding
 /// and a subtle gold ring, so `DashboardScreen`/`MainNavigationScreen`/

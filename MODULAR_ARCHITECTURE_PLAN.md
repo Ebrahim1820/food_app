@@ -279,12 +279,17 @@ Not yet built, called out so the boundary is pre-drawn rather than improvised la
 
 Because nothing is committed yet (§0, finding 3), this is a **reorganize-then-commit** plan, not a live incremental migration with a working `main` the whole time. That's simpler and lower-risk than a typical brownfield migration — take the opportunity.
 
-**Phase 1 — Extract core components (est. before first commit)**
-1. Delete the dead `lib/app/`, `lib/packages/`, `lib/features/` scaffold folders.
-2. Set up Melos, create `apps/`, `packages/`, `features/` skeletons with empty pubspecs.
-3. Move `network/api_service.dart` → `packages/core`, split into `ApiClient` + per-feature endpoint groups as features are extracted (don't try to pre-split endpoints before you know feature boundaries from Phase 2).
-4. Move `theme/`, `l10n/`, `strings/` → `packages/design_system` + `packages/i18n`.
-5. Get the app compiling as a single `apps/customer_app` importing the new core/design_system/i18n packages, with everything else still flat temporarily. This is the checkpoint — verify `flutter analyze` and a smoke run before continuing.
+**Phase 1 — Extract core components — ✅ done (2026-07-28)**
+1. ✅ Deleted the dead `lib/app/`, `lib/packages/`, `lib/features/` scaffold folders.
+2. ✅ Set up a Dart-native pub workspace (root `pubspec.yaml` `workspace:` + `melos:` sections — Melos 8 reads config from `pubspec.yaml`, not a standalone `melos.yaml`) with `packages/{core,design_system,models,i18n}` as real Flutter packages. `melos bootstrap` / `melos run analyze` both verified working.
+3. ✅ Moved `network/api_service.dart`, `auth_interceptor.dart`, `keycloak_auth_service.dart`, `app_routes.dart` (route *name* constants only — the real `app_pages.dart` GetPage table stays in the app), `api_constants.dart`, `api_endpoints.dart`, `app_storage.dart`, `data_cache_service.dart`, `app_logger.dart` → `packages/core`.
+   - Added a `packages/models` package (not originally called out for Phase 1, but needed once `market_colors.dart` and 33+ call sites turned out to depend on the `Market`/`app_enums` enums) holding `app_enums.dart` + `market_enums.dart`.
+   - `AuthInterceptor` directly called `Get.offAllNamed(...)` and showed an `AppSnackbar` on session-expiry/403 — real UI/navigation side effects that can't live in a package with no navigation stack. Decoupled via `onSessionExpired`/`onPermissionDenied` callbacks on `AuthInterceptor`/`ApiService`, wired up in `lib/bindings/initial_binding.dart` where `ApiService` is constructed. This is the one non-mechanical change in Phase 1 — everything else was a pure move + import rewrite.
+   - `cache_service.dart` stayed in the app (not moved) — it mixes core concerns (AppStorage, AppLogger) with app-only ones (a feature-specific strings file, `AppSnackbar`), so it wasn't cleanly separable without moving those too. Update its imports and leave the file in place until Phase 2 sorts out where feature-specific strings live.
+4. ✅ Moved `theme/*` → `packages/design_system`; `l10n/`, `strings/`, `controllers/locale_controller.dart`, `utils/currency_formatter.dart` → `packages/i18n`.
+5. ✅ Verified: `flutter pub get` (workspace-wide), `flutter analyze` (0 errors — 28 pre-existing info/warning lints, none introduced by the move), and `flutter build apk --debug` all succeed. Safety commit `e016f5b` created before starting (see repo history) as the pre-migration checkpoint.
+
+Deliberately **not** done in Phase 1, despite the original draft above: moving `main.dart` + `android/`/`ios/`/etc. platform folders into `apps/customer_app/`. Platform-folder moves are fragile (Xcode project references, Gradle paths, Firebase config) — doing that move once, as part of the real 3-way app split in Phase 3, is safer than doing it twice. The app currently still lives at the repo root and depends on the 4 new packages via the workspace; `apps/{customer_app,seller_app,admin_app}` do not exist yet.
 
 **Phase 2 — Separate features**
 1. Move one feature at a time, starting with `order` (already shaped right, lowest risk) to validate the package template, then `cart`, `catalog`, `payment`, `review`, `notification`, `location`.

@@ -1,9 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'keycloak_auth_service.dart';
 
 /// A Dio interceptor automatically runs on EVERY request/response that goes
@@ -11,10 +7,28 @@ import 'keycloak_auth_service.dart';
 ///   1. Attaches the Keycloak access token to outgoing requests.
 ///   2. Auto-refreshes the token and retries once if the server says 401.
 /// So your screens just call the API — they never touch tokens directly.
+///
+/// This lives in `core`, which owns no navigation stack and no UI, so it
+/// can't call `Get.offAllNamed(...)` or show a snackbar itself. Instead it
+/// reports the two events the app needs to react to via callbacks, which
+/// the app wires up (to GetX navigation + [AppSnackbar]) when it constructs
+/// [ApiService].
 class AuthInterceptor extends Interceptor {
-  AuthInterceptor(this._auth, this._dio);
+  AuthInterceptor(
+    this._auth,
+    this._dio, {
+    required this.onSessionExpired,
+    required this.onPermissionDenied,
+  });
   final KeycloakAuthService _auth;
   final Dio _dio;
+
+  /// Scheduled (after the current frame) once the session is confirmed dead.
+  final void Function() onSessionExpired;
+
+  /// Called on a 403 that isn't tagged `silent403`. Receives the
+  /// server-provided message, if any, so the app can localize/format it.
+  final void Function(String? serverMessage) onPermissionDenied;
 
   // Prevents multiple concurrent session-expired events from each firing
   // Get.offAllNamed(login), which causes duplicate navigation stack pushes.
@@ -111,25 +125,23 @@ class AuthInterceptor extends Interceptor {
   }
 
   void _redirectToLogin() {
-    // 1. Guard against navigation if we're already on login or already redirecting
-    if (_redirecting || Get.currentRoute == AppRoutes.login) return;
+    // Guard against firing onSessionExpired twice concurrently. (We no
+    // longer check "already on login" here — core doesn't know the app's
+    // current route — so a session_expired that fires while already on
+    // login triggers one harmless extra navigation instead of a no-op.)
+    if (_redirecting) return;
 
     _redirecting = true;
 
-    /// 2. Schedule navigation after the current frame to prevent race conditions during hot reload
+    /// Schedule after the current frame to prevent race conditions during hot reload
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.offAllNamed(AppRoutes.login)?.then((_) {
-        // Reset flag after navigation completes so future logouts work
-        _redirecting = false;
-      });
+      onSessionExpired();
+      _redirecting = false;
     });
   }
 
   void _showPermissionDeniedSnackbar(dynamic responseData) {
-    AppSnackbar.error(
-      ErrorStrings.permissionDeniedTitle,
-      _extractMessage(responseData) ?? ErrorStrings.permissionDeniedBody,
-    );
+    onPermissionDenied(_extractMessage(responseData));
   }
 
   String? _extractMessage(dynamic data) {

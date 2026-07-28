@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/auth_controller.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/user_service.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';

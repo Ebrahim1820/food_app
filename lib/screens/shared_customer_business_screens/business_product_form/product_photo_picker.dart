@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:food_app/models/image_model.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Opens the shared camera/gallery (and optional "remove photo") bottom
 /// sheet used by every photo picker in the business "create/edit listing"

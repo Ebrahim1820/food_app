@@ -14,10 +14,10 @@
 // own order history, merged on the Dashboard's own Orders tab); Profile
 // (index 3) is shared across markets already.
 import 'package:flutter/material.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/controllers/dashboard_controller.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_home_tiles.dart';
 import 'package:food_app/widgets/dashboard/widgets/account_drawer.dart';
@@ -28,7 +28,7 @@ import 'package:food_app/screens/dashboard/view/global_bottom_nav.dart';
 import 'package:food_app/screens/dashboard/view/shell_leading_avatar_ring.dart';
 import 'package:food_app/screens/cosmetic_teil/customer_views/customer_cosmetic_screen.dart';
 import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_order_list_screen.dart';
-import 'package:food_app/strings/product_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
@@ -41,10 +41,7 @@ import 'package:food_app/profile_and_orders/orders/constants/customer_order_stri
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
 import 'package:food_app/profile_and_orders/orders/views/order_list_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/profile_screen.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
-import 'package:food_app/strings/app_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/utils/greeting_header.dart';
 import 'package:food_app/widgets/common/app_search_field.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';

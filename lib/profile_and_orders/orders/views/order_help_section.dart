@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
 import 'package:food_app/profile_and_orders/profile/views/customer_help_screen.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:design_system/design_system.dart';
+import 'package:core/core.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 

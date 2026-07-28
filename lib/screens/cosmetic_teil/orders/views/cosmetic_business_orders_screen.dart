@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
 import 'package:food_app/models/product_models/product_order_model.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';

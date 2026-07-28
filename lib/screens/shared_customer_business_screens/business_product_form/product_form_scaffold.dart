@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Shared responsive shell for the business "create/edit listing" forms
 /// (Food and Cosmetic today, any future market next). Centralizes the one

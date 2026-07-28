@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/images/network_image_widget.dart';
 
 /// One line item in an order review list — market-agnostic (title/image/

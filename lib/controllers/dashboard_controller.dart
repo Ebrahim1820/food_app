@@ -10,15 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/widgets/dashboard_icons.dart';
 import 'package:food_app/models/dashboard_model.dart';
 import 'package:food_app/models/user_model.dart';
-import 'package:food_app/routes/app_routes.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/dashboard_service.dart';
-import 'package:food_app/services/data_cache_service.dart';
 import 'package:food_app/services/user_service.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 class DashboardController extends GetxController {

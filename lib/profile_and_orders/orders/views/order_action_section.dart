@@ -3,7 +3,7 @@ import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/views/cancel_reason_dialog.dart';
 import 'package:food_app/profile_and_orders/profile/views/icon_action_button.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Edit/cancel actions for a pending order's detail screen — market-agnostic
 /// so both Food and Cosmetic wire the same widget instead of Cosmetic having

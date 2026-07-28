@@ -1,5 +1,5 @@
 import 'package:food_app/controllers/cart_controller.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/bp_email_prefs_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/bp_notif_prefs_controller.dart';
@@ -25,7 +25,7 @@ import 'package:food_app/controllers/mercure_controller.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:food_app/controllers/notification_controller.dart';
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/address_service.dart';
 import 'package:food_app/services/food_services/business_services/bank_account_service.dart';
 import 'package:food_app/services/food_services/business_services/business_partner_service.dart';
@@ -37,14 +37,15 @@ import 'package:food_app/services/food_services/customer_services/favorite_offer
 import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
 import 'package:food_app/services/review_service.dart';
 import 'package:food_app/controllers/review_controller.dart';
-import 'package:food_app/network/api_service.dart';
 import 'package:food_app/services/admin_service.dart';
 import 'package:food_app/services/food_services/shared_customer_and_business_services/food_offer_service.dart';
 import 'package:food_app/services/notification_service.dart';
 import 'package:food_app/services/change_password_service.dart';
 import 'package:food_app/services/push_notification_service.dart';
 import 'package:food_app/services/user_service.dart';
+import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
+import 'package:i18n/i18n.dart';
 
 /// GetX runs this once at app startup (wired via `initialBinding` in main.dart).
 /// It builds all the shared services/controllers and registers them so any
@@ -64,7 +65,17 @@ class InitialBinding extends Bindings {
 
     // Build the shared HTTP client, handing it the shared auth service so the
     // interceptor and the login/logout screens all use the same token store.
-    final apiService = ApiService(authService);
+    // onSessionExpired/onPermissionDenied are how `core` (which owns no
+    // navigation stack or UI) tells the app to react — see AuthInterceptor's
+    // doc comment.
+    final apiService = ApiService(
+      authService,
+      onSessionExpired: () => Get.offAllNamed(AppRoutes.login),
+      onPermissionDenied: (serverMessage) => AppSnackbar.error(
+        ErrorStrings.permissionDeniedTitle,
+        serverMessage ?? ErrorStrings.permissionDeniedBody,
+      ),
+    );
 
     Get.put<ApiService>(apiService, permanent: true);
 

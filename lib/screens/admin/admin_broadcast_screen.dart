@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/admin_controller.dart';
 import 'package:food_app/controllers/auth_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/common/confirm_dialog.dart';
 import 'package:food_app/widgets/dialog/info_dialog.dart';

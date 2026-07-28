@@ -2,16 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:food_app/models/product_models/product_model.dart';
-import 'package:food_app/utils/app_logger.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:core/core.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_item_model.dart';
-import 'package:food_app/services/data_cache_service.dart';
 import 'package:food_app/services/food_services/customer_services/favorite_offer_service.dart';
 import 'package:food_app/services/mercure_service.dart';
 import 'package:food_app/constants/food/customer_constants/customer_favorites_strings.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

@@ -1,6 +1,6 @@
 // lib/screens/business/create_food_offer_screen.dart
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,7 +8,7 @@ import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
 import 'package:food_app/screens/food_teil/business_views/offer_preview_screen.dart';
 import 'package:food_app/services/user_service.dart';
-import 'package:food_app/strings/business_offer_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/pickup_window_picker.dart';
 import 'package:food_app/screens/food_teil/business_views/primary_action_fab.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/product_form_field_label.dart';

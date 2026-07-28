@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Horizontal "track your order" stepper — Placed → Confirmed → Ready →
 /// Completed — with a distinct red banner in place of the stepper when the

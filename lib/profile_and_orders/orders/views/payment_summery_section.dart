@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_payment_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 
 class PaymentSummarySection extends StatelessWidget {

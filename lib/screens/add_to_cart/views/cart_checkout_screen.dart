@@ -4,7 +4,7 @@ import 'package:food_app/controllers/cart_controller.dart';
 import 'package:food_app/screens/add_to_cart/views/cart_revalidation_dialog.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_checkout_strings.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_payment_strings.dart';
@@ -15,9 +15,8 @@ import 'package:food_app/profile_and_orders/orders/views/build_price_breakdown_w
 import 'package:food_app/profile_and_orders/orders/views/order_line_items_card.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/payment_screen.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

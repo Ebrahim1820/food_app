@@ -30,9 +30,9 @@ import 'package:food_app/screens/food_teil/customer_views/business_reviews_scree
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/product_detail_screen.dart';
 import 'package:food_app/services/mercure_service.dart';
 import 'package:food_app/services/product_service.dart';
-import 'package:food_app/strings/product_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
+import 'package:core/core.dart';
 import 'package:food_app/utils/distance_helper.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/dialog/info_dialog.dart';

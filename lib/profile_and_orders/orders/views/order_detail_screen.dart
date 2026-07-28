@@ -22,7 +22,7 @@ import 'package:food_app/profile_and_orders/orders/views/payment_summery_section
 import 'package:food_app/profile_and_orders/orders/views/rate_order_button.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_detail_screen.dart'
     as shared;
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 
 class OrderDetailScreen extends StatefulWidget {

@@ -7,12 +7,11 @@ import 'package:food_app/controllers/food_controllers/food_business_controllers/
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
 import 'package:food_app/screens/food_teil/business_views/business_offer_edit_screen.dart';
 import 'package:food_app/services/mercure_service.dart';
-import 'package:food_app/strings/business_offer_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
-import 'package:food_app/utils/app_logger.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:core/core.dart';
 import 'package:food_app/widgets/common/confirm_dialog.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

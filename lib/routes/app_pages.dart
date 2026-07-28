@@ -11,9 +11,8 @@ import 'package:food_app/screens/shared/settings_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/team_members_screen.dart';
 import 'package:food_app/screens/cosmetic_teil/business_views/my_products_screen.dart';
 import 'package:food_app/screens/shared/notifications_screen.dart';
+import 'package:core/core.dart';
 import 'package:get/get.dart';
-
-import 'app_routes.dart';
 
 class AppPages {
   static final routes = [

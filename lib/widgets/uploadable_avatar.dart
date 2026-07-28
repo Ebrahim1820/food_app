@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/services/app_storage.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/image_service.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
-import 'package:food_app/utils/app_logger.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

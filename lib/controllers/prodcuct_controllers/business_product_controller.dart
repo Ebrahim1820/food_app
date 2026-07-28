@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/product_models/product_model.dart';
 import 'package:food_app/services/product_service.dart';
-import 'package:food_app/services/data_cache_service.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 
 /// Owns the business partner "publish a listing" flow for the generic
 /// Product catalog, scoped to a single [market] — the market-agnostic

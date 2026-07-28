@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/cart_controller.dart';
 import 'package:food_app/screens/add_to_cart/views/cart_screen.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Cart icon with an item-count badge, backed by [CartController] — the

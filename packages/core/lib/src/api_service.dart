@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/screens/auth/auth_interceptor.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
-import '../constants/api_constants.dart';
+import 'api_constants.dart';
+import 'auth_interceptor.dart';
+import 'keycloak_auth_service.dart';
 
 /// The single HTTP client for the whole app. Every service (FoodOfferService,
 /// OrderService, etc.) talks to the backend through this one `dio` instance,
@@ -10,7 +10,15 @@ class ApiService {
   /// We receive the auth service from outside (dependency injection) rather
   /// than creating it here, so the same KeycloakAuthService instance is shared
   /// with the login screen, logout button, etc.
-  ApiService(this._auth) {
+  ///
+  /// [onSessionExpired] and [onPermissionDenied] are forwarded straight to
+  /// [AuthInterceptor] — see its doc comment for why this package can't just
+  /// navigate/show a snackbar itself.
+  ApiService(
+    this._auth, {
+    required void Function() onSessionExpired,
+    required void Function(String? serverMessage) onPermissionDenied,
+  }) {
     // Rewrite baseUrl on every request so it always uses the host that
     // resolveDevHost() settled on — the Dio instance may be constructed
     // before the host probe completes, so we can't bake it into BaseOptions.
@@ -22,7 +30,14 @@ class ApiService {
         },
       ),
     );
-    dio.interceptors.add(AuthInterceptor(_auth, dio));
+    dio.interceptors.add(
+      AuthInterceptor(
+        _auth,
+        dio,
+        onSessionExpired: onSessionExpired,
+        onPermissionDenied: onPermissionDenied,
+      ),
+    );
   }
 
   /// The shared auth service: knows how to get/refresh the access token.

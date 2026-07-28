@@ -4,7 +4,7 @@
 // payment-method option tiles.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 class IconListTile extends StatelessWidget {
   final IconData icon;

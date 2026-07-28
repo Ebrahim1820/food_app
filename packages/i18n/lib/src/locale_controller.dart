@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:food_app/services/app_storage.dart';
-import 'package:food_app/theme/app_theme.dart';
+import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 
 class LocaleController extends GetxController {
   static const _storageKey = 'locale_lang';

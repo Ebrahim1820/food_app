@@ -16,7 +16,7 @@ import 'package:food_app/widgets/common/quantity_stepper_field.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_address_picker_widget.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// One editable line item on the Edit Order screen.

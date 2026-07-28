@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/login_controller.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/strings/auth_strings.dart';
+import 'package:core/core.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/dialog/forgot_password_sheet.dart';
 import 'package:get/get.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/app_widgets.dart';
 
 class LoginScreen extends StatefulWidget {

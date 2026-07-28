@@ -5,19 +5,18 @@ import 'package:food_app/profile_and_orders/profile/controllers/address_controll
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
-import 'package:food_app/network/api_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
 import 'package:food_app/services/user_service.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/email_verification_banner.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_address_picker_widget.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_confirm_button_widget.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_notes_field_widget.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_offer_info_widget.dart';
 import 'package:food_app/profile_and_orders/orders/views/build_price_breakdown_widget.dart';
-import 'package:food_app/strings/business_offer_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_checkout_strings.dart';
-import 'package:food_app/utils/currency_formatter.dart';
 import 'package:get/get.dart';
 
 class OrderCheckoutScreen extends StatelessWidget {

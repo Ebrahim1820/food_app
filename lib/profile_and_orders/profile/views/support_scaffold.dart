@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Shared scaffold used by all three support screens (Live Chat, Email, Call Us).
 ///

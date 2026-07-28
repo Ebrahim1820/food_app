@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_constants.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 
 typedef RegisterResult = ({
   bool success,

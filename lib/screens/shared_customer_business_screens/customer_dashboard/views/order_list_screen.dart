@@ -18,10 +18,10 @@
 // types, so they're used directly rather than re-abstracted.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/profile/views/dismiss_background_widget.dart';
 import 'package:food_app/profile_and_orders/profile/views/menu_chip_widget.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/common/filter_chip_widget.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';

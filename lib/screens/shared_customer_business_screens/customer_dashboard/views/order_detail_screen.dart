@@ -17,7 +17,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_app/profile_and_orders/profile/utils/status_helper.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/utils/helper_methods.dart';
 import 'package:get/get.dart';
 

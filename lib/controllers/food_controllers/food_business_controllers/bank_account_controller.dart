@@ -1,7 +1,7 @@
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/models/food_models/business_models/bank_account_model.dart';
 import 'package:food_app/services/food_services/business_services/bank_account_service.dart';
-import 'package:food_app/services/app_storage.dart';
+import 'package:core/core.dart';
 import 'package:food_app/constants/food/business_constants/business_bank_account_strings.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';

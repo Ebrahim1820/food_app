@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
 import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/constants/food/customer_constants/customer_favorites_strings.dart';
 import 'package:food_app/constants/food/shared_customer_and_business_constants/food_offer_strings.dart';
 import 'package:food_app/models/product_models/product_model.dart';

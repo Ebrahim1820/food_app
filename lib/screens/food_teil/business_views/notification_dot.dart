@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Small unread/attention dot overlaid on the top-right corner of [child] —
 /// the same "something's new here" pattern used for iOS app icons, Slack

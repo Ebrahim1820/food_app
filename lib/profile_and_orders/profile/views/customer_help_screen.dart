@@ -10,7 +10,7 @@ import 'package:food_app/profile_and_orders/profile/views/call_us_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/contact_email_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/live_chat_screen.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

@@ -13,8 +13,8 @@ import 'package:food_app/profile_and_orders/orders/views/build_price_breakdown_w
 import 'package:food_app/profile_and_orders/orders/views/order_line_items_card.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/payment_screen.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 
 /// Fulfillment step for a single [ProductModel] order — the Cosmetic-flavored

@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/dashboard_model.dart';
-import 'package:food_app/network/api_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 
 /// Fetches the market tiles that power the post-login Dashboard screen and
 /// the registration screen's business-market dropdown.

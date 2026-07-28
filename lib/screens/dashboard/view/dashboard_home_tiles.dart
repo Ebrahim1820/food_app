@@ -14,7 +14,7 @@ import 'package:food_app/widgets/dashboard/widgets/hero_market_tile.dart';
 import 'package:food_app/widgets/dashboard/widgets/market_tile.dart';
 import 'package:food_app/widgets/dashboard/widgets/secondary_market_tile.dart';
 import 'package:food_app/models/dashboard_model.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';
 import 'package:get/get.dart';
 

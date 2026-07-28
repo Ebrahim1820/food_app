@@ -1,4 +1,4 @@
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 
 abstract class CustomerOrderStrings {

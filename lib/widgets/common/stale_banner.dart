@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Shown at the top of a screen when the controller is displaying cached data
 /// from the previous session while a fresh network request is in flight.

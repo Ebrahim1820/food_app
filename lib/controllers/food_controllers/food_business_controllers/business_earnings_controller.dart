@@ -6,7 +6,7 @@
 //   • static const datasets — allocated once at compile time
 // Replace Future.delayed + mock data with a real payout-API call when ready.
 
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:get/get.dart';
 
 // ── Data models ───────────────────────────────────────────────────────────────

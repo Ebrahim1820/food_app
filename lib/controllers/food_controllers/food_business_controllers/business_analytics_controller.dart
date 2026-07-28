@@ -6,8 +6,8 @@
 // real API call when the backend endpoint is ready.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:design_system/design_system.dart';
+import 'package:models/models.dart';
 import 'package:get/get.dart';
 
 // ── Analytics data models ─────────────────────────────────────────────────────

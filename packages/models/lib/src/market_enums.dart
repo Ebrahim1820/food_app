@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// Market — the top tier of the app's two-tier category model (Market → Category).
 /// Mirrors `App\Enum\Market` in Symfony.
 enum Market {

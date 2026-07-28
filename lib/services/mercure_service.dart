@@ -3,8 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:flutter_client_sse/flutter_client_sse.dart';
-import 'package:food_app/constants/api_constants.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 
 /// The "new offer" payload the backend publishes to a city-scoped Mercure
 /// topic (`food-products/city/{citySlug}`) when a new offer goes live. This is

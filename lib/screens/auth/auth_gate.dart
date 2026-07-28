@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/constants/api_constants.dart';
+import 'package:core/core.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/controllers/mercure_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
-
-import '../../routes/app_routes.dart';
 
 /// Entry point: shows an animated splash while it decides where to send the
 /// user, then redirects with GetX. See [_resolveTargetRoute] for the full

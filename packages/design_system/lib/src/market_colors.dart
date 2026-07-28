@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
+import 'app_colors.dart';
 
 /// Single source of truth mapping a backend market key
 /// (`DashboardMarket.key` / `businessCapabilities` key) to its brand accent

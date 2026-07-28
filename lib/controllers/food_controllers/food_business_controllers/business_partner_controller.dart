@@ -12,9 +12,8 @@
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/models/business_partner_model.dart';
 import 'package:food_app/models/food_models/business_models/team_member_model.dart';
-import 'package:food_app/screens/auth/keycloak_auth_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/food_services/business_services/business_partner_service.dart';
-import 'package:food_app/services/data_cache_service.dart';
 import 'package:get/get.dart';
 
 class BusinessPartnerController extends GetxController {

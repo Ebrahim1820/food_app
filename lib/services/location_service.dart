@@ -1,4 +1,4 @@
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Provides the device's current GPS position.

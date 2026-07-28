@@ -3,14 +3,14 @@ import 'package:food_app/controllers/food_controllers/food_business_controllers/
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:food_app/controllers/notification_controller.dart';
 import 'package:food_app/models/notification_model.dart';
-import 'package:food_app/routes/app_routes.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/push_notification_service.dart';
-import 'package:food_app/strings/notifications_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_shell.dart';
 import 'package:food_app/screens/dashboard/view/global_bottom_nav.dart';
 import 'package:food_app/screens/food_teil/business_views/scrollable_business_nav.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/notification/notification_card.dart';
 import 'package:get/get.dart';

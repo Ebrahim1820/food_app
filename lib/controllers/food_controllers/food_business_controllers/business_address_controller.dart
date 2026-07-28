@@ -1,8 +1,8 @@
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/models/address_model.dart';
 import 'package:food_app/services/address_service.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:i18n/i18n.dart';
+import 'package:core/core.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

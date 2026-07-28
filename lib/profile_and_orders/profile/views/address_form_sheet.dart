@@ -3,7 +3,7 @@ import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
 import 'package:food_app/models/address_model.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/address_widgets.dart';
 
 /// Returns the [showModalBottomSheet] future so callers that need to react

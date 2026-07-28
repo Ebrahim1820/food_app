@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:food_app/constants/api_constants.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'api_constants.dart';
+import 'app_logger.dart';
+import 'app_routes.dart';
 
 /// Handles login / logout / token refresh against Keycloak using the
 /// Direct Access Grant ("password") flow, so the app uses its OWN in-app

@@ -5,7 +5,7 @@ import 'package:food_app/controllers/admin_controller.dart';
 import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/models/admin_stats_model.dart';
 import 'package:food_app/screens/admin/admin_broadcast_screen.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 class AdminOverviewTab extends StatelessWidget {

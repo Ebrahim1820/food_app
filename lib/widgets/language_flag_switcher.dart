@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:food_app/controllers/locale_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 
 /// A compact flag-pill that sits in any AppBar's [actions].
 /// One tap toggles between English 🇬🇧 and Farsi 🇮🇷.

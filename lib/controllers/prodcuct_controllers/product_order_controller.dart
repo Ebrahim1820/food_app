@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/product_models/product_order_model.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/services/product_order_service.dart';
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:i18n/i18n.dart';
+import 'package:core/core.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 
 /// Owns checkout and order-history for the generic Product catalog — the

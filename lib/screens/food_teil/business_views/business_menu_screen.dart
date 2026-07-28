@@ -7,19 +7,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
 import 'package:food_app/screens/food_teil/business_views/business_offer_detail_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/create_food_offer_screen.dart';
-import 'package:food_app/strings/business_offer_strings.dart';
 import 'package:food_app/widgets/common/confirm_dialog.dart';
 import 'package:food_app/screens/food_teil/business_views/search_filter_bar.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';

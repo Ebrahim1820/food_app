@@ -23,9 +23,9 @@ import 'package:food_app/profile_and_orders/profile/views/customer_help_screen.d
 import 'package:food_app/profile_and_orders/profile/utils/status_helper.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_detail_screen.dart'
     as shared;
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/app_logger.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
+import 'package:core/core.dart';
+import 'package:i18n/i18n.dart';
 
 class CosmeticOrderDetailScreen extends StatefulWidget {
   const CosmeticOrderDetailScreen({super.key, required this.order});

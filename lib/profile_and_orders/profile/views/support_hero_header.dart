@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Gradient hero header for support / info screens.
 /// Automatically switches to a compact horizontal layout in landscape.

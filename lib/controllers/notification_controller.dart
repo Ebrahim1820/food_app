@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:food_app/models/notification_model.dart';
 import 'package:food_app/services/notification_service.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:core/core.dart';
 import 'package:get/get.dart';
 
 /// Single source of truth for the notification bell: unread badge count and

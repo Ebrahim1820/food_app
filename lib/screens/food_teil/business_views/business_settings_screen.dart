@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/routes/app_routes.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/cache_service.dart';
 import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_addresses_screen.dart';
@@ -12,7 +12,7 @@ import 'package:food_app/screens/food_teil/business_views/business_operating_hou
 import 'package:food_app/screens/food_teil/business_views/business_photos_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_profile_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_security_screen.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/language_selector_widget.dart';
 import 'package:get/get.dart';
 

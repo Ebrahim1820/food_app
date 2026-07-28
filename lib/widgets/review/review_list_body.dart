@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/review_controller.dart';
-import 'package:food_app/strings/review_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/review/review_card.dart';
 import 'package:get/get.dart';

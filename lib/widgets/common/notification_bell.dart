@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/notification_controller.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Bell icon with an unread-count badge, backed by [NotificationController].

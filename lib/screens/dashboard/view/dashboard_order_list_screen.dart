@@ -10,15 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_order_list_screen.dart'
     show CosmeticOrderCard;
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/theme/market_colors.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:design_system/design_system.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
 import 'package:food_app/profile_and_orders/orders/views/order_summary_card.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_orders_merger.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'
     as shared;
-import 'package:food_app/strings/app_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:i18n/i18n.dart';
 
 class DashboardOrderListScreen extends StatefulWidget {
   const DashboardOrderListScreen({super.key, required this.merger});

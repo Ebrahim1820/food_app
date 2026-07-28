@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 enum AppSnackbarType { success, error, warning, info, neutral }
 

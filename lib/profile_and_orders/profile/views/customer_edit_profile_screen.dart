@@ -4,7 +4,7 @@ import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/customer_edit_profile_controller.dart';
 import 'package:food_app/services/user_service.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/profile_and_orders/profile/views/section_label.dart';
 import 'package:get/get.dart';
 

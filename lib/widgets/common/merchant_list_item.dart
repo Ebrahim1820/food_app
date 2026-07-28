@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// A compact, tappable row for browsing/listing businesses — avatar (initials
 /// or a custom widget), name + optional status badge, an optional subtitle

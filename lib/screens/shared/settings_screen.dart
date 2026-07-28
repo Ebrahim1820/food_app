@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/controllers/locale_controller.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_email_alerts_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_help_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_notifications_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_security_screen.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 class SettingsScreen extends StatelessWidget {

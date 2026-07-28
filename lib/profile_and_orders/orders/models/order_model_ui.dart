@@ -1,8 +1,8 @@
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_detail_screen.dart'
     show isPendingOrderStatus, isTerminalOrderStatus;
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 
 /// UI-only helpers layered on top of the shared [OrderModel].

@@ -14,8 +14,7 @@ import 'package:food_app/models/food_models/shared_customer_and_business_models/
 import 'package:food_app/profile_and_orders/orders/constants/customer_payment_strings.dart';
 import 'package:food_app/profile_and_orders/orders/views/order_line_items_card.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/payment_screen.dart';
-import 'package:food_app/strings/error_strings.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 

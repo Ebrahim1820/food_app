@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_payment_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Shared bank-gateway picker for the "pay online" step of checkout —
 /// used by every market (Food, Cosmetic, ...), since choosing a PSP has

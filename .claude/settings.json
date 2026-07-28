@@ -35,14 +35,20 @@
       "Bash(find / -maxdepth 3 -iname \"*food_api*\")",
       "Bash(php -l src/Entity/BusinessPartner.php)",
       "Bash(lsof -nP -iTCP -sTCP:LISTEN)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(git commit -m ' *)",
+      "Bash(dart --version)",
+      "Bash(dart pub *)",
+      "WebFetch(domain:melos.invertase.dev)",
+      "Bash(rm -f /tmp/rewrite_imports.py *)"
     ],
     "additionalDirectories": [
       "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Entity",
       "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/migrations",
       "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Dto",
       "/Users/enajafi/Flutter_Projects/food_app/lib/screens/shared_customer_business_screens",
-      "/Users/enajafi/Flutter_Projects/food_api/perka-project-api/project-data/app/src/Entity"
+      "/Users/enajafi/Flutter_Projects/food_api/perka-project-api/project-data/app/src/Entity",
+      "/private/tmp"
     ]
   }
 }

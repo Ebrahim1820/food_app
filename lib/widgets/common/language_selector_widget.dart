@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/controllers/locale_controller.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Two-button EN / FA language selector used on settings screens.

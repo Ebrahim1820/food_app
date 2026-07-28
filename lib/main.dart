@@ -1,12 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/bindings/initial_binding.dart';
-import 'package:food_app/controllers/locale_controller.dart';
-import 'package:food_app/l10n/app_translations.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/routes/app_pages.dart';
-import 'package:food_app/routes/app_routes.dart';
-import 'package:food_app/services/app_storage.dart';
-import 'package:food_app/theme/app_theme.dart';
+import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';

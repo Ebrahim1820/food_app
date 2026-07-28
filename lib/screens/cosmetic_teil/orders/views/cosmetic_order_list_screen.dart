@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
 import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_edit_order_screen.dart';
 import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_order_detail_screen.dart';
@@ -24,9 +24,8 @@ import 'package:food_app/screens/shared_customer_business_screens/customer_dashb
     show isPendingOrderStatus, isTerminalOrderStatus, orderStatusLabel;
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'
     as shared;
-import 'package:food_app/strings/product_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/status_pill.dart';
 import 'package:food_app/widgets/images/network_image_widget.dart';
 

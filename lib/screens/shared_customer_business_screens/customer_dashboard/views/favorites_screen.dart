@@ -12,7 +12,7 @@
 // handed to it.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/common/filter_chip_widget.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';

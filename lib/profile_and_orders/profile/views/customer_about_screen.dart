@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/screens/shared/legal/privacy_policy_screen.dart';
 import 'package:food_app/screens/shared/legal/terms_of_service_screen.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/profile_and_orders/profile/views/icon_list_tile.dart';
 import 'package:food_app/profile_and_orders/profile/views/section_label.dart';
 import 'package:get/get.dart';

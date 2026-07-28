@@ -5,7 +5,7 @@ import 'package:food_app/profile_and_orders/profile/views/customer_addresses_scr
     show CustomerAddressesScreen, customerAddressLabelOptions;
 import 'package:food_app/profile_and_orders/orders/constants/customer_checkout_strings.dart';
 import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/profile_and_orders/profile/views/address_form_sheet.dart';
 import 'package:get/get.dart';
 

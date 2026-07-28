@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:food_app/services/app_storage.dart';
+import 'app_storage.dart';
 
 /// Stores and retrieves raw API JSON in [AppStorage] (Hive) so controllers
 /// can show data immediately on launch before the network request completes.

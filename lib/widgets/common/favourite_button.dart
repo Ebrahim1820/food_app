@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
 import 'package:food_app/models/product_models/product_model.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 // Heart icon — toggles this offer in/out of the user's favourites.

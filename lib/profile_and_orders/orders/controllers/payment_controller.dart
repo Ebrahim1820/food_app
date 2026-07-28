@@ -1,4 +1,4 @@
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:get/get.dart';
 
 /// Checkout-step payment state — shared by every market (Food, Cosmetic,

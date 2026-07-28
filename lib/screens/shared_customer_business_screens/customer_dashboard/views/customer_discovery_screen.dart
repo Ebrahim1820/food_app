@@ -12,7 +12,7 @@
 //   2-column grid of matching items from config.searchResults.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/common/stale_banner.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/models/market_category.dart';

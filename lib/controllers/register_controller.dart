@@ -1,10 +1,10 @@
 import 'package:food_app/models/dashboard_model.dart';
 import 'package:food_app/services/dashboard_service.dart';
-import 'package:food_app/strings/auth_strings.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/routes/app_routes.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/registration_service.dart';
 
 class RegisterController extends GetxController {

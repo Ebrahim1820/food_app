@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/images/network_image_widget.dart';
 
 /// Full-width image banner for a set of items — a single image when there's

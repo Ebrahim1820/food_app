@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/product_models/product_order_model.dart';
 import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_model.dart';

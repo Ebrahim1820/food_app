@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:food_app/models/cart_item.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/product_models/product_model.dart';
 import 'package:food_app/models/product_models/product_section_model.dart';
-import 'package:food_app/network/api_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 import 'dart:convert';
 
 /// Handles all REST calls for the generic `/products` resource — the

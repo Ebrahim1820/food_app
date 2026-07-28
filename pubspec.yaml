@@ -21,6 +21,21 @@ version: 1.0.0+1
 environment:
   sdk: ^3.12.0
 
+workspace:
+  - packages/core
+  - packages/design_system
+  - packages/models
+  - packages/i18n
+
+melos:
+  scripts:
+    analyze:
+      run: melos exec -- flutter analyze .
+      description: Run flutter analyze in every package.
+    test:
+      run: melos exec --dir-exists=test -- flutter test
+      description: Run flutter test in every package that has one.
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -31,10 +46,18 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Local monorepo packages (workspace + melos config below)
+  core:
+    path: packages/core
+  design_system:
+    path: packages/design_system
+  models:
+    path: packages/models
+  i18n:
+    path: packages/i18n
+
   # State management & navigation
   get: ^4.6.6
-  hive_ce: ^2.11.3
-  hive_ce_flutter: ^2.3.2
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
 
@@ -73,9 +96,6 @@ dependencies:
   # Push notifications
   flutter_client_sse: ^2.0.0
 
-  # Fonts
-  google_fonts: ^6.2.1
-
   # JWT
   jwt_decoder: ^2.0.1
 
@@ -96,6 +116,7 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   json_serializable: ^6.8.0
   flutter_launcher_icons: ^0.14.3
+  melos: ^7.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

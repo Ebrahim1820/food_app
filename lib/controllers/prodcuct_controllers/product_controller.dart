@@ -2,15 +2,14 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/product_models/product_model.dart';
 import 'package:food_app/models/product_models/product_section_model.dart';
 import 'package:food_app/profile_and_orders/orders/models/order_item_model.dart';
 import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
-import 'package:food_app/services/data_cache_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/services/mercure_service.dart';
 import 'package:food_app/services/product_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 
 /// Controls customer product discovery, search, and section pagination for a
 /// specific [market] (e.g., 'cosmetic', 'grocery'). Favoriting is handled by

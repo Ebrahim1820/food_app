@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/controllers/review_controller.dart';
-import 'package:food_app/strings/review_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:i18n/i18n.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Bottom sheet for submitting a post-order star rating + optional comment

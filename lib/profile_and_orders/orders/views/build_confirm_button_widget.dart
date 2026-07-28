@@ -4,7 +4,7 @@ import 'package:food_app/controllers/auth_controller.dart';
 import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
 import 'package:food_app/profile_and_orders/orders/views/customer_payment_screen.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_payment_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 class BuildConfirmButtonWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:food_app/controllers/locale_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'locale_controller.dart';
 
 // NOTE: Currency conversion is display-only — the app switches the symbol and
 // digit style based on locale, but does NOT apply a live EUR→IRR exchange rate.

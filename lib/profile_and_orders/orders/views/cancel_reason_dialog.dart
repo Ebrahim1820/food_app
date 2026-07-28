@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Cancellation-reason picker shown before cancelling a pending order.
 /// Market-agnostic — only needs the order's display id (for the subtitle),

@@ -1,5 +1,5 @@
-import 'package:food_app/utils/currency_formatter.dart';
 import 'package:get/get.dart';
+import '../currency_formatter.dart';
 
 abstract class BusinessOfferCreateStrings {
   static String get appBarTitle => 'bizCreate_appBarTitle'.tr;

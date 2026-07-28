@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/dashboard/view/shell_app_bar.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Shared chrome for the app's market-facing shells (customer, business,
 /// cosmetic, and any future market). Centralises the mechanics that were

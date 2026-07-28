@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:food_app/services/app_storage.dart';
-import 'package:food_app/services/data_cache_service.dart';
+import 'package:core/core.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/app_logger.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/app_snackbar.dart';
 
 /// Clears all app caches and shows a confirmation dialog before doing so.

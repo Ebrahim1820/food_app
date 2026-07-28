@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constants/add_to_cart/cart_strings.dart';
 import 'package:food_app/controllers/cart_controller.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/common/confirm_dialog.dart';
 
 /// Gates every [CartController.addItem] call from the UI side. Returns true

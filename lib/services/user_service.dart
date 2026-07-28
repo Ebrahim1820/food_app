@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/mercure_credentials_model.dart';
 import 'package:food_app/models/user_model.dart';
-import 'package:food_app/network/api_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 
 /// Handles REST calls for the `/users` resource.
 ///

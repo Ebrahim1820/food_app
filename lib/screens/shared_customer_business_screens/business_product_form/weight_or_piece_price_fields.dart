@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
+import 'package:i18n/i18n.dart';
 
 /// Renders a single field's label — injected by the caller so each market
 /// can keep its own label style (e.g. Food's create screens use a bold

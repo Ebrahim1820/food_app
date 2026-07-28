@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/constants/food/business_constants/business_order_strings.dart';
 
 /// Shown when a tab has no orders. Message is specific to the bucket so it

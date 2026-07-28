@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/profile_and_orders/orders/views/cancel_reason_dialog.dart';
 import 'package:food_app/profile_and_orders/profile/views/icon_action_button.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Icon-only edit/cancel actions for a pending order's row on the "My
 /// Orders" list — shared by Food's `OrderSummaryCard` and Cosmetic's

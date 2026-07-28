@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:food_app/constants/api_endpoints.dart';
+import 'package:core/core.dart';
 import 'package:food_app/models/notification_model.dart';
-import 'package:food_app/network/api_service.dart';
-import 'package:food_app/utils/app_logger.dart';
 
 /// Handles all REST calls for the current user's persisted notification
 /// history (GET /notifications and friends) — separate from

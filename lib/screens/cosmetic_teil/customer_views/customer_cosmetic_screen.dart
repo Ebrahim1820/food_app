@@ -1,7 +1,7 @@
 // lib/src/markets/cosmetic/customer/views/customer_cosmetic_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/customer_discovery_config.dart';
 import 'package:food_app/widgets/common/product_card_compact.dart';
 import 'package:get/get.dart';
@@ -11,7 +11,7 @@ import 'package:food_app/controllers/prodcuct_controllers/product_controller.dar
 import 'package:food_app/models/product_models/product_model.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/models/market_category.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/customer_discovery_screen.dart';
-import 'package:food_app/strings/product_strings.dart';
+import 'package:i18n/i18n.dart';
 
 /// Customer discovery screen for the Cosmetic market — discovery / category / search modes.
 ///

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 
 /// Lightweight pulsing placeholder shown while the Dashboard's first fetch is
 /// in flight and there's no cached data to show yet. No shimmer package in

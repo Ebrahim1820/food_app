@@ -1,7 +1,7 @@
 // lib/screens/shared_customer_business_screens/business_product_form/pickup_window_picker.dart
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/pickup_window_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 // ─────────────────────────────────────────────────────────────────────────────

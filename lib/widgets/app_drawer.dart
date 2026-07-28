@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/utils/greeting_header.dart';
 import 'package:food_app/widgets/logout_widget.dart';
 

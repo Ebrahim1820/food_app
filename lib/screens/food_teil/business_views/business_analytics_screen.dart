@@ -8,10 +8,10 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_analytics_controller.dart';
-import 'package:food_app/enums/app_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/constants/food/business_constants/business_analytics_strings.dart';
-import 'package:food_app/theme/app_colors.dart';
-import 'package:food_app/utils/currency_formatter.dart';
+import 'package:design_system/design_system.dart';
+import 'package:i18n/i18n.dart';
 
 /// Displays revenue, order, and offer performance statistics for the selected
 /// time period (Today / This Week / This Month).

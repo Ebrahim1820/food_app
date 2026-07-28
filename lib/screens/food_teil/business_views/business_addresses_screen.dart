@@ -3,7 +3,7 @@ import 'package:food_app/controllers/food_controllers/food_business_controllers/
 import 'package:food_app/models/address_model.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
 import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/theme/app_colors.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/address_widgets.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';

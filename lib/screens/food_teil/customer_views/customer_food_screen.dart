@@ -22,7 +22,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constants/food/customer_constants/customer_offer_strings.dart';
 import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
-import 'package:food_app/enums/market_enums.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/product_models/product_model.dart';
 import 'package:food_app/widgets/common/product_card_compact.dart';
 import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/models/market_category.dart';
