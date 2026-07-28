@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:core/core.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_order_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:customer_experience/customer_experience.dart';
 import 'package:notification/notification.dart';
 import 'package:models/models.dart';
-import 'package:food_app/screens/food_teil/business_views/business_order_detail_screen.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
@@ -48,10 +46,6 @@ class PushNotificationService {
   StreamSubscription? _onMessageSub;
   StreamSubscription? _onMessageOpenedSub;
   StreamSubscription? _onTokenRefreshSub;
-
-  // Set to true by the offer preview screen for the duration of _publish().
-  // Prevents notification taps from pushing extra routes during that window.
-  static bool publishingOffer = false;
 
   PushNotificationService() {
     pushEnabled = (AppStorage.read<bool>(_kPushEnabledKey) ?? true).obs;
@@ -338,7 +332,7 @@ class PushNotificationService {
         return;
       }
       // Also guard during active publish to prevent extra routes being pushed.
-      if (publishingOffer) {
+      if (PublishingOfferGuard.active) {
         AppLogger.info(
           _tag,
           'Skipping $type navigation — offer publish in progress',

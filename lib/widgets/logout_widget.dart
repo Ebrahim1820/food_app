@@ -4,7 +4,7 @@ import 'package:design_system/design_system.dart';
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:food_app/screens/auth/login_screen.dart';
-import 'package:food_app/services/cache_service.dart';
+import 'package:i18n/i18n.dart';
 import 'package:profile/profile.dart';
 import 'package:get/get.dart';
 

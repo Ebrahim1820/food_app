@@ -33,6 +33,8 @@ workspace:
   - features/review
   - features/profile
   - features/customer_experience
+  - features/seller_mgmt
+  - features/admin_platform
 
 melos:
   scripts:
@@ -76,6 +78,10 @@ dependencies:
     path: features/profile
   customer_experience:
     path: features/customer_experience
+  seller_mgmt:
+    path: features/seller_mgmt
+  admin_platform:
+    path: features/admin_platform
 
   # State management & navigation
   get: ^4.6.6

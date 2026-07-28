@@ -1,0 +1,34 @@
+name: admin_platform
+description: Platform admin — manage sellers, customers, orders, offers, and broadcasts. Reads across other features' data plus admin-only actions; nothing should depend on this package.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=1.17.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  dio: ^5.4.3
+  intl: ^0.19.0
+  auth:
+    path: ../auth
+  core:
+    path: ../../packages/core
+  customer_experience:
+    path: ../customer_experience
+  design_system:
+    path: ../../packages/design_system
+  i18n:
+    path: ../../packages/i18n
+  models:
+    path: ../../packages/models
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

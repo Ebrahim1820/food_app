@@ -11,25 +11,15 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:auth/auth.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_addresses_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_bank_account_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_email_alerts_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_help_screen.dart';
+import 'package:food_app/widgets/logout_widget.dart';
 import 'package:food_app/screens/food_teil/business_views/business_notifications_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_operating_hours_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_photos_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_profile_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_security_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_settings_screen.dart';
 import 'package:profile/profile.dart';
 import 'package:food_app/profile_and_orders/profile/views/customer_payment_methods_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/customer_settings_screen.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/app_drawer.dart';
-import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';
 
 class AccountDrawer extends StatelessWidget {
@@ -101,6 +91,7 @@ class _CustomerAccountDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
     return AppDrawer(
+      footer: const LogoutWidget(),
       avatarWidget: UploadableAvatar(
         initials: auth.firstName.isNotEmpty
             ? auth.firstName.characters.first.toUpperCase()
@@ -220,7 +211,13 @@ class _BusinessAccountDrawer extends StatelessWidget {
       case 'about':
         Get.to(() => const BusinessAboutScreen());
       case 'settings':
-        Get.to(() => const BusinessSettingsScreen());
+        Get.to(
+          () => BusinessSettingsScreen(
+            onOpenNotifications: () =>
+                Get.to(() => const BusinessNotificationsScreen()),
+            onOpenSecurity: () => Get.to(() => const BusinessSecurityScreen()),
+          ),
+        );
     }
   }
 
@@ -247,6 +244,7 @@ class _BusinessAccountDrawer extends StatelessWidget {
           ? partner!.businessName.characters.first.toUpperCase()
           : '?';
       return AppDrawer(
+        footer: const LogoutWidget(),
         avatarWidget: UploadableAvatar(
           initials: initials,
           imageType: 'business_logo',

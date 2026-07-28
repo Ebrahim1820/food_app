@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   get: ^4.6.6
   intl: ^0.19.0
+  flutter_cache_manager: ^3.3.1
   core:
     path: ../core
   design_system:

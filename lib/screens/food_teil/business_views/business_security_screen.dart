@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:core/core.dart';
-import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/dialog/change_password_sheet.dart';

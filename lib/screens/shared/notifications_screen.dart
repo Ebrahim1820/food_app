@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_navigation_controller.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:notification/notification.dart';
 import 'package:core/core.dart';
@@ -8,7 +8,6 @@ import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_shell.dart';
 import 'package:food_app/screens/dashboard/view/global_bottom_nav.dart';
-import 'package:food_app/screens/food_teil/business_views/scrollable_business_nav.dart';
 import 'package:get/get.dart';
 
 /// Notification history for both customer and business-partner accounts.

@@ -1,4 +1,4 @@
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:food_app/screens/admin/admin_dashboard_screen.dart';
 import 'package:food_app/screens/auth/auth_gate.dart';
 import 'package:food_app/screens/auth/login_screen.dart';
@@ -6,11 +6,12 @@ import 'package:food_app/screens/auth/email_verification_notice_screen.dart';
 import 'package:food_app/screens/auth/register_screen.dart';
 import 'package:food_app/screens/dashboard/view/app_shell_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_dashboard_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_settings_screen.dart';
+import 'package:food_app/screens/food_teil/business_views/business_notifications_screen.dart';
+import 'package:food_app/screens/food_teil/business_views/business_security_screen.dart';
 import 'package:food_app/screens/shared/settings_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/team_members_screen.dart';
-import 'package:food_app/screens/cosmetic_teil/business_views/my_products_screen.dart';
 import 'package:food_app/screens/shared/notifications_screen.dart';
+import 'package:food_app/controllers/navigation_controller.dart';
+import 'package:food_app/widgets/logout_widget.dart';
 import 'package:core/core.dart';
 import 'package:get/get.dart';
 
@@ -50,7 +51,17 @@ class AppPages {
     // isn't a full BusinessDashboardScreen-style shell.
     GetPage(
       name: AppRoutes.cosmeticBusinessProducts,
-      page: () => const MyProductsScreen(),
+      page: () => MyProductsScreen(
+        onSwitchToCustomerView: () {
+          final nav = Get.find<NavigationController>();
+          nav.actingAsCustomer.value = true;
+          nav.activeMarket.value = null;
+          nav.currentIndex.value = 0;
+          Get.offNamed(AppRoutes.dashboard);
+        },
+        onOpenSettings: () => Get.to(() => const SettingsScreen()),
+        drawerFooter: const LogoutWidget(),
+      ),
     ),
 
     // Shared settings screen (language toggle, etc.)
@@ -67,7 +78,11 @@ class AppPages {
 
     GetPage(
       name: AppRoutes.businessSettings,
-      page: () => const BusinessSettingsScreen(),
+      page: () => BusinessSettingsScreen(
+        onOpenNotifications: () =>
+            Get.to(() => const BusinessNotificationsScreen()),
+        onOpenSecurity: () => Get.to(() => const BusinessSecurityScreen()),
+      ),
     ),
 
     // Admin experience.

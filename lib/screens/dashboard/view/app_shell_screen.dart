@@ -30,9 +30,7 @@ import 'package:customer_experience/customer_experience.dart';
 import 'package:i18n/i18n.dart';
 import 'package:food_app/profile_and_orders/profile/views/profile_screen.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/utils/greeting_header.dart';
 import 'package:food_app/widgets/common/app_search_field.dart';
-import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';
 
 class AppShellScreen extends StatefulWidget {

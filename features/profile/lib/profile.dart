@@ -13,6 +13,7 @@ export 'src/customer_profile_strings.dart';
 export 'src/dismiss_background_widget.dart';
 export 'src/icon_action_button.dart';
 export 'src/icon_list_tile.dart';
+export 'src/language_selector_widget.dart';
 export 'src/legal_document_scaffold.dart';
 export 'src/live_chat_screen.dart';
 export 'src/menu_chip_widget.dart';

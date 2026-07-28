@@ -8,11 +8,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:profile/profile.dart';
-import 'package:food_app/services/cache_service.dart';
+import 'package:i18n/i18n.dart';
 import 'package:food_app/services/push_notification_service.dart';
 import 'package:get/get.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/common/language_selector_widget.dart';
 import 'package:food_app/widgets/dialog/change_password_sheet.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {

@@ -7,3 +7,4 @@ export 'src/app_storage.dart';
 export 'src/auth_interceptor.dart';
 export 'src/data_cache_service.dart';
 export 'src/keycloak_auth_service.dart';
+export 'src/publishing_offer_guard.dart';

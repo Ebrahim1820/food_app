@@ -1,5 +1,5 @@
 import 'package:auth/auth.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:notification/notification.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/push_notification_service.dart';

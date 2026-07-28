@@ -1,4 +1,5 @@
 export 'src/app_colors.dart';
+export 'src/app_drawer.dart';
 export 'src/app_snackbar.dart';
 export 'src/app_theme.dart';
 export 'src/confirm_dialog.dart';
@@ -7,7 +8,10 @@ export 'src/dashboard_icons.dart';
 export 'src/email_verification_banner.dart';
 export 'src/empty_state_widget.dart';
 export 'src/filter_chip_widget.dart';
+export 'src/greeting_header.dart';
+export 'src/image_service.dart';
 export 'src/info_dialog.dart';
 export 'src/market_colors.dart';
 export 'src/network_image_widget.dart';
 export 'src/stale_banner.dart';
+export 'src/uploadable_avatar.dart';

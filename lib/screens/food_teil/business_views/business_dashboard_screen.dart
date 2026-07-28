@@ -3,43 +3,17 @@ import 'package:design_system/design_system.dart';
 import 'package:auth/auth.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:food_app/widgets/common/app_search_field.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_navigation_controller.dart';
-import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_email_alerts_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_help_screen.dart';
+import 'package:seller_mgmt/seller_mgmt.dart';
 import 'package:food_app/screens/food_teil/business_views/business_notifications_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_operating_hours_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_addresses_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_photos_screen.dart';
 import 'package:food_app/screens/food_teil/business_views/business_security_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_settings_screen.dart';
-import 'package:food_app/models/food_models/business_models/metric_model.dart';
-import 'package:food_app/screens/food_teil/business_views/business_impact_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_menu_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_bank_account_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_profile_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/team_members_screen.dart';
 import 'package:core/core.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_shell.dart';
-import 'package:food_app/constants/food/business_constants/business_analytics_strings.dart';
-import 'package:food_app/widgets/app_drawer.dart';
-import 'package:food_app/screens/food_teil/business_views/notification_dot.dart';
-import 'package:food_app/widgets/uploadable_avatar.dart';
+import 'package:food_app/widgets/logout_widget.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_earnings_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_order_controller.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:customer_experience/customer_experience.dart';
-import 'business_reviews_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_analytics_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_earnings_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/business_orders_screen.dart';
-import 'package:food_app/screens/food_teil/business_views/scrollable_business_nav.dart';
-import 'package:food_app/screens/food_teil/business_views/business_summary_card.dart';
-import 'package:food_app/screens/food_teil/shared_customer_and_business_widget/impact_tracker_widget.dart';
-import 'package:food_app/screens/food_teil/shared_customer_and_business_utils/impact_calculator.dart';
+import 'package:seller_mgmt/src/business_views/business_reviews_screen.dart';
 
 // ---------------------------------------------------------------------------
 // Home page
@@ -133,7 +107,13 @@ class _PartnerDashboardHomeState extends State<BusinessDashboardScreen> {
       case 'about':
         Get.to(() => const BusinessAboutScreen());
       case 'settings':
-        Get.to(() => const BusinessSettingsScreen());
+        Get.to(
+          () => BusinessSettingsScreen(
+            onOpenNotifications: () =>
+                Get.to(() => const BusinessNotificationsScreen()),
+            onOpenSecurity: () => Get.to(() => const BusinessSecurityScreen()),
+          ),
+        );
     }
   }
 
@@ -176,6 +156,7 @@ class _PartnerDashboardHomeState extends State<BusinessDashboardScreen> {
           ? partner!.businessName.characters.first.toUpperCase()
           : '?';
       return AppDrawer(
+        footer: const LogoutWidget(),
         avatarWidget: UploadableAvatar(
           initials: initials,
           imageType: 'business_logo',

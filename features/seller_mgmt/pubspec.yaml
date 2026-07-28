@@ -1,0 +1,48 @@
+name: seller_mgmt
+description: >
+  Business-partner identity/settings and product/offer CRUD (inventory) for
+  the Seller Platform team — combined into one package for the same reason
+  customer_experience is: the code is mutually coupled today (offer editing
+  needs business-partner context, business screens embed product-form
+  widgets). See MODULAR_ARCHITECTURE_PLAN.md.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=1.17.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  dio: ^5.4.3
+  cached_network_image: ^3.3.1
+  image_picker: ^1.1.2
+  intl: ^0.19.0
+  url_launcher: ^6.3.1
+  auth:
+    path: ../auth
+  core:
+    path: ../../packages/core
+  customer_experience:
+    path: ../customer_experience
+  design_system:
+    path: ../../packages/design_system
+  i18n:
+    path: ../../packages/i18n
+  models:
+    path: ../../packages/models
+  notification:
+    path: ../notification
+  profile:
+    path: ../profile
+  review:
+    path: ../review
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

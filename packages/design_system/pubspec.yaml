@@ -15,6 +15,11 @@ dependencies:
   get: ^4.6.6
   google_fonts: ^6.2.1
   cached_network_image: ^3.3.1
+  dio: ^5.4.3
+  image_picker: ^1.1.2
+  jwt_decoder: ^2.0.1
+  core:
+    path: ../core
   models:
     path: ../models
 
