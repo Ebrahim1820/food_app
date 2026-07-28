@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
+import 'package:profile/profile.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/cache_service.dart';
 import 'package:food_app/screens/food_teil/business_views/business_about_screen.dart';

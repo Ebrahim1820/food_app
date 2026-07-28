@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/image_service.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

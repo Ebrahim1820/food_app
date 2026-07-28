@@ -3,7 +3,7 @@ import 'package:food_app/controllers/register_controller.dart';
 import 'package:food_app/models/dashboard_model.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/address_widgets.dart';
+import 'package:profile/profile.dart';
 import 'package:food_app/widgets/app_widgets.dart';
 import 'package:get/get.dart';
 

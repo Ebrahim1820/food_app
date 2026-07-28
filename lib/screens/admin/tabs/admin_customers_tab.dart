@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/admin_controller.dart';
-import 'package:food_app/models/user_model.dart';
+import 'package:models/models.dart';
 import 'package:food_app/screens/admin/admin_customer_detail_screen.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/common/filter_chip_widget.dart';
 import 'package:get/get.dart';
 
 class AdminCustomersTab extends StatelessWidget {

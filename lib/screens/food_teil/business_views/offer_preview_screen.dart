@@ -3,14 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
+import 'package:models/models.dart';
 import 'package:food_app/services/image_service.dart';
 import 'package:food_app/services/push_notification_service.dart';
-import 'package:food_app/constants/food/shared_customer_and_business_constants/food_offer_strings.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/utils/helper_methods.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

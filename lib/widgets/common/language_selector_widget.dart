@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
+import 'package:profile/profile.dart';
 import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 

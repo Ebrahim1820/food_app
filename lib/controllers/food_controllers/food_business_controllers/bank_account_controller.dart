@@ -3,7 +3,7 @@ import 'package:food_app/models/food_models/business_models/bank_account_model.d
 import 'package:food_app/services/food_services/business_services/bank_account_service.dart';
 import 'package:core/core.dart';
 import 'package:food_app/constants/food/business_constants/business_bank_account_strings.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 class BankAccountController extends GetxController {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/controllers/mercure_controller.dart';
+import 'package:notification/notification.dart';
 import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 

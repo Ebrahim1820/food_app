@@ -3,16 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart'; // for debugPrint / kDebugMode
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/controllers/mercure_controller.dart';
+import 'package:notification/notification.dart';
 import 'package:models/models.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_item_model.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model_ui.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:core/core.dart';
-import 'package:food_app/services/mercure_service.dart';
-import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Handles the BUSINESS PARTNER's orders: the queue of orders customers

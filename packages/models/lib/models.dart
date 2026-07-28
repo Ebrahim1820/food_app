@@ -1,2 +1,9 @@
+export 'src/address_model.dart';
 export 'src/app_enums.dart';
+export 'src/business_partner_model.dart';
+export 'src/food_offer_model.dart';
+export 'src/id_parse.dart';
+export 'src/image_model.dart';
 export 'src/market_enums.dart';
+export 'src/product_model.dart';
+export 'src/user_model.dart';

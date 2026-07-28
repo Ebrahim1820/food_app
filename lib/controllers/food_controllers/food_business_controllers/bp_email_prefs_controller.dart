@@ -3,7 +3,7 @@ import 'package:core/core.dart';
 import 'package:food_app/models/food_models/business_models/bp_email_prefs_model.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 
 /// Manages email-alert preferences for the business partner account.

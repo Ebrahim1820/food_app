@@ -1,0 +1,31 @@
+name: notification
+description: Notification center, real-time (Mercure/SSE) transport, and the user-account service other features fetch/update the current user through.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=1.17.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  dio: ^5.4.3
+  jwt_decoder: ^2.0.1
+  flutter_client_sse: ^2.0.0
+  core:
+    path: ../../packages/core
+  design_system:
+    path: ../../packages/design_system
+  i18n:
+    path: ../../packages/i18n
+  models:
+    path: ../../packages/models
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

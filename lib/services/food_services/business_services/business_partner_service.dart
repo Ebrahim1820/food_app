@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:core/core.dart';
-import 'package:food_app/models/business_partner_model.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/food_models/business_models/team_member_model.dart';
 
 /// Fetches the [BusinessPartnerModel] linked to the currently authenticated user.

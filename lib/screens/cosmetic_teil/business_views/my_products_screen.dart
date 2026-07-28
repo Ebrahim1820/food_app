@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:core/core.dart';
 import 'package:food_app/screens/shared/settings_screen.dart';
 import 'package:food_app/screens/cosmetic_teil/business_views/create_product_screen.dart';
-import 'package:food_app/constants/cosmetic/cosmetic_strings.dart';
-import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_business_orders_screen.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:i18n/i18n.dart';
 import 'package:food_app/controllers/prodcuct_controllers/business_product_controller.dart';
-import 'package:food_app/models/product_models/product_model.dart';
+import 'package:models/models.dart';
 import 'package:design_system/design_system.dart';
 import 'package:food_app/widgets/app_drawer.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
-import 'package:food_app/widgets/common/confirm_dialog.dart';
-import 'package:food_app/widgets/common/stale_banner.dart';
 import 'package:food_app/widgets/uploadable_avatar.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 
 /// Business partner's "My Products" screen for Cosmetics — the market's
 /// minimal business-side dashboard entry point, mirroring `BusinessMenuScreen`

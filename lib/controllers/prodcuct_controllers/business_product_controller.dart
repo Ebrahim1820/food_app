@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:models/models.dart';
-import 'package:food_app/models/product_models/product_model.dart';
-import 'package:food_app/services/product_service.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:core/core.dart';
 
 /// Owns the business partner "publish a listing" flow for the generic

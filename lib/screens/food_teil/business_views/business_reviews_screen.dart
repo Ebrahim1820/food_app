@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/controllers/review_controller.dart';
+import 'package:review/review.dart';
 import 'package:food_app/constants/food/business_constants/business_analytics_strings.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/review/review_list_body.dart';
 import 'package:get/get.dart';
 
 /// Business owner's "Reviews" screen — read-only list of what customers have

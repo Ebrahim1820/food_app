@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/models/business_partner_model.dart';
-import 'package:food_app/models/address_model.dart';
-import 'package:food_app/screens/food_teil/business_views/business_reviews_screen.dart';
+import 'package:models/models.dart';
+import 'business_reviews_screen.dart';
 import 'package:food_app/constants/food/business_constants/business_settings_strings.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:design_system/design_system.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
 import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';
 

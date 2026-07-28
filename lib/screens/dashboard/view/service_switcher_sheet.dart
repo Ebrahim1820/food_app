@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 import 'package:food_app/controllers/dashboard_controller.dart';
-import 'package:food_app/widgets/dashboard_icons.dart';
 import 'package:i18n/i18n.dart';
 import 'package:get/get.dart';
 

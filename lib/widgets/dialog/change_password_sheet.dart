@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/bindings/initial_binding.dart';
-import 'package:food_app/controllers/auth_controller.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
+import 'package:auth/auth.dart';
+import 'package:design_system/design_system.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/change_password_service.dart';
 import 'package:i18n/i18n.dart';
-import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/address_widgets.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
+import 'package:profile/profile.dart';
 import 'package:get/get.dart';
 
 /// Shows the change-password bottom sheet.

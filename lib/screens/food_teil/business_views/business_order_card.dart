@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
+import 'package:design_system/design_system.dart';
 import 'package:food_app/constants/food/business_constants/business_bank_account_strings.dart';
 import 'package:food_app/constants/food/business_constants/business_order_strings.dart';
-import 'package:design_system/design_system.dart';
 import 'package:models/models.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model_ui.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/widgets/images/network_image_widget.dart';
 import 'package:intl/intl.dart';
 
 class BusinessOrderCard extends StatelessWidget {

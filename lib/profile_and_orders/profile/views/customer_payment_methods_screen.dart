@@ -6,13 +6,10 @@
 // Cards are currently mocked — wire to a real payment controller when ready.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
-import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/profile_and_orders/profile/views/icon_list_tile.dart';
-import 'package:food_app/profile_and_orders/profile/views/section_label.dart';
-import 'package:food_app/profile_and_orders/orders/views/add_card_sheet.dart';
+import 'package:profile/profile.dart';
+import 'package:i18n/i18n.dart';
+import 'package:customer_experience/customer_experience.dart';
 
 // Mock data — replace with real payment controller / model
 class _MockCard {

@@ -1,8 +1,6 @@
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:models/models.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_model_ui.dart';
-import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:core/core.dart';
 import 'package:get/get.dart';
 

@@ -4,10 +4,10 @@ import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
 import 'package:food_app/screens/food_teil/business_views/offer_preview_screen.dart';
-import 'package:food_app/services/user_service.dart';
+import 'package:notification/notification.dart';
 import 'package:i18n/i18n.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/pickup_window_picker.dart';
 import 'package:food_app/screens/food_teil/business_views/primary_action_fab.dart';
@@ -16,8 +16,6 @@ import 'package:food_app/screens/shared_customer_business_screens/business_produ
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/product_photo_picker.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/quantity_stepper.dart';
 import 'package:food_app/screens/shared_customer_business_screens/business_product_form/weight_or_piece_price_fields.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
-import 'package:food_app/widgets/email_verification_banner.dart';
 
 class CreateFoodOfferScreen extends StatefulWidget {
   final int businessPartnerId;

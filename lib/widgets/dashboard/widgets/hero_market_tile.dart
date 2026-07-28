@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:food_app/models/dashboard_model.dart';
-import 'package:food_app/widgets/dashboard_icons.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/images/network_image_widget.dart';
 
 /// Large card for the top-priority live market (Food today), with a
 /// rotating carousel of [DashboardMarket.heroImages]. Falls back to a solid

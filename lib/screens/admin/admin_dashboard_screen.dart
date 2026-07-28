@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/bindings/initial_binding.dart';
 import 'package:food_app/controllers/admin_controller.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:food_app/screens/admin/tabs/admin_customers_tab.dart';
 import 'package:food_app/screens/admin/tabs/admin_offers_tab.dart';
@@ -9,7 +9,6 @@ import 'package:food_app/screens/admin/tabs/admin_overview_tab.dart';
 import 'package:food_app/screens/admin/tabs/admin_partners_tab.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_shell.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/common/stale_banner.dart';
 import 'package:get/get.dart';
 
 // Dashboard background — light cool-gray used widely in SaaS dashboards

@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_app/widgets/dashboard_icons.dart';
-import 'package:food_app/models/dashboard_model.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/images/network_image_widget.dart';
+import 'package:food_app/models/dashboard_model.dart';
 
 /// The market shown beside the hero tile — same height, narrower, solid
 /// accent colour (or a rotating carousel of its images, if it has any) with

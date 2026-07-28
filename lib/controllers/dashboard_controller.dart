@@ -7,17 +7,14 @@
 // first Get.find() — i.e. the first time AuthGate/login routes here.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:design_system/design_system.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:models/models.dart';
-import 'package:food_app/widgets/dashboard_icons.dart';
 import 'package:food_app/models/dashboard_model.dart';
-import 'package:food_app/models/user_model.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/dashboard_service.dart';
-import 'package:food_app/services/user_service.dart';
-import 'package:design_system/design_system.dart';
+import 'package:notification/notification.dart';
 import 'package:get/get.dart';
 
 class DashboardController extends GetxController {

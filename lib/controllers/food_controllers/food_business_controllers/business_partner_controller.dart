@@ -9,8 +9,8 @@
 //
 // This replaces every hardcoded `businessPartnerId: 1` in the app.
 
-import 'package:food_app/controllers/auth_controller.dart';
-import 'package:food_app/models/business_partner_model.dart';
+import 'package:auth/auth.dart';
+import 'package:models/models.dart';
 import 'package:food_app/models/food_models/business_models/team_member_model.dart';
 import 'package:core/core.dart';
 import 'package:food_app/services/food_services/business_services/business_partner_service.dart';

@@ -7,16 +7,12 @@
 // state is held in per-widget ValueNotifiers — no StatefulWidget needed.
 
 import 'package:flutter/material.dart';
-import 'package:food_app/profile_and_orders/profile/controllers/user_preferences_controller.dart';
+import 'package:profile/profile.dart';
 import 'package:food_app/services/cache_service.dart';
 import 'package:food_app/services/push_notification_service.dart';
 import 'package:get/get.dart';
-import 'package:food_app/profile_and_orders/profile/constants/customer_profile_strings.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/profile_and_orders/profile/views/icon_list_tile.dart';
 import 'package:food_app/widgets/common/language_selector_widget.dart';
-import 'package:food_app/profile_and_orders/profile/views/section_label.dart';
-import 'package:food_app/profile_and_orders/profile/views/toggle_tile.dart';
 import 'package:food_app/widgets/dialog/change_password_sheet.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {

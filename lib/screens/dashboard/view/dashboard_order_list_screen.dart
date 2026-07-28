@@ -7,16 +7,11 @@
 // wiring layer on top of [DashboardOrdersMerger]; neither of those two
 // screens is touched by this file.
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_order_list_screen.dart'
-    show CosmeticOrderCard;
-import 'package:food_app/widgets/common/custom_dynamic_button.dart';
 import 'package:design_system/design_system.dart';
 import 'package:models/models.dart';
-import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/profile_and_orders/orders/views/order_summary_card.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_orders_merger.dart';
-import 'package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'
-    as shared;
+import 'package:customer_experience/discovery.dart' as shared;
 import 'package:i18n/i18n.dart';
 
 class DashboardOrderListScreen extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:food_app/profile_and_orders/orders/models/order_model.dart';
+import 'package:customer_experience/customer_experience.dart';
 
 /// Aggregated environmental impact of a set of rescued orders.
 class ImpactStats {

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/admin_controller.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/models/admin_stats_model.dart';
 import 'package:food_app/screens/admin/admin_broadcast_screen.dart';
 import 'package:design_system/design_system.dart';

@@ -3,10 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:models/models.dart';
-import 'package:food_app/models/food_models/shared_customer_and_business_models/food_offer_model.dart';
-import 'package:food_app/profile_and_orders/orders/models/order_item_model.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:core/core.dart';
-import 'package:food_app/services/food_services/shared_customer_and_business_services/food_offer_service.dart';
 
 /// Owns the partner "add a surplus bag to the menu" flow.
 ///

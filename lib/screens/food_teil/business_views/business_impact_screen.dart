@@ -10,7 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_order_controller.dart';
-import 'package:food_app/constants/food/shared_customer_and_business_constants/impact_strings.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:design_system/design_system.dart';
 import 'package:i18n/i18n.dart';
 import 'package:food_app/screens/food_teil/shared_customer_and_business_utils/impact_calculator.dart';

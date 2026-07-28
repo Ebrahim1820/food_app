@@ -1,6 +1,8 @@
 export 'src/app_translations.dart';
 export 'src/currency_formatter.dart';
+export 'src/helper_methods.dart';
 export 'src/locale_controller.dart';
+export 'src/relative_time.dart';
 export 'src/strings/app_strings.dart';
 export 'src/strings/auth_strings.dart';
 export 'src/strings/business_offer_strings.dart';

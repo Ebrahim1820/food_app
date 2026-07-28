@@ -8,18 +8,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:core/core.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_order_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
-import 'package:food_app/controllers/notification_controller.dart';
-import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
-import 'package:food_app/models/product_models/product_model.dart';
-import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
+import 'package:customer_experience/customer_experience.dart';
+import 'package:notification/notification.dart';
+import 'package:models/models.dart';
 import 'package:food_app/screens/food_teil/business_views/business_order_detail_screen.dart';
-import 'package:food_app/screens/food_teil/customer_views/customer_product_detail_screen.dart';
-import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
 import 'package:i18n/i18n.dart';
 import 'package:design_system/design_system.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
-import 'package:food_app/profile_and_orders/orders/views/order_detail_screen.dart';
 import 'package:get/get.dart';
 
 /// Manages Firebase Cloud Messaging (FCM) for the app.

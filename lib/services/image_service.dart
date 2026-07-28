@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:core/core.dart';
-import 'package:food_app/models/image_model.dart';
+import 'package:models/models.dart';
 
 class ImageService {
   const ImageService(this._api);

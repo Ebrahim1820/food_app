@@ -15,7 +15,7 @@
 // (index 3) is shared across markets already.
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
 import 'package:models/models.dart';
 import 'package:food_app/controllers/dashboard_controller.dart';
@@ -26,25 +26,12 @@ import 'package:food_app/screens/dashboard/view/dashboard_orders_merger.dart';
 import 'package:food_app/screens/dashboard/view/dashboard_shell.dart';
 import 'package:food_app/screens/dashboard/view/global_bottom_nav.dart';
 import 'package:food_app/screens/dashboard/view/shell_leading_avatar_ring.dart';
-import 'package:food_app/screens/cosmetic_teil/customer_views/customer_cosmetic_screen.dart';
-import 'package:food_app/screens/cosmetic_teil/orders/views/cosmetic_order_list_screen.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:i18n/i18n.dart';
-import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
-import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_customer_controllers/food_offer_controller.dart';
-import 'package:food_app/constants/food/customer_constants/customer_offer_strings.dart';
-import 'package:food_app/constants/food/customer_constants/customer_favorites_strings.dart';
-import 'package:food_app/screens/food_teil/customer_views/customer_food_screen.dart';
-import 'package:food_app/screens/food_teil/customer_views/favorites_screen.dart';
-import 'package:food_app/profile_and_orders/orders/constants/customer_order_strings.dart';
-import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
-import 'package:food_app/profile_and_orders/orders/views/order_list_screen.dart';
 import 'package:food_app/profile_and_orders/profile/views/profile_screen.dart';
 import 'package:design_system/design_system.dart';
 import 'package:food_app/utils/greeting_header.dart';
 import 'package:food_app/widgets/common/app_search_field.dart';
-import 'package:food_app/widgets/common/empty_state_widget.dart';
 import 'package:food_app/widgets/uploadable_avatar.dart';
 import 'package:get/get.dart';
 
@@ -129,7 +116,10 @@ class _AppShellScreenState extends State<AppShellScreen> {
     // Favorites (index 1) and Profile (index 3) are shared across every
     // market — same screen regardless of activeMarket.
     return switch (index) {
-      1 => FavoritesScreen(searchController: _favoritesSearchCtrl),
+      1 => FavoritesScreen(
+        searchController: _favoritesSearchCtrl,
+        onBrowse: () => Get.find<NavigationController>().currentIndex.value = 0,
+      ),
       2 => OrderListScreen(searchController: _ordersSearchCtrl),
       _ => ProfileScreen(),
     };

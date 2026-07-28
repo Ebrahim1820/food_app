@@ -1,13 +1,12 @@
-import 'package:food_app/controllers/cart_controller.dart';
+import 'package:customer_experience/customer_experience.dart';
 import 'package:models/models.dart';
-import 'package:food_app/profile_and_orders/profile/controllers/address_controller.dart';
+import 'package:profile/profile.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/bp_email_prefs_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/bp_notif_prefs_controller.dart';
-import 'package:food_app/profile_and_orders/profile/controllers/user_preferences_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_address_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/bank_account_controller.dart';
 import 'package:food_app/controllers/admin_controller.dart';
-import 'package:food_app/controllers/auth_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_analytics_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_earnings_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_offer_controller.dart';
@@ -15,35 +14,20 @@ import 'package:food_app/controllers/food_controllers/food_business_controllers/
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_partner_controller.dart';
 import 'package:food_app/controllers/food_controllers/food_business_controllers/business_navigation_controller.dart';
 import 'package:food_app/controllers/dashboard_controller.dart';
-import 'package:food_app/controllers/prodcuct_controllers/product_controller.dart';
 import 'package:food_app/controllers/prodcuct_controllers/business_product_controller.dart';
-import 'package:food_app/controllers/prodcuct_controllers/product_order_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_customer_controllers/favorites_offer_controller.dart';
-import 'package:food_app/controllers/food_controllers/food_customer_controllers/food_offer_controller.dart';
-import 'package:food_app/controllers/location_controller.dart';
-import 'package:food_app/controllers/mercure_controller.dart';
+import 'package:location/location.dart';
+import 'package:notification/notification.dart';
 import 'package:food_app/controllers/navigation_controller.dart';
-import 'package:food_app/controllers/notification_controller.dart';
-import 'package:food_app/profile_and_orders/orders/controllers/order_controller.dart';
 import 'package:core/core.dart';
-import 'package:food_app/services/address_service.dart';
 import 'package:food_app/services/food_services/business_services/bank_account_service.dart';
 import 'package:food_app/services/food_services/business_services/business_partner_service.dart';
-import 'package:food_app/services/product_service.dart';
-import 'package:food_app/services/product_order_service.dart';
 import 'package:food_app/services/dashboard_service.dart';
 import 'package:food_app/services/image_service.dart';
-import 'package:food_app/services/food_services/customer_services/favorite_offer_service.dart';
-import 'package:food_app/profile_and_orders/orders/services/order_service.dart';
-import 'package:food_app/services/review_service.dart';
-import 'package:food_app/controllers/review_controller.dart';
+import 'package:review/review.dart';
 import 'package:food_app/services/admin_service.dart';
-import 'package:food_app/services/food_services/shared_customer_and_business_services/food_offer_service.dart';
-import 'package:food_app/services/notification_service.dart';
 import 'package:food_app/services/change_password_service.dart';
 import 'package:food_app/services/push_notification_service.dart';
-import 'package:food_app/services/user_service.dart';
-import 'package:food_app/widgets/common/app_snackbar.dart';
+import 'package:design_system/design_system.dart';
 import 'package:get/get.dart';
 import 'package:i18n/i18n.dart';
 
@@ -224,7 +208,14 @@ class InitialBinding extends Bindings {
     );
 
     Get.lazyPut<ReviewController>(
-      () => ReviewController(reviewService),
+      () => ReviewController(
+        reviewService,
+        onBusinessRatingChanged: () {
+          if (Get.isRegistered<BusinessPartnerController>()) {
+            Get.find<BusinessPartnerController>().fetchMyPartner();
+          }
+        },
+      ),
       fenix: true,
     );
 

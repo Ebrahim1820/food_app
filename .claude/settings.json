@@ -40,7 +40,25 @@
       "Bash(dart --version)",
       "Bash(dart pub *)",
       "WebFetch(domain:melos.invertase.dev)",
-      "Bash(rm -f /tmp/rewrite_imports.py *)"
+      "Bash(rm -f /tmp/rewrite_imports.py *)",
+      "Bash(grep -v \"^--$\")",
+      "Bash(cd /Users/enajafi/Flutter_Projects/food_app *)",
+      "Bash(mkdir -p /Users/enajafi/Flutter_Projects/food_app/features/location/lib/src *)",
+      "Bash(mkdir -p /Users/enajafi/Flutter_Projects/food_app/features/review/lib/src *)",
+      "Bash(python3 /tmp/fix_profile_internal.py)",
+      "Bash(sed -i '' -e 's|import '\\\\''package:food_app/services/address_service.dart'\\\\'';|import '\\\\''address_service.dart'\\\\'';|' features/profile/lib/src/address_controller.dart)",
+      "Bash(sed -i '' \"s|import 'package:food_app/widgets/common/confirm_dialog.dart';|import 'package:design_system/design_system.dart';|\" features/profile/lib/src/customer_addresses_screen.dart)",
+      "Bash(set -e)",
+      "Bash(xargs -n1 basename)",
+      "Bash(sed -i '' 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_detail_screen.dart'\\\\''|import '\\\\''../../discovery/views/order_detail_screen.dart'\\\\''|; s|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'\\\\''|import '\\\\''../../discovery/views/order_list_screen.dart'\\\\''|' features/customer_experience/lib/src/order/views/order_list_screen.dart features/customer_experience/lib/src/order/models/order_model_ui.dart features/customer_experience/lib/src/order/views/order_summary_card.dart features/customer_experience/lib/src/order/views/order_detail_screen.dart)",
+      "Bash(sed -i '' 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/favorites_screen.dart'\\\\''|import '\\\\''../../discovery/views/favorites_screen.dart'\\\\''|' features/customer_experience/lib/src/catalog/food_customer_views/favorites_screen.dart)",
+      "Bash(sed -i '' 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_detail_screen.dart'\\\\''|import '\\\\''../../../discovery/views/order_detail_screen.dart'\\\\''|; s|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/order_list_screen.dart'\\\\''|import '\\\\''../../../discovery/views/order_list_screen.dart'\\\\''|' features/customer_experience/lib/src/order/cosmetic_orders/views/cosmetic_order_list_screen.dart features/customer_experience/lib/src/order/cosmetic_orders/views/cosmetic_order_detail_screen.dart)",
+      "Bash(sed -i '' 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/edit_order_screen.dart'\\\\''|import '\\\\''../../../discovery/views/edit_order_screen.dart'\\\\''|' features/customer_experience/lib/src/order/cosmetic_orders/views/cosmetic_edit_order_screen.dart)",
+      "Bash(sed -i '' 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/edit_order_screen.dart'\\\\''|import '\\\\''../../discovery/views/edit_order_screen.dart'\\\\''|' features/customer_experience/lib/src/order/views/customer_edit_order_screen.dart)",
+      "Bash(sed -i '' 's|export '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/payment_screen.dart'\\\\''|export '\\\\''../../discovery/views/payment_screen.dart'\\\\''|' features/customer_experience/lib/src/order/views/customer_payment_screen.dart)",
+      "Bash(sed -i '' -e 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/models/market_category.dart'\\\\'';|import '\\\\''../models/market_category.dart'\\\\'';|' -e 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/models/market_section.dart'\\\\'';|import '\\\\''../models/market_section.dart'\\\\'';|' -e 's|import '\\\\''package:food_app/screens/shared_customer_business_screens/customer_dashboard/views/customer_discovery_config.dart'\\\\'';|import '\\\\''customer_discovery_config.dart'\\\\'';|' features/customer_experience/lib/src/discovery/views/customer_discovery_screen.dart features/customer_experience/lib/src/discovery/views/customer_discovery_config.dart)",
+      "Bash(sed -i '' \"/^import 'package:customer_experience\\\\/customer_experience.dart';$/d\" features/customer_experience/lib/src/catalog/universal_market_card.dart)",
+      "Bash(sed -i '' \"/^import 'package:food_app\\\\/screens\\\\/dashboard\\\\/view\\\\/dashboard_orders_merger.dart';$/d\" lib/profile_and_orders/profile/views/customer_profile_screen.dart lib/profile_and_orders/profile/views/profile_screen.dart)"
     ],
     "additionalDirectories": [
       "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Entity",
@@ -48,7 +66,11 @@
       "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Dto",
       "/Users/enajafi/Flutter_Projects/food_app/lib/screens/shared_customer_business_screens",
       "/Users/enajafi/Flutter_Projects/food_api/perka-project-api/project-data/app/src/Entity",
-      "/private/tmp"
+      "/private/tmp",
+      "/Users/enajafi/Flutter_Projects/food_app/packages/models/lib/src",
+      "/Users/enajafi/Flutter_Projects/food_app/features/notification/lib/src",
+      "/Users/enajafi/Flutter_Projects/food_app/features/location/lib/src",
+      "/Users/enajafi/Flutter_Projects/food_app/features/review/lib/src"
     ]
   }
 }

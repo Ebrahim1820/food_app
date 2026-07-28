@@ -1,0 +1,33 @@
+name: profile
+description: Customer profile, saved addresses, edit-profile, support/help/legal screens, and app preferences.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=1.17.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  dio: ^5.4.3
+  auth:
+    path: ../auth
+  core:
+    path: ../../packages/core
+  design_system:
+    path: ../../packages/design_system
+  i18n:
+    path: ../../packages/i18n
+  models:
+    path: ../../packages/models
+  notification:
+    path: ../notification
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

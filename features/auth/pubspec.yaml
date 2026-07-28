@@ -1,0 +1,24 @@
+name: auth
+description: Session/identity state (AuthController) — who is logged in and what role they have. Login/register flow orchestration stays app-level (see AuthController's consumers) since it bootstraps many other features on success.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=1.17.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  flutter_secure_storage: ^9.0.0
+  jwt_decoder: ^2.0.1
+  notification:
+    path: ../notification
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

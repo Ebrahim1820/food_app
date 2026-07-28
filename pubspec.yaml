@@ -26,6 +26,13 @@ workspace:
   - packages/design_system
   - packages/models
   - packages/i18n
+  - features/notification
+  - features/location
+  - features/payment
+  - features/auth
+  - features/review
+  - features/profile
+  - features/customer_experience
 
 melos:
   scripts:
@@ -55,6 +62,20 @@ dependencies:
     path: packages/models
   i18n:
     path: packages/i18n
+  notification:
+    path: features/notification
+  location:
+    path: features/location
+  payment:
+    path: features/payment
+  auth:
+    path: features/auth
+  review:
+    path: features/review
+  profile:
+    path: features/profile
+  customer_experience:
+    path: features/customer_experience
 
   # State management & navigation
   get: ^4.6.6
