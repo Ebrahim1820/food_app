@@ -1,0 +1,32 @@
+
+digraph FoodOfferLifecycle {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.6 nodesep=0.8 ranksep=1.1]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2.5]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=2 arrowsize=1.1]
+
+    Create    [label="Business creates
+Food Offer" shape=box fillcolor="#ECEFF1" color="#455A64"]
+    Scheduled [label="SCHEDULED
+startTime not yet reached" shape=box fillcolor="#B3E5FC" color="#0288D1" fontcolor="#01579B" fontname="Helvetica Bold"]
+    Active    [label="ACTIVE
+Customers can order" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold" fontsize=13]
+    SoldOut   [label="SOLD OUT
+quantityAvailable = 0" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C" fontname="Helvetica Bold"]
+    Expired   [label="EXPIRED
+endTime has passed" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100" fontname="Helvetica Bold"]
+    Hidden    [label="HIDDEN
+Temporarily invisible" shape=box fillcolor="#ECEFF1" color="#546E7A" fontname="Helvetica Bold"]
+    Cancelled [label="CANCELLED
+Permanently stopped" shape=box fillcolor="#FFCDD2" color="#B71C1C" fontcolor="#B71C1C" fontname="Helvetica Bold"]
+
+    Create    -> Active    [label="startTime now" color="#2E7D32" fontcolor="#2E7D32"]
+    Create    -> Scheduled [label="startTime in future" color="#0288D1" fontcolor="#0288D1"]
+    Scheduled -> Active    [label="startTime reached" color="#2E7D32" fontcolor="#2E7D32"]
+    Active    -> SoldOut   [label="qty = 0" color="#C62828" fontcolor="#C62828"]
+    Active    -> Expired   [label="endTime passed" color="#F57F17" fontcolor="#F57F17"]
+    Active    -> Hidden    [label="business hides" color="#546E7A" fontcolor="#546E7A"]
+    Active    -> Cancelled [label="permanently cancelled" color="#B71C1C" fontcolor="#B71C1C"]
+    Hidden    -> Active    [label="re-show" color="#2E7D32" fontcolor="#2E7D32"]
+    SoldOut   -> Active    [label="order cancelled
+(stock restored)" style=dashed color="#2E7D32" fontcolor="#2E7D32"]
+}

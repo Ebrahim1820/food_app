@@ -1,0 +1,38 @@
+
+digraph BusinessDashboard {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.6 nodesep=0.6 ranksep=1.1 splines=ortho]
+    node  [fontname="Helvetica" fontsize=11 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.7]
+
+    Login    [label="Business Login" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    Dash     [label="Dashboard
+Open/Close toggle
+Today stats + alerts" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold"]
+    Orders   [label="Orders Screen
+NEW | ACTIVE | DONE" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1" fontname="Helvetica Bold"]
+    Menu     [label="Menu Screen
+Create, Edit, Hide offers" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    Settings [label="Settings
+Profile, Team, Notifications" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Analytics   [label="Analytics
+Revenue, Order history" shape=box fillcolor="#F3E5F5" color="#7B1FA2" fontcolor="#4A148C"]
+    BankAccount [label="Bank Account & Payments
+Bank accounts, Cash toggle" shape=box fillcolor="#E8EAF6" color="#3949AB" fontcolor="#1A237E"]
+
+    NewTab    [label="NEW Tab
+Accept / Reject" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    ActiveTab [label="ACTIVE Tab
+Advance progress" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20"]
+    DoneTab   [label="DONE Tab
+Completed + Cancelled" shape=box fillcolor="#ECEFF1" color="#455A64"]
+
+    Login -> Dash
+    Dash -> Orders      [label="Orders tab"]
+    Dash -> Menu        [label="Menu tab"]
+    Dash -> Settings
+    Dash -> Analytics
+    Dash -> BankAccount [label="Sidebar drawer"]
+    Orders -> NewTab
+    Orders -> ActiveTab
+    Orders -> DoneTab
+}

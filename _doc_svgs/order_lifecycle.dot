@@ -1,0 +1,43 @@
+
+digraph OrderLifecycle {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.7 nodesep=0.9 ranksep=1.3]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2.5]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=2 arrowsize=1.1]
+
+    Place     [label="Customer
+places order" shape=box fillcolor="#ECEFF1" color="#455A64"]
+    Pending   [label="PENDING
+Waiting for business decision" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100" fontname="Helvetica Bold" fontsize=13]
+    Confirmed [label="CONFIRMED
+Business accepted" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold" fontsize=13]
+    Ready     [label="READY FOR PICKUP
+Food ready" shape=box fillcolor="#C8E6C9" color="#388E3C" fontcolor="#1B5E20" fontname="Helvetica Bold" fontsize=13]
+    Completed [label="COMPLETED
+Order handed over" shape=box fillcolor="#A5D6A7" color="#1B5E20" fontcolor="#1B5E20" fontname="Helvetica Bold" fontsize=13]
+    Cancelled [label="CANCELLED
+Rejected / cancelled
+Stock restored" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C" fontname="Helvetica Bold" fontsize=13]
+
+    NewTab  [label="NEW Tab
+(Business app)"    shape=box style="dashed,rounded" fillcolor="#FFF9C4" color="#F57F17" fontsize=11]
+    ActTab  [label="ACTIVE Tab
+(Business app)" shape=box style="dashed,rounded" fillcolor="#DCEDC8" color="#2E7D32" fontsize=11]
+    DoneTab [label="DONE Tab
+(Business app)"   shape=box style="dashed,rounded" fillcolor="#ECEFF1" color="#455A64" fontsize=11]
+
+    Place    -> Pending
+    Pending  -> Confirmed [label="Business accepts" color="#2E7D32" fontcolor="#2E7D32" penwidth=2.5]
+    Pending  -> Cancelled [label="Business rejects" color="#C62828" fontcolor="#C62828" penwidth=2.5]
+    Confirmed -> Ready    [label="Food ready" color="#2E7D32" fontcolor="#2E7D32" penwidth=2.5]
+    Confirmed -> Pending  [label="undo" style=dashed color="#F57F17" fontcolor="#F57F17"]
+    Ready    -> Completed [label="Delivered" color="#1B5E20" fontcolor="#1B5E20" penwidth=2.5]
+    Ready    -> Confirmed [label="undo" style=dashed color="#F57F17" fontcolor="#F57F17"]
+    Confirmed -> Cancelled [label="cancel" style=dashed color="#C62828" fontcolor="#C62828"]
+    Ready    -> Cancelled  [label="cancel" style=dashed color="#C62828" fontcolor="#C62828"]
+
+    Pending   -> NewTab  [style=dotted color="#F57F17"]
+    Confirmed -> ActTab  [style=dotted color="#2E7D32"]
+    Ready     -> ActTab  [style=dotted color="#2E7D32"]
+    Completed -> DoneTab [style=dotted color="#455A64"]
+    Cancelled -> DoneTab [style=dotted color="#455A64"]
+}

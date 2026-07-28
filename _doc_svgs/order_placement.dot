@@ -1,0 +1,33 @@
+
+digraph OrderPlacement {
+    graph [rankdir=TB fontname="Helvetica" splines=ortho bgcolor="#FAFAFA" pad=0.6 nodesep=0.5 ranksep=0.7]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.8]
+
+    Start  [label="POST /api/orders  {businessPartner, orderItems, deliveryAddress}" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1" fontname="Helvetica Bold"]
+    S1     [label="Step 1: Validate Stock
+Load each food offer from DB
+Check quantityAvailable >= requested qty
+Snapshot unitPrice from DB
+Decrement quantityAvailable" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    StockFail [label="422 Unprocessable
+Not enough stock" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+    S2     [label="Step 2: Calculate Subtotal
+sum(quantity x unitPrice) server-side" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    S3     [label="Step 3: Snapshot Delivery Address
+Save plain text copy of address
+(order history survives address changes)" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    S4     [label="Step 4: Estimate Delivery Time
+business lat/lng to delivery lat/lng" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    S5     [label="Step 5: Save to MySQL
+Order + OrderItems persisted" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    S6     [label="Step 6: Push Notification
+Send FCM to all business staff devices" shape=box fillcolor="#B3E5FC" color="#0288D1" fontcolor="#01579B"]
+    Done   [label="201 Created
+Order appears in customer My Orders" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold"]
+
+    Start -> S1
+    S1 -> StockFail [label="Qty too high" color="#C62828" fontcolor="#C62828"]
+    S1 -> S2 [label="Stock OK" color="#2E7D32" fontcolor="#2E7D32"]
+    S2 -> S3 -> S4 -> S5 -> S6 -> Done
+}

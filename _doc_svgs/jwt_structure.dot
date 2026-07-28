@@ -1,0 +1,35 @@
+
+digraph JWT {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.5 nodesep=0.5 ranksep=1.0]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=11 penwidth=1.5]
+
+    JWT [label="JWT Token
+(3 dot-separated parts)" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C" fontname="Helvetica Bold" fontsize=14]
+
+    H [label="Header
+──────────
+algorithm: RS256
+type: JWT" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    P [label="Payload
+──────────────
+sub: user-uuid
+email: user@mail.com
+realm_access.roles: [ROLE_USER]
+exp: unix-timestamp" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20"]
+    S [label="Signature
+──────────
+RSA-signed by Keycloak
+private key (tamper-proof)" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+
+    Roles  [label="ROLE_USER → Customer app"          shape=box fillcolor="#ECEFF1" color="#455A64" fontsize=11]
+    RolesB [label="ROLE_BUSINESS_PARTNER → Business"  shape=box fillcolor="#ECEFF1" color="#455A64" fontsize=11]
+    RolesA [label="ROLE_ADMIN → Admin dashboard"      shape=box fillcolor="#ECEFF1" color="#455A64" fontsize=11]
+
+    JWT -> H
+    JWT -> P
+    JWT -> S
+    P -> Roles  [style=dashed color="#455A64"]
+    P -> RolesB [style=dashed color="#455A64"]
+    P -> RolesA [style=dashed color="#455A64"]
+}

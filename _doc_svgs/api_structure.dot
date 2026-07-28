@@ -1,0 +1,33 @@
+
+digraph ApiStructure {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.6 nodesep=0.5 ranksep=1.1]
+    node  [fontname="Helvetica" fontsize=11 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.5]
+
+    Entity   [label="PHP Entity Class
+with ApiResource attributes" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C" fontname="Helvetica Bold"]
+    APi      [label="API Platform
+auto-generates REST endpoints" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold"]
+
+    GET    [label="GET /api/food_offers
+List with filters + pagination" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    GETid  [label="GET /api/food_offers/{id}
+Single item" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    POST   [label="POST /api/food_offers
+Create new" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20"]
+    PATCH  [label="PATCH /api/food_offers/{id}
+Partial update (merge-patch+json)" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    DELETE [label="DELETE /api/food_offers/{id}" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+
+    Security [label="Security Layer
+JWT validated
+Serialization groups
+Query extensions auto-filter" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+
+    Entity -> APi -> GET
+    APi -> GETid
+    APi -> POST
+    APi -> PATCH
+    APi -> DELETE
+    APi -> Security [style=dashed color="#6A1B9A" fontcolor="#6A1B9A"]
+}

@@ -1,0 +1,117 @@
+
+digraph Database {
+    graph [fontname="Helvetica" bgcolor="#FAFAFA" pad=0.7 nodesep=0.6 ranksep=1.1 splines=ortho]
+    node  [fontname="Helvetica" fontsize=11 style="filled" shape=none penwidth=0]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.6 arrowsize=0.9]
+
+    User [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#BBDEFB">
+        <TR><TD COLSPAN="2" BGCOLOR="#1565C0"><FONT COLOR="white"><B>user</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT"><B>uuid</B></TD><TD ALIGN="LEFT">public API identifier</TD></TR>
+        <TR><TD ALIGN="LEFT">firstName, lastName</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">email</TD><TD ALIGN="LEFT">unique</TD></TR>
+        <TR><TD ALIGN="LEFT">roles</TD><TD ALIGN="LEFT">JSON array</TD></TR>
+        <TR><TD ALIGN="LEFT">businessPartner_id</TD><TD ALIGN="LEFT">FK (null = customer)</TD></TR>
+        </TABLE>>]
+
+    BusinessPartner [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#C8E6C9">
+        <TR><TD COLSPAN="2" BGCOLOR="#2E7D32"><FONT COLOR="white"><B>business_partner</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">businessName</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">kycStatus</TD><TD ALIGN="LEFT">pending/approved/rejected</TD></TR>
+        <TR><TD ALIGN="LEFT">isActive</TD><TD ALIGN="LEFT">boolean (open/closed)</TD></TR>
+        <TR><TD ALIGN="LEFT">deliveryFee</TD><TD ALIGN="LEFT">decimal</TD></TR>
+        <TR><TD ALIGN="LEFT">acceptsCashPayment</TD><TD ALIGN="LEFT">boolean (cash at pickup)</TD></TR>
+        </TABLE>>]
+
+    FoodOffer [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#FFE0B2">
+        <TR><TD COLSPAN="2" BGCOLOR="#E65100"><FONT COLOR="white"><B>food_offer</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">title, category</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">originPrice, price</TD><TD ALIGN="LEFT">decimal</TD></TR>
+        <TR><TD ALIGN="LEFT">quantityTotal</TD><TD ALIGN="LEFT">int</TD></TR>
+        <TR><TD ALIGN="LEFT">quantityAvailable</TD><TD ALIGN="LEFT">int (decrements on order)</TD></TR>
+        <TR><TD ALIGN="LEFT">startTime, endTime</TD><TD ALIGN="LEFT">pickup window</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD><TD ALIGN="LEFT">active/sold_out/expired…</TD></TR>
+        <TR><TD ALIGN="LEFT">version</TD><TD ALIGN="LEFT">optimistic lock (anti-oversell)</TD></TR>
+        <TR><TD ALIGN="LEFT">businessPartner_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    Order [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#E1BEE7">
+        <TR><TD COLSPAN="2" BGCOLOR="#6A1B9A"><FONT COLOR="white"><B>order</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">status</TD><TD ALIGN="LEFT">pending/confirmed/…</TD></TR>
+        <TR><TD ALIGN="LEFT">subtotal, deliveryFee</TD><TD ALIGN="LEFT">decimal</TD></TR>
+        <TR><TD ALIGN="LEFT">deliveryAddressSnapshot</TD><TD ALIGN="LEFT">plain text copy</TD></TR>
+        <TR><TD ALIGN="LEFT">estimatedDeliveryTime</TD><TD ALIGN="LEFT">datetime</TD></TR>
+        <TR><TD ALIGN="LEFT">completedAt, cancelledAt</TD><TD ALIGN="LEFT">timestamps</TD></TR>
+        <TR><TD ALIGN="LEFT">paymentMethod</TD><TD ALIGN="LEFT">card / cash</TD></TR>
+        <TR><TD ALIGN="LEFT">user_id, businessPartner_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    OrderItem [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#F3E5F5">
+        <TR><TD COLSPAN="2" BGCOLOR="#7B1FA2"><FONT COLOR="white"><B>order_item</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">quantity</TD><TD ALIGN="LEFT">int</TD></TR>
+        <TR><TD ALIGN="LEFT">unitPrice</TD><TD ALIGN="LEFT">price snapshot at order time</TD></TR>
+        <TR><TD ALIGN="LEFT">totalPrice</TD><TD ALIGN="LEFT">quantity x unitPrice</TD></TR>
+        <TR><TD ALIGN="LEFT">foodOffer_id, order_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    Address [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#FFF9C4">
+        <TR><TD COLSPAN="2" BGCOLOR="#F57F17"><FONT COLOR="white"><B>address</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">street, city, postalCode</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">latitude, longitude</TD><TD ALIGN="LEFT">for delivery ETA</TD></TR>
+        <TR><TD ALIGN="LEFT">user_id, businessPartner_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    Review [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#FFCDD2">
+        <TR><TD COLSPAN="2" BGCOLOR="#C62828"><FONT COLOR="white"><B>review</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">rating (1-5)</TD><TD ALIGN="LEFT">int</TD></TR>
+        <TR><TD ALIGN="LEFT">comment</TD><TD ALIGN="LEFT">text</TD></TR>
+        <TR><TD ALIGN="LEFT">user_id, businessPartner_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    DeviceToken [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#B3E5FC">
+        <TR><TD COLSPAN="2" BGCOLOR="#0288D1"><FONT COLOR="white"><B>device_token</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">token</TD><TD ALIGN="LEFT">FCM device token</TD></TR>
+        <TR><TD ALIGN="LEFT">platform</TD><TD ALIGN="LEFT">ios / android</TD></TR>
+        <TR><TD ALIGN="LEFT">user_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    BusinessBankAccount [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#F9FBE7">
+        <TR><TD COLSPAN="2" BGCOLOR="#827717"><FONT COLOR="white"><B>business_bank_account</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>id</B> (INT, PK)</TD><TD ALIGN="LEFT">auto-increment</TD></TR>
+        <TR><TD ALIGN="LEFT">bankName</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">accountHolderName</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">iban</TD><TD ALIGN="LEFT">string</TD></TR>
+        <TR><TD ALIGN="LEFT">swiftOrBicCode</TD><TD ALIGN="LEFT">optional</TD></TR>
+        <TR><TD ALIGN="LEFT">accountNumber</TD><TD ALIGN="LEFT">optional</TD></TR>
+        <TR><TD ALIGN="LEFT">isDefault</TD><TD ALIGN="LEFT">boolean</TD></TR>
+        <TR><TD ALIGN="LEFT">businessPartner_id</TD><TD ALIGN="LEFT">FK</TD></TR>
+        </TABLE>>]
+
+    User            -> BusinessPartner [label="works at
+(nullable)" color="#2E7D32" fontcolor="#2E7D32"]
+    BusinessPartner -> FoodOffer       [label="creates" color="#E65100" fontcolor="#E65100"]
+    FoodOffer       -> OrderItem       [label="in" color="#7B1FA2" fontcolor="#7B1FA2"]
+    OrderItem       -> Order           [label="part of" color="#6A1B9A" fontcolor="#6A1B9A"]
+    Order           -> User            [label="placed by" color="#1565C0" fontcolor="#1565C0" style=dashed]
+    Order           -> BusinessPartner [label="placed at" color="#2E7D32" fontcolor="#2E7D32" style=dashed]
+    Address         -> User            [label="belongs to" color="#F57F17" fontcolor="#F57F17"]
+    Review          -> BusinessPartner [label="for" color="#C62828" fontcolor="#C62828"]
+    DeviceToken     -> User            [label="owned by" color="#0288D1" fontcolor="#0288D1"]
+    BusinessBankAccount -> BusinessPartner [label="owned by" color="#827717" fontcolor="#827717"]
+}

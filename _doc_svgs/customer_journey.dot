@@ -1,0 +1,30 @@
+
+digraph CustomerJourney {
+    graph [rankdir=TB fontname="Helvetica" splines=ortho bgcolor="#FAFAFA" pad=0.6 nodesep=0.5 ranksep=0.75]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.8]
+
+    Home      [label="Home Screen
+Browse food offers
+(active + not expired)" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    Detail    [label="Offer Detail
+Photo, price, pickup window" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    BizCheck  [label="Business currently
+active?" shape=diamond fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Closed    [label="Dialog: Restaurant Closed
+Cannot order" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+    Checkout  [label="Checkout Screen
+Quantity, address, notes, price" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20"]
+    Payment   [label="Payment Screen
+Confirm total" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20"]
+    Placed    [label="Order Placed
+Appears in My Orders" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold"]
+    Track     [label="Track Order
+Pending to Confirmed to Done" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+
+    Home -> Detail
+    Detail -> BizCheck [label="Order Now tapped"]
+    BizCheck -> Closed   [label="Closed" color="#C62828" fontcolor="#C62828"]
+    BizCheck -> Checkout [label="Open"   color="#2E7D32" fontcolor="#2E7D32"]
+    Checkout -> Payment -> Placed -> Track
+}

@@ -1,0 +1,32 @@
+
+digraph RoleRouting {
+    graph [rankdir=LR fontname="Helvetica" bgcolor="#FAFAFA" pad=0.6 nodesep=0.6 ranksep=1.1]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=11 penwidth=1.8]
+
+    AppLaunch  [label="App Launch
+Auth Gate" shape=box fillcolor="#ECEFF1" color="#455A64" fontname="Helvetica Bold"]
+    TokenCheck [label="Valid token in Keychain?" shape=diamond fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Login      [label="Login Screen" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+    ReadRoles  [label="Read roles from JWT" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+
+    AdminDash    [label="Admin Dashboard
+All data visible" shape=box fillcolor="#D1C4E9" color="#4527A0" fontcolor="#311B92"]
+    BizDash      [label="Business Dashboard
+Orders, Menu, Earnings" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20"]
+    CustomerDash [label="Customer App
+Browse and order" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+
+    R_Admin [label="ROLE_ADMIN"            shape=box fillcolor="#ECEFF1" color="#4527A0" fontsize=11]
+    R_Biz   [label="ROLE_BUSINESS_PARTNER" shape=box fillcolor="#ECEFF1" color="#2E7D32" fontsize=11]
+    R_Mem   [label="ROLE_MEMBER"           shape=box fillcolor="#ECEFF1" color="#2E7D32" fontsize=11]
+    R_User  [label="ROLE_USER"             shape=box fillcolor="#ECEFF1" color="#1565C0" fontsize=11]
+
+    AppLaunch -> TokenCheck
+    TokenCheck -> Login      [label="No" color="#C62828" fontcolor="#C62828"]
+    TokenCheck -> ReadRoles  [label="Yes" color="#2E7D32" fontcolor="#2E7D32"]
+    ReadRoles -> R_Admin -> AdminDash     [color="#4527A0"]
+    ReadRoles -> R_Biz   -> BizDash      [color="#2E7D32"]
+    ReadRoles -> R_Mem   -> BizDash      [color="#2E7D32"]
+    ReadRoles -> R_User  -> CustomerDash [color="#1565C0"]
+}

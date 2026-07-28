@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tee /private/tmp/claude-501/-Users-enajafi-Flutter-Projects-food-app/3f1b6080-096d-44ed-81b2-af0bfe7bc9ae/scratchpad/flutter_run_ios.log)",
+      "Bash(sort -u -t: -k2)",
+      "Bash(awk '/Widget _buildOverview\\\\\\(bool wide\\\\\\)/{print NR\": \"$0; f=1; d=0} f{for\\(i=1;i<=length\\($0\\);i++\\){c=substr\\($0,i,1\\); if\\(c==\"{\"\\)d++; if\\(c==\"}\"\\)d--}; if\\(f && d==0 && NR>442\\){print NR\": \"$0; exit}}' /Users/enajafi/Flutter_Projects/food_app/lib/screens/business/business_dashboard_screen.dart)",
+      "WebSearch",
+      "Bash(php -l src/Entity/Review.php)",
+      "Bash(git mv *)",
+      "Bash(dart format *)",
+      "Bash(grep -rn \"food-offers/city\\\\|food-offers/\\\\${\\\\|'food-offers/'\\\\|\\\\\"food-offers/\\\\\"\\\\|food-offers\\\\/\" lib/)",
+      "Bash(git rm *)",
+      "Bash(lsof -iTCP:8081 -sTCP:LISTEN -P)",
+      "Bash(lsof -iTCP:8082 -sTCP:LISTEN -P)",
+      "Bash(curl -s -m 3 -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8081/api/products?market=food)",
+      "Bash(curl -s -m 3 http://localhost:8081/api/products/sections/food)",
+      "Bash(curl -s -m 3 -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8081/api/food-offers)",
+      "Bash(curl -s -m 5 -o /dev/null -w \"products?market=food -> %{http_code}\\\\n\" \"http://localhost:8081/api/products?market=food\")",
+      "Bash(curl -s -m 5 -o /dev/null -w \"products/sections/food -> %{http_code}\\\\n\" \"http://localhost:8081/api/products/sections/food\")",
+      "Bash(curl -s -m 5 -o /dev/null -w \"products/sections/food \\(with Accept\\) -> %{http_code}\\\\n\" -H \"Accept: application/ld+json\" \"http://localhost:8081/api/products/sections/food\")",
+      "Bash(curl -s -m 5 -o /dev/null -w \"dashboard -> %{http_code}\\\\n\" \"http://localhost:8081/api/dashboard\")",
+      "Bash(curl -s -m 5 -o /dev/null -w \"business-partners -> %{http_code}\\\\n\" \"http://localhost:8081/api/business-partners\")",
+      "Bash(curl -s -m 5 \"http://localhost:8081/api/products?market=food\")",
+      "Bash(open -a Simulator)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(pkill -f \"flutter run -d EB05B3E4\")",
+      "Bash(mkfifo /private/tmp/claude-501/-Users-enajafi-Flutter-Projects-food-app/fe64744c-8971-47bb-9ba9-73f1efb35384/scratchpad/flutter_stdin)",
+      "Bash(nohup bash -c 'tail -f '\\\\''/private/tmp/claude-501/-Users-enajafi-Flutter-Projects-food-app/fe64744c-8971-47bb-9ba9-73f1efb35384/scratchpad/flutter_stdin'\\\\'' | flutter run -d EB05B3E4-CC72-45C7-A0E8-A8992513924B')",
+      "Bash(pkill -f \"flutter run\")",
+      "Bash(pkill -f \"tail -f.*flutter_stdin\")",
+      "Bash(mkdir -p /Users/enajafi/Flutter_Projects/food_app/lib/screens/shared_customer_business_screens/business_product_form *)",
+      "Bash(git -C /Users/enajafi/Flutter_Projects/food_app mv)",
+      "Bash(sed -i '' -e '1s|.*|// lib/screens/shared_customer_business_screens/business_product_form/pickup_window_picker.dart|' -e 's|import '\\\\''package:food_app/strings/business_offer_strings.dart'\\\\'';|import '\\\\''package:food_app/screens/shared_customer_business_screens/business_product_form/pickup_window_strings.dart'\\\\'';|' -e s/PickupPickerStrings/PickupWindowStrings/g /Users/enajafi/Flutter_Projects/food_app/lib/screens/shared_customer_business_screens/business_product_form/pickup_window_picker.dart)",
+      "Bash(find / -maxdepth 3 -iname \"*symfony*\")",
+      "Bash(find / -maxdepth 3 -iname \"*food_api*\")",
+      "Bash(php -l src/Entity/BusinessPartner.php)",
+      "Bash(lsof -nP -iTCP -sTCP:LISTEN)",
+      "Bash(python3 -c ' *)"
+    ],
+    "additionalDirectories": [
+      "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Entity",
+      "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/migrations",
+      "/Users/enajafi/Flutter_Projects/food_api/my-symfony-template-api/project-data/app/src/Dto",
+      "/Users/enajafi/Flutter_Projects/food_app/lib/screens/shared_customer_business_screens",
+      "/Users/enajafi/Flutter_Projects/food_api/perka-project-api/project-data/app/src/Entity"
+    ]
+  }
+}

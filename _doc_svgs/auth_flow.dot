@@ -1,0 +1,33 @@
+
+digraph AuthFlow {
+    graph [rankdir=TB fontname="Helvetica" splines=ortho bgcolor="#FAFAFA" pad=0.5 nodesep=0.55 ranksep=0.85]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.6]
+
+    S1 [label="User enters email + password" shape=box fillcolor="#ECEFF1" color="#455A64"]
+    S2 [label="POST /token  (grant_type=password)" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    S3 [label="Keycloak verifies credentials" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    S4 [label="Returns JWT
+access_token (5 min)
+refresh_token (hours)" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20"]
+    S5 [label="App saves tokens
+in encrypted Keychain" shape=box fillcolor="#ECEFF1" color="#455A64"]
+    S6 [label="API Request  —  Authorization: Bearer token" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    S7 [label="Symfony validates JWT
+signature + expiry" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    S8 [label="Load User from MySQL by email" shape=box fillcolor="#C8E6C9" color="#2E7D32" fontcolor="#1B5E20"]
+    S9 [label="Return API Response" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20"]
+
+    Expired [label="Token expired?" shape=diamond fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Refresh [label="Use refresh_token
+for new access_token" shape=box fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Fail    [label="Refresh failed
+Force logout to Login" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+
+    S1 -> S2 -> S3 -> S4 -> S5 -> S6 -> Expired
+    Expired -> S7   [label="No, still valid" color="#2E7D32" fontcolor="#2E7D32"]
+    Expired -> Refresh [label="Yes" color="#F57F17" fontcolor="#F57F17"]
+    Refresh -> S7   [label="New token OK" color="#2E7D32" fontcolor="#2E7D32"]
+    Refresh -> Fail [label="Also failed" color="#C62828" fontcolor="#C62828"]
+    S7 -> S8 -> S9
+}

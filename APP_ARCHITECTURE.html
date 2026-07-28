@@ -1,0 +1,4000 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perka Flutter App — Architecture Reference</title>
+  <style>
+    /* ═══════════ Design tokens — brand hues fixed, surfaces/text theme-aware ═══════════ */
+    :root {
+      /* Brand + semantic (constant across themes) */
+      --primary: #15803D;
+      --primary-d: #0F6E56;
+      --accent: #EF9F27;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --purple: #7C3AED;
+      --teal: #0D9488;
+
+      /* Light-theme surfaces/text (default) */
+      --page-bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --border: #E2E8F0;
+      --text: #334155;
+      --text-strong: #0F172A;
+      --text-muted: #64748B;
+      --code-bg: #F1F5F9;
+      --pre-bg: #0F172A;
+      --pre-text: #E2E8F0;
+      --nav-bg: #0F172A;
+      --nav-text: #94A3B8;
+      --row-hover: #F0FDF4;
+      --row-alt: #F8FAFC;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page-bg: #0B1220;
+        --surface: #121A2B;
+        --surface-alt: #1A2338;
+        --border: #283248;
+        --text: #C3CCDE;
+        --text-strong: #F1F5F9;
+        --text-muted: #8996B0;
+        --code-bg: #1A2338;
+        --pre-bg: #0A0F1A;
+        --pre-text: #DCE4F2;
+        --nav-bg: #070B14;
+        --nav-text: #93A0BD;
+        --row-hover: #14251C;
+        --row-alt: #16202F;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --page-bg: #0B1220;
+      --surface: #121A2B;
+      --surface-alt: #1A2338;
+      --border: #283248;
+      --text: #C3CCDE;
+      --text-strong: #F1F5F9;
+      --text-muted: #8996B0;
+      --code-bg: #1A2338;
+      --pre-bg: #0A0F1A;
+      --pre-text: #DCE4F2;
+      --nav-bg: #070B14;
+      --nav-text: #93A0BD;
+      --row-hover: #14251C;
+      --row-alt: #16202F;
+    }
+
+    :root[data-theme="light"] {
+      --page-bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --border: #E2E8F0;
+      --text: #334155;
+      --text-strong: #0F172A;
+      --text-muted: #64748B;
+      --code-bg: #F1F5F9;
+      --pre-bg: #0F172A;
+      --pre-text: #E2E8F0;
+      --nav-bg: #0F172A;
+      --nav-text: #94A3B8;
+      --row-hover: #F0FDF4;
+      --row-alt: #F8FAFC;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--page-bg);
+    }
+
+    /* ── Layout ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 270px;
+      height: 100vh;
+      background: var(--nav-bg);
+      color: var(--nav-text);
+      overflow-y: auto;
+      padding: 24px 0;
+      z-index: 100;
+      border-right: 1px solid var(--border);
+    }
+
+    nav h2 {
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 0 20px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+      margin-bottom: 8px;
+    }
+
+    nav a {
+      display: block;
+      padding: 5px 20px;
+      font-size: 13px;
+      color: var(--nav-text);
+      text-decoration: none;
+      transition: color .15s, background .15s;
+      border-radius: 4px;
+      margin: 1px 8px;
+    }
+
+    nav a:hover,
+    nav a:focus-visible,
+    nav a.active {
+      background: rgba(255, 255, 255, .08);
+      color: #fff;
+      outline: none;
+    }
+
+    nav .nav-section {
+      padding: 12px 20px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #64748B;
+    }
+
+    main {
+      margin-left: 270px;
+      padding: 48px 60px;
+      max-width: 1150px;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-strong);
+      margin-bottom: 8px;
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin: 52px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin: 30px 0 10px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 20px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    a {
+      color: var(--primary);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle.small {
+      font-size: 13px;
+    }
+
+    .lede {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Section divider label (Customer / Business) ── */
+    .part-divider {
+      margin: 64px 0 8px;
+      padding: 22px 26px;
+      border-radius: 14px;
+      color: #fff;
+    }
+
+    .part-divider.customer {
+      background: linear-gradient(120deg, #15803D, #0F6E56);
+    }
+
+    .part-divider.business {
+      background: linear-gradient(120deg, #7C3AED, #5B21B6);
+    }
+
+    .part-divider.shared {
+      background: linear-gradient(120deg, #334155, #0F172A);
+    }
+
+    .part-divider h2 {
+      border: none;
+      margin: 0 0 4px;
+      color: #fff;
+      font-size: 26px;
+    }
+
+    .part-divider p {
+      margin: 0;
+      color: rgba(255, 255, 255, .85);
+      font-size: 14px;
+    }
+
+    /* ── Tables ── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    thead th {
+      background: var(--nav-bg);
+      color: #fff;
+      padding: 9px 13px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--row-alt);
+    }
+
+    tbody tr:hover {
+      background: var(--row-hover);
+    }
+
+    td,
+    th {
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    td code {
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--text-strong);
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 1.6;
+      margin: 12px 0 20px;
+    }
+
+    pre .cmt {
+      color: #64748B;
+      font-style: italic;
+    }
+
+    pre .kw {
+      color: #93C5FD;
+    }
+
+    pre .fn {
+      color: #FCD34D;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Badges (HTTP verbs) — fixed light pill, readable on both themes ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge-get {
+      background: #DBEAFE;
+      color: #1D4ED8;
+    }
+
+    .badge-post {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .badge-put {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .badge-patch {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .badge-delete {
+      background: #F3E8FF;
+      color: #6B21A8;
+    }
+
+    /* ── Badges (architecture layer) ── */
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .tag-screen {
+      background: #DBEAFE;
+      color: #1D4ED8;
+    }
+
+    .tag-controller {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .tag-service {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .tag-widget {
+      background: #EDE9FE;
+      color: #5B21B6;
+    }
+
+    .tag-dead {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .tag-mock {
+      background: #FDE68A;
+      color: #78350F;
+    }
+
+    .tag-enum {
+      background: #E0E7FF;
+      color: #3730A3;
+    }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-left: 4px solid;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 13.5px;
+      background: var(--surface-alt);
+    }
+
+    .callout-info {
+      border-color: var(--primary);
+    }
+
+    .callout-warn {
+      border-color: var(--warning);
+    }
+
+    .callout-danger {
+      border-color: var(--danger);
+    }
+
+    .callout-success {
+      border-color: var(--success);
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-strong);
+    }
+
+    /* ── Class card (Screen/Controller/Service block) ── */
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 18px 0;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 18px;
+      background: var(--surface-alt);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-body {
+      padding: 4px 18px 14px;
+    }
+
+    .card-path {
+      font-family: monospace;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-strong);
+    }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 24px;
+      font-size: 13px;
+    }
+
+    .flow-step {
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .flow-step.alt {
+      background: var(--warning);
+    }
+
+    .flow-step.done {
+      background: var(--success);
+    }
+
+    .flow-step.fail {
+      background: var(--danger);
+    }
+
+    /* ── Payment/Cart process flowchart — vertical, branching ── */
+    .pflow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 20px 0 28px;
+    }
+
+    .pflow-node {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-strong);
+      text-align: center;
+      min-width: 200px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+    }
+
+    .pflow-node small {
+      display: block;
+      font-weight: 500;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .pflow-node.entry {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .pflow-node.entry small {
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .pflow-node.alt {
+      border-color: var(--warning);
+    }
+
+    .pflow-node.done {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+
+    .pflow-node.done small {
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .pflow-node.fail {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+
+    .pflow-node.fail small {
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .pflow-arrow {
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1.4;
+      padding: 2px 0;
+    }
+
+    .pflow-branch {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin: 4px 0;
+    }
+
+    .pflow-path {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 10px 14px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .pflow-path-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .pflow-branch {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* ── Nav-tree diagram (bottom nav / sidebar) ── */
+    .navtree {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 14px 0 22px;
+    }
+
+    .navtree .item {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface);
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .navtree .item small {
+      color: var(--text-muted);
+    }
+
+    /* ── Summary bar ── */
+    .summary-bar {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 22px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .stat-card .num-big {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    [id] {
+      scroll-margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      main {
+        margin-left: 0;
+        padding: 32px 24px;
+      }
+    }
+
+    @media print {
+      nav {
+        display: none;
+      }
+
+      main {
+        margin: 0;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================================
+     SIDEBAR NAV
+     ===================================================================== -->
+  <nav>
+    <h2>🍱 Perka</h2>
+    <div class="nav-section">Overview</div>
+    <a href="#intro">Introduction</a>
+    <a href="#pattern">Architecture Pattern</a>
+    <a href="#structure">Folder Structure</a>
+    <a href="#gaps">⚠️ Mock &amp; Dead Code</a>
+
+    <div class="nav-section">Shared / Core</div>
+    <a href="#sh-auth">Authentication</a>
+    <a href="#sh-network">Networking &amp; Token Refresh</a>
+    <a href="#sh-push">Push Notifications (FCM)</a>
+    <a href="#sh-mercure">Real-Time Updates (Mercure)</a>
+    <a href="#sh-notif">Notification Center</a>
+    <a href="#sh-cache">Caching</a>
+    <a href="#sh-i18n">Multi-language (i18n)</a>
+    <a href="#sh-images">Image Uploads</a>
+
+    <div class="nav-section">Customer App</div>
+    <a href="#cust-nav">Navigation Shell &amp; Dashboard</a>
+    <a href="#cust-auth">Auth / Onboarding</a>
+    <a href="#cust-home">Home / Browse Offers</a>
+    <a href="#cust-detail">Offer Detail</a>
+    <a href="#cust-checkout">Checkout, Cart &amp; Payment</a>
+    <a href="#cust-orders">My Orders</a>
+    <a href="#cust-favorites">Favorites</a>
+    <a href="#cust-profile">Profile</a>
+    <a href="#cust-addresses">Addresses</a>
+    <a href="#cust-payment-methods">Payment Methods (mock)</a>
+    <a href="#cust-settings">Settings</a>
+    <a href="#cust-help">Help / About</a>
+
+    <div class="nav-section">Business App</div>
+    <a href="#biz-nav">Navigation Shell</a>
+    <a href="#biz-dashboard">Dashboard / Overview</a>
+    <a href="#biz-orders">Orders Management</a>
+    <a href="#biz-history">Order History</a>
+    <a href="#biz-menu">Menu / Offer Management</a>
+    <a href="#biz-team">Team Members</a>
+    <a href="#biz-bank">Bank Account</a>
+    <a href="#biz-profile">Business Profile</a>
+    <a href="#biz-settings">Settings / Security / Hours</a>
+    <a href="#biz-analytics">Analytics &amp; Earnings</a>
+  </nav>
+
+  <!-- =====================================================================
+     MAIN CONTENT
+     ===================================================================== -->
+  <main>
+
+    <h1>🍱 Perka Flutter App — Architecture Reference</h1>
+    <p class="subtitle">
+      Flutter · GetX · Dio &nbsp;|&nbsp; Package name: <code>food_app</code> &nbsp;|&nbsp; Last updated:
+      <strong>July 2026</strong>
+    </p>
+    <p class="subtitle small">
+      This document explains the <strong>app itself</strong> — every screen, controller, service, and widget —
+      written so a developer completely new to this codebase can find their way around without reading
+      every file first. Backend/database internals are intentionally out of scope here (see the Symfony API's
+      own documentation for that); this is the Flutter side only.
+    </p>
+
+    <div class="summary-bar">
+      <div class="stat-card">
+        <div class="num-big">2</div>
+        <div class="label">Apps in one codebase (Customer + Business)</div>
+      </div>
+      <div class="stat-card">
+        <div class="num-big">25+</div>
+        <div class="label">GetX Controllers</div>
+      </div>
+      <div class="stat-card">
+        <div class="num-big">20+</div>
+        <div class="label">Services</div>
+      </div>
+      <div class="stat-card">
+        <div class="num-big">60+</div>
+        <div class="label">Screens</div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════════
+     INTRODUCTION
+     ═════════════════════════════════════════════════════════════════════ -->
+    <h2 id="intro">Introduction</h2>
+
+    <p>
+      This one Flutter codebase renders <strong>two completely separate apps</strong> that happen to share
+      infrastructure (login, push notifications, real-time updates, caching, translations):
+    </p>
+    <ul style="padding-left:20px; margin-bottom:16px; line-height:2">
+      <li>🛍️ <strong>Customer app</strong> — browse food offers, place orders, track them, manage
+        favorites/profile/addresses.</li>
+      <li>🏪 <strong>Business app</strong> — manage a restaurant/shop's offers, handle incoming orders in real time,
+        manage the team and bank account.</li>
+    </ul>
+    <p>
+      After login, <code>AuthGate</code> reads the user's role from the JWT and routes them into exactly one of
+      these two experiences (there's also a third, smaller Admin dashboard, out of scope for this document).
+      A single account can also switch between the two if it has both a customer identity and business access —
+      both the customer drawer and the business drawer have a "switch view" shortcut.
+    </p>
+
+    <div class="callout callout-info">
+      <strong>📌 How to use this document</strong>
+      Jump to the section for whatever you're touching. Each feature section covers, in order: the
+      <strong>Screens</strong> (what the user sees), the <strong>Controller</strong> (the state + logic behind it),
+      the <strong>Service</strong> (the actual network calls), and any <strong>notable widgets</strong>. Customer and
+      Business sections are entirely separate — nothing is mixed together.
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════════
+     PATTERN
+     ═════════════════════════════════════════════════════════════════════ -->
+    <h2 id="pattern">Architecture Pattern (GetX)</h2>
+
+    <p>Every feature in this app follows the same four-layer flow. Once you've understood it once, you've understood the
+      whole codebase:</p>
+
+    <div class="flow">
+      <div class="flow-step">Screen (View)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step alt">Controller</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Service</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step done">Model</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Lives in</th>
+            <th>Responsibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-screen">Screen</span></td>
+            <td><code>lib/screens/**</code></td>
+            <td>Pure UI. Reads reactive <code>.obs</code> values wrapped in <code>Obx(() =&gt; ...)</code> so it
+              rebuilds automatically. Contains <strong>zero</strong> business logic or network calls.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-controller">Controller</span></td>
+            <td><code>lib/controllers/**</code></td>
+            <td>A <code>GetxController</code>. Holds state as <code>.obs</code> fields, exposes methods the screen calls
+              (e.g. <code>fetchOrders()</code>), talks to one or more Services.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-service">Service</span></td>
+            <td><code>lib/services/**</code></td>
+            <td>Makes the actual <code>Dio</code> HTTP call to the backend and parses the JSON response into a Model. No
+              UI, no GetX state.</td>
+          </tr>
+          <tr>
+            <td>Model</td>
+            <td><code>lib/models/**</code></td>
+            <td>A plain Dart class with a <code>fromJson</code>/<code>toJson</code>. No logic beyond parsing/formatting.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>When a Controller updates an <code>.obs</code> value, every <code>Obx()</code> widget reading it rebuilds
+      automatically — no <code>setState()</code> anywhere in this pattern.</p>
+
+    <h3>Dependency wiring — <code>InitialBinding</code></h3>
+    <p>
+      <code>lib/bindings/initial_binding.dart</code> is where every Service and Controller is constructed and
+      registered, once, at app startup. Two registration styles are used throughout the app:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Style</th>
+            <th>Meaning</th>
+            <th>Used for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Get.put(x, permanent: true)</code></td>
+            <td>Created immediately, lives for the app's entire lifetime</td>
+            <td><code>ApiService</code>, <code>KeycloakAuthService</code>, <code>PushNotificationService</code>,
+              <code>NotificationController</code>, <code>LocationController</code>, <code>BankAccountController</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>Get.lazyPut(() =&gt; x, fenix: true)</code></td>
+            <td>Created on first use; if disposed, automatically re-created next time it's requested</td>
+            <td>Most feature controllers — <code>FoodOfferController</code>, <code>OrderController</code>,
+              <code>FavoritesOfferController</code>, <code>BusinessOrderController</code>,
+              <code>BusinessOfferController</code>, etc.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      On logout, <code>InitialBinding.clearUserControllers()</code> force-deletes every user-scoped controller so
+      the next login starts with a clean slate instead of showing the previous user's stale data.
+    </p>
+
+    <!-- ═════════════════════════════════════════════════════════════════════
+     FOLDER STRUCTURE
+     ═════════════════════════════════════════════════════════════════════ -->
+    <h2 id="structure">Folder Structure</h2>
+    <div class="callout callout-info">
+      <strong>Multi-market app, not just Food</strong>
+      Perka now spans more than one market — Food and Cosmetic today, more later (Clothes is scaffolded for).
+      The reorg reflects that: instead of one flat <code>screens/customer/</code>, each market gets its own
+      folder (<code>food_teil/</code>, <code>cosmetic_teil/</code>), and anything genuinely market-agnostic
+      (product detail, payment, cart, order list) lives under <code>screens/shared_customer_business_screens/</code>
+      or a dedicated top-level module like <code>cart/</code>, built once and wired up per-market via a small
+      "config object" passed in by each market's own thin screen (see <a href="#cust-checkout">Checkout, Cart
+        &amp; Payment</a> for a concrete walkthrough of this pattern).
+    </div>
+
+    <pre><code>lib/
+├── bindings/                 <span class="cmt">// InitialBinding — wires every Controller/Service once at startup</span>
+├── cart/                    <span class="cmt">// Shopping cart (market-agnostic) — models/, controllers/, views/, constants/</span>
+├── constants/
+│   ├── api_constants.dart, api_endpoints.dart
+│   ├── cosmetic/             <span class="cmt">// Cosmetic-market strings + its checkout/order screens</span>
+│   └── food/                <span class="cmt">// Food-market strings (product detail, offer, checkout wording)</span>
+├── controllers/               <span class="cmt">// GetxControllers not yet under a feature folder</span>
+│   ├── food_controllers/        <span class="cmt">// Food customer + business controllers</span>
+│   └── prodcuct_controllers/     <span class="cmt">// Generic ProductController/ProductOrderController (Cosmetic today)</span>
+├── core/
+│   ├── shared_widgets/          <span class="cmt">// UniversalMarketCard, ItemImageCarousel, custom buttons, etc.</span>
+│   └── theme/                 <span class="cmt">// market_colors.dart — per-market accent colours</span>
+├── enums/                    <span class="cmt">// app_enums.dart — single source of truth for every enum in the app</span>
+├── features/dashboard/           <span class="cmt">// Dashboard-tile widgets (the market-picker home)</span>
+├── l10n/                     <span class="cmt">// AppTranslations — EN + FA string maps</span>
+├── models/                    <span class="cmt">// Plain Dart data classes with fromJson/toJson (+ product_models/, food_models/)</span>
+├── network/                   <span class="cmt">// ApiService — the single shared Dio instance</span>
+├── profile_and_orders/            <span class="cmt">// Profile + Orders, merged since they share so much UI</span>
+│   ├── profile/               <span class="cmt">// Addresses, settings, payment-methods (mock), qty_step_button, etc.</span>
+│   └── orders/                <span class="cmt">// Order/Payment/Checkout controllers, models, services, views</span>
+├── routes/                    <span class="cmt">// AppRoutes (path constants) + AppPages (GetPage registrations)</span>
+├── screens/
+│   ├── admin/                  <span class="cmt">// Admin dashboard (out of scope for this document)</span>
+│   ├── auth/                   <span class="cmt">// Login, Register, AuthGate, KeycloakAuthService, AuthInterceptor</span>
+│   ├── cosmetic_teil/            <span class="cmt">// Cosmetic market — customer_views/, business_views/</span>
+│   ├── food_teil/               <span class="cmt">// Food market — customer_views/, business_views/</span>
+│   ├── dashboard/               <span class="cmt">// AppShellScreen, DashboardShell, ShellAppBar, GlobalBottomNav</span>
+│   ├── shared_customer_business_screens/
+│   │   ├── customer_dashboard/     <span class="cmt">// Generic screens shared across markets: ProductDetailScreen,</span>
+│   │   │                     <span class="cmt">// PaymentScreen, FavoritesScreen, OrderListScreen, OrderDetailScreen</span>
+│   │   └── business_dashboard/
+│   └── shared/                 <span class="cmt">// NotificationsScreen — used by both customer and business shells</span>
+├── services/                   <span class="cmt">// Dio-calling classes — one per feature/resource</span>
+├── strings/                    <span class="cmt">// *Strings classes — one .tr-based accessor class per screen/feature</span>
+├── theme/                     <span class="cmt">// AppColors — the only place hex colors are allowed to live</span>
+├── utils/                     <span class="cmt">// AppLogger, relative_time, distance/map helpers, etc.</span>
+└── widgets/                    <span class="cmt">// common/, dialog/, images/, notification/, review/ — cross-app reusables</span>
+</code></pre>
+
+    <div class="callout callout-warn">
+      <strong>Two generic-screen patterns to recognise before editing anything shared</strong>
+      Files under <code>shared_customer_business_screens/</code> and <code>cart/</code> follow a deliberate
+      "config object" pattern: the generic screen (e.g. <code>ProductDetailScreen</code>, <code>PaymentScreen</code>)
+      takes a plain-data <code>...Config</code> class with values + callbacks, and never imports a market model
+      (no <code>FoodOfferModel</code>, no <code>ProductModel</code>) or a market's translation keys. Each market's
+      own thin screen (e.g. <code>CustomerProductDetailScreen</code> for Food) builds that config from its own
+      model and hands it in. When you see a file ending in <code>_old.dart</code>, that's the pre-genericization
+      original kept only for reference — it is not imported anywhere and should not be edited.
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>⚠️ Section on mock/unfinished features — read before assuming something is "real"</strong>
+      Several screens in this app are fully built visually but are <strong>not connected to any backend</strong> —
+      they operate on hardcoded local data. Jumping straight to <a href="#gaps">Mock &amp; Dead Code</a> before
+      making changes to Payment Methods, Analytics, Earnings, or Operating Hours will save you from assuming
+      a bug is on the backend when the screen was never wired up in the first place.
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════════
+     MOCK / DEAD CODE APPENDIX (kept near the top on purpose)
+     ═════════════════════════════════════════════════════════════════════ -->
+    <h2 id="gaps">⚠️ Mock Data &amp; Dead Code — Read This First</h2>
+    <p>Before you assume a bug is a backend problem, check this table. These are fully-built screens that are either not
+      wired to any API at all, or contain widgets/files that are never actually used.</p>
+
+    <h3>Entirely mock — no backend calls</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen / Class</th>
+            <th>Side</th>
+            <th>What's mocked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>CustomerPaymentMethodsScreen</code>, <code>AddCardSheet</code></td>
+            <td>Customer</td>
+            <td>Profile's standalone "Payment Methods" screen — hardcoded mock card list, "add card" never
+              submits anywhere. <strong>Not</strong> the same code as checkout's payment step anymore (see
+              <a href="#cust-checkout">Checkout, Cart &amp; Payment</a>) — that one really does select cash or a
+              PSP gateway, it's just the actual bank-redirect API call that isn't wired up yet.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessAnalyticsController</code></td>
+            <td>Business</td>
+            <td>All 5 time-period datasets (<code>_today</code>, <code>_week</code>, <code>_month</code>,
+              <code>_lastMonth</code>, <code>_lastThreeMonths</code>) are static constants. No service, no HTTP call at
+              all.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessEarningsController</code></td>
+            <td>Business</td>
+            <td>Same pattern — 5 static mock <code>EarningsData</code> sets, including the "today's earnings" figure
+              shown on the Dashboard Overview card.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessOperatingHoursScreen</code></td>
+            <td>Business</td>
+            <td>Save button has a <code>// TODO: POST /api/business_partners/{id}/hours</code> comment — just fakes an
+              800ms delay and shows a success snackbar.</td>
+          </tr>
+          <tr>
+            <td><code>business_security_screen.dart</code> — 2FA toggle &amp; "Active Sessions"</td>
+            <td>Business</td>
+            <td>2FA switch only flips local state. The two session rows (iPhone/MacBook) are hardcoded, not fetched.
+            </td>
+          </tr>
+          <tr>
+            <td><code>business_security_screen.dart</code> — "Delete account"</td>
+            <td>Business</td>
+            <td>Dialog has a <code>// TODO: DELETE /api/users/{id}</code> comment, does nothing on confirm.</td>
+          </tr>
+          <tr>
+            <td><code>team_members_screen.dart</code> — edit permissions sheet</td>
+            <td>Business</td>
+            <td>Save button has a <code>// TODO: PATCH /api/users/{id}/permissions</code> comment — updates local state
+              only.</td>
+          </tr>
+          <tr>
+            <td>"Reviews" dashboard tab</td>
+            <td>Business</td>
+            <td><code>Center(child: Text('Reviews'))</code> — a placeholder, nothing built yet.</td>
+          </tr>
+          <tr>
+            <td>Social links, "Rate app", "Reorder", "Contact support", biometric toggle</td>
+            <td>Both</td>
+            <td>Scattered across About/Settings/Order Actions screens — buttons wired to empty
+              <code>onPressed: () {}</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Dead code — defined but never used</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Why it's dead</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>lib/widgets/order/order_header_section.dart</code></td>
+            <td>Superseded by an inline header built directly in <code>order_detail_screen.dart</code>.</td>
+          </tr>
+          <tr>
+            <td><code>lib/widgets/profile/*</code> (all 4 files)</td>
+            <td><code>CustomerProfileScreen</code> reimplements equivalent UI inline instead of using these.</td>
+          </tr>
+          <tr>
+            <td><code>lib/screens/customer/customer_food_offer_screen.dart</code> (+ <code>_old</code> variant)</td>
+            <td>Not referenced by any route; <code>HomeScreen/customer_food_screen.dart</code> is the real Home screen.
+            </td>
+          </tr>
+          <tr>
+            <td><code>ApiEndpoints.customerBankAccounts</code></td>
+            <td>Constant defined, never consumed by any service.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="part-divider shared">
+      <h2 id="shared-part">Shared / Core Infrastructure</h2>
+      <p>Used by BOTH the Customer and Business apps — read this once, it applies everywhere below.</p>
+    </div>
+
+    <!-- ═══════════════════════════ AUTH ═══════════════════════════ -->
+    <h2 id="sh-auth">Authentication</h2>
+    <p class="lede">Login/registration screens differ per audience (covered in each app's own section), but the
+      underlying token machinery is one shared system.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">KeycloakAuthService</span>
+        <span class="card-path">lib/screens/auth/keycloak_auth_service.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Registered <code>permanent: true</code>. Talks directly to Keycloak (not the Symfony API) using its own bare
+          <code>Dio</code> instance with no auth interceptor — attaching an interceptor here would create an infinite
+          refresh loop.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>login(username, password)</code></td>
+                <td>Direct Access Grant —
+                  <code>POST {keycloakBaseUrl}/realms/{realm}/protocol/openid-connect/token</code>. Throws
+                  <code>incorrect_credentials</code> or <code>server_unreachable</code>.</td>
+              </tr>
+              <tr>
+                <td><code>getValidAccessToken()</code></td>
+                <td>Decodes the stored JWT's <code>exp</code>; if it expires within 30s, silently refreshes first. Uses
+                  a <code>Completer</code> mutex so concurrent callers share one in-flight refresh instead of firing N
+                  parallel refresh requests.</td>
+              </tr>
+              <tr>
+                <td><code>forceRefreshToken()</code></td>
+                <td>Discards the cached token and refreshes unconditionally — used after the server itself rejects a
+                  client-side-still-valid token (401).</td>
+              </tr>
+              <tr>
+                <td><code>logout({localOnly})</code></td>
+                <td>Best-effort <code>POST .../logout</code> + clears secure storage.</td>
+              </tr>
+              <tr>
+                <td><code>getRolesFromToken(token)</code></td>
+                <td>Decodes <code>realm_access.roles</code> from the JWT payload — this is how the app knows if someone
+                  is <code>ROLE_USER</code>, <code>ROLE_BUSINESS_PARTNER</code>, <code>ROLE_MEMBER</code>, or
+                  <code>ROLE_ADMIN</code>.</td>
+              </tr>
+              <tr>
+                <td><code>homeRouteForRoles(roles)</code></td>
+                <td>Role → route mapping, used by both <code>AuthGate</code> and <code>LoginController</code> to send
+                  the user to the right dashboard.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">AuthController</span>
+        <span class="card-path">lib/controllers/auth_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>App-wide singleton (<code>permanent: true</code>), also a <code>WidgetsBindingObserver</code> so it can react
+          to app foreground/background transitions.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State / getter</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>accessToken</code> <em>(RxnString)</em></td>
+                <td>The raw JWT, persisted to <code>flutter_secure_storage</code>.</td>
+              </tr>
+              <tr>
+                <td><code>isEmailVerified</code></td>
+                <td>Defaults <code>true</code> so no false-positive "verify your email" banner shows before the first
+                  real check.</td>
+              </tr>
+              <tr>
+                <td><code>isLoggedIn</code>, <code>firstName</code>, <code>fullName</code>, <code>email</code>,
+                  <code>userId</code>, <code>roles</code></td>
+                <td>All derived by decoding the JWT once — no extra network call needed just to read who's logged in.
+                </td>
+              </tr>
+              <tr>
+                <td><code>isBusinessPartner</code>, <code>isMember</code>, <code>hasBusinessDashboardAccess</code>,
+                  <code>isAdmin</code></td>
+                <td>Role checks used throughout the app to gate UI (e.g. hiding owner-only menu items from staff).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>setToken(token)</code></td>
+                <td>Persists + updates all the reactive getters above.</td>
+              </tr>
+              <tr>
+                <td><code>setEmailVerified(bool)</code></td>
+                <td>Starts/stops a 30s polling <code>Timer</code> that re-checks verification while the account is
+                  unverified — also re-triggered when the app resumes from background.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ NETWORKING ═══════════════════════════ -->
+    <h2 id="sh-network">Networking &amp; Automatic Token Refresh</h2>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">ApiService</span>
+        <span class="card-path">lib/network/api_service.dart</span>
+      </div>
+      <div class="card-body">
+        <p>The <strong>single</strong> <code>Dio</code> instance the whole app's business logic talks through — every
+          other Service (<code>FoodOfferService</code>, <code>OrderService</code>, etc.) is constructed with this one
+          shared instance, so configuring auth here means every request everywhere is authenticated automatically. Two
+          interceptors are attached in the constructor:</p>
+        <ol style="padding-left:20px; line-height:1.9; margin-bottom:12px;">
+          <li>An inline <code>InterceptorsWrapper</code> that rewrites
+            <code>options.baseUrl = ApiConstants.baseUrl</code> on <em>every</em> request — because the Dio instance is
+            constructed at app startup, before the dev-host probe (see below) has resolved which IP to use. Without
+            this, requests would freeze onto whichever host happened to be first when the app launched.</li>
+          <li><code>AuthInterceptor</code> — see below.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Interceptor</span>
+        <span class="card-title">AuthInterceptor</span>
+        <span class="card-path">lib/screens/auth/auth_interceptor.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Runs on every request/response through the shared Dio client. Screens never touch tokens directly — they just
+          call a Service method and this interceptor handles the rest.</p>
+        <h4>onRequest</h4>
+        <p>Skips token injection entirely for requests tagged <code>Options(extra: {'noAuth': true})</code> (public
+          endpoints like browsing offers). Otherwise calls <code>getValidAccessToken()</code> and attaches
+          <code>Authorization: Bearer &lt;token&gt;</code>. If there's genuinely no token left, rejects the request
+          immediately with a <code>session_expired</code> marker (distinguished from a transient network failure during
+          refresh, which fails normally instead of forcing a logout).</p>
+        <h4>onError</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Condition</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>session_expired</code> marker from onRequest</td>
+                <td>Redirects to Login (<code>Get.offAllNamed</code>), guarded by a <code>_redirecting</code> flag so
+                  multiple concurrent 401s don't stack duplicate navigations.</td>
+              </tr>
+              <tr>
+                <td>HTTP 403, not tagged <code>silent403</code></td>
+                <td>Shows a global "permission denied" snackbar with the backend's error message — a safety net so
+                  screens without bespoke 403 handling still tell the user something. Bulk lookups that are
+                  <em>expected</em> to sometimes 403 (e.g. fetching N team members' profiles) tag their requests
+                  <code>silent403: true</code> so one failure doesn't spam N stacked snackbars.</td>
+              </tr>
+              <tr>
+                <td>HTTP 401, first occurrence</td>
+                <td>Calls <code>forceRefreshToken()</code> (not the cached token — that's exactly what just got
+                  rejected), retries the original request once with the new token (tagged <code>_retried</code> to
+                  prevent infinite loops). If refresh itself fails, logs out and redirects to Login.</td>
+              </tr>
+              <tr>
+                <td>Retry with a fresh token still fails</td>
+                <td>Treated as a real permissions problem, not a session problem — does <strong>not</strong> force
+                  logout, lets the calling screen show its own error state.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Dev-host resolution (why the app finds your laptop automatically)</h3>
+    <p><code>lib/constants/api_constants.dart</code> — <code>ApiConstants.resolveDevHost()</code>. On development
+      builds, the backend runs on a laptop whose IP changes per network (home Wi-Fi, hotspot, emulator, simulator). This
+      probes a priority list of known hosts (<code>10.0.2.2</code> for Android emulator, <code>localhost</code> for iOS
+      simulator, then known LAN/hotspot IPs) by opening a TCP socket to each in parallel, and uses the first one that
+      responds. Runs from <code>AuthGate</code>, in parallel with the auth check and the splash animation, so it never
+      adds extra wait time.</p>
+
+    <!-- ═══════════════════════════ PUSH ═══════════════════════════ -->
+    <h2 id="sh-push">Push Notifications (FCM)</h2>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">PushNotificationService</span>
+        <span class="card-path">lib/services/push_notification_service.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Registered <code>permanent: true</code>, initialized once after login (<code>init()</code>). Three jobs:</p>
+        <ol style="padding-left:20px; line-height:1.9; margin-bottom:12px;">
+          <li>Requests OS notification permission and registers this device's FCM token with the backend
+            (<code>POST /device-tokens</code>).</li>
+          <li>Shows a styled in-app banner (<code>Get.snackbar</code>) when a push arrives while the app is open
+            (<code>_handleForeground</code>).</li>
+          <li>Routes to the right screen when a notification is tapped — whether the app was backgrounded
+            (<code>onMessageOpenedApp</code>) or fully terminated (<code>getInitialMessage</code>) — via
+            <code>_routeMessage</code>.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Push <code>type</code></th>
+                <th>Foreground effect</th>
+                <th>Tap effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>new_order</code></td>
+                <td>Force-refreshes <code>BusinessOrderController.fetchOrders()</code> immediately (bypasses its normal
+                  30s cooldown) so the badge/list is correct the instant the push arrives, not on the next poll.</td>
+                <td>Opens the order detail screen — business or customer variant depending on who's logged in on this
+                  device.</td>
+              </tr>
+              <tr>
+                <td><code>new_offer</code></td>
+                <td>Calls <code>FoodOfferController.refreshForNewOffer()</code>.</td>
+                <td>Fetches the offer and opens <code>CustomerProductDetailScreen</code> (skipped entirely if the
+                  current device is a business partner, or if <code>publishingOffer</code> is true — set while the
+                  business's own publish flow is in flight, to avoid double-navigation from a self-triggered push).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>openOrder(orderId)</code> and <code>openOffer(offerId)</code> are public methods extracted specifically
+          so <a href="#sh-notif">NotificationsScreen</a> can reuse the exact same navigation logic when a notification
+          history row is tapped, instead of duplicating the role-aware routing.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ MERCURE ═══════════════════════════ -->
+    <h2 id="sh-mercure">Real-Time Updates (Mercure)</h2>
+    <p class="lede">A faster, complementary channel alongside FCM — Server-Sent Events (SSE) pushed from a Mercure hub,
+      used where near-instant UI refresh matters more than FCM's delivery latency allows. Six topics total: three public
+      (no auth), three private (JWT-gated).</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">MercureController</span>
+        <span class="card-path">lib/controllers/mercure_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Single source of truth for the session's Mercure subscriber credential — <code>permanent: true</code>, shared
+          by both apps. Calls <code>GET /me/mercure-token</code> once per session (<code>ensureLoaded()</code>, called
+          from <code>LoginController.signIn()</code> and <code>AuthGate</code>'s app-restore path, right next to the
+          existing <code>/users/me</code> calls) and exposes <code>tokenRx</code> (reactive JWT) plus
+          <code>topicsRx</code> (the private topics this user is authorized for). Every user gets
+          <code>users/{id}/orders</code>; a business-linked user (owner or staff) additionally gets
+          <code>business-partners/{id}/orders</code> and <code>business-partners/{id}/reviews</code> — exposed as the
+          <code>userOrdersTopic</code>/<code>businessOrdersTopic</code>/<code>businessReviewsTopic</code> getters rather
+          than callers hardcoding a topic string.</p>
+        <p>Proactively refreshes by decoding the JWT's <code>exp</code> claim and re-fetching ~30 seconds before it
+          expires (falls back to a fixed 30-minute interval if the token has no readable <code>exp</code>). Subscribers
+          don't run their own refresh timers — they <code>ever(mercureCtrl.tokenRx, ...)</code> and simply resubscribe
+          whenever the token changes. <code>clear()</code> is called from
+          <code>InitialBinding.clearUserControllers()</code> on logout so the next login fetches a token scoped to
+          whoever just logged in.</p>
+        <div class="callout callout-warn">
+          <strong>⚠️ Breaking change from the old per-business endpoint</strong>
+          Replaces <code>GET /business-partners/me/mercure-token</code> → <code>{token, topic}</code> (singular,
+          business-only). The new <code>GET /me/mercure-token</code> → <code>{token, topics: [...]}</code> is called for
+          every logged-in user, not just business partners.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">MercureService</span>
+        <span class="card-path">lib/services/mercure_service.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Auth</th>
+                <th>Fires on</th>
+                <th>Subscribed by</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>food-offers/city/{citySlug}</code></td>
+                <td>None</td>
+                <td>New offer published in that city</td>
+                <td><code>FoodOfferController</code> — re-subscribes whenever
+                  <code>AddressController.selectedAddress</code>'s city changes; triggers
+                  <code>refreshForNewOffer()</code></td>
+              </tr>
+              <tr>
+                <td><code>food-offers/{offerId}</code></td>
+                <td>None</td>
+                <td>Stock changes or the offer expires</td>
+                <td><code>CustomerProductDetailScreen</code> <strong>and</strong> <code>BusinessOfferDetailScreen</code>
+                  — both patch <code>quantityAvailable</code>/<code>weightAvailableKg</code>/<code>status</code> into
+                  local state via <code>setState</code>, no refetch</td>
+              </tr>
+              <tr>
+                <td><code>business-partners/{id}/status</code></td>
+                <td>None</td>
+                <td>Business toggles open/closed or closes permanently</td>
+                <td><code>CustomerProductDetailScreen</code> — patches the live open/closed pill; overrides the snapshot
+                  baked into <code>offer.businessPartner</code></td>
+              </tr>
+              <tr>
+                <td><code>users/{id}/orders</code></td>
+                <td>Bearer token</td>
+                <td>One of your own orders changes status</td>
+                <td><code>OrderController</code> — triggers <code>refreshAfterOrderChange()</code>, <strong>not</strong>
+                  plain <code>fetchOrders()</code> — see the reliability card below for why</td>
+              </tr>
+              <tr>
+                <td><code>business-partners/{id}/orders</code></td>
+                <td>Bearer token</td>
+                <td>New order placed at your business, and (confirmed 2026-07-19) subsequent status changes on it too,
+                  e.g. a customer cancelling</td>
+                <td><code>BusinessOrderController</code> — triggers <code>fetchOrders(force: true)</code> and, if the
+                  Menu tab has been opened this session, <code>BusinessOfferController.fetchMyOffers()</code></td>
+              </tr>
+              <tr>
+                <td><code>business-partners/{id}/reviews</code></td>
+                <td>Bearer token</td>
+                <td>New review posted</td>
+                <td><em>Not subscribed anywhere yet</em> — no Reviews screen exists (dashboard tab 5 is a bare
+                  placeholder); topic is available via <code>MercureController.businessReviewsTopic</code> for whoever
+                  builds it</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Each topic decodes into a small event model (<code>MercureOfferEvent</code>,
+          <code>OfferStockMercureEvent</code>, <code>BusinessStatusMercureEvent</code>,
+          <code>UserOrderMercureEvent</code>, <code>OrderMercureEvent</code>) — a <em>subset</em> of the full model,
+          just enough to know "something changed" (or, for the two public offer-detail topics, enough to patch the open
+          screen directly without a refetch).</p>
+        <div class="callout callout-info">
+          <strong>City slug has no backend field</strong>
+          "Current city" for <code>food-offers/city/{citySlug}</code> is a Flutter-side decision — this app derives it
+          from <code>AddressController.selectedAddress.city</code>, slugified by <code>MercureService.citySlug()</code>
+          (lowercase, accents stripped, punctuation → hyphens). A customer with no selected address gets no live
+          new-offer alerts until they pick one.
+        </div>
+        <div class="callout callout-warn">
+          <strong>⚠️ The SSE client never surfaces HTTP status codes</strong>
+          The <code>flutter_client_sse</code> package used here does not expose the connection's HTTP status to callers
+          — a 401 (expired/invalid token) looks identical to a normal idle reconnect (silent internal retry). This is
+          why token refresh for private topics is <strong>proactive</strong> (via <code>MercureController</code>'s
+          JWT-exp timer) rather than reactive. The package also prints its own raw <code>---ERROR---</code> /
+          <code>---RETRY CONNECTION---</code> / <code>--SUBSCRIBING TO SSE---</code> lines straight to the console on
+          every drop-and-reconnect — cosmetic noise from a healthy connection recovering, <strong>not</strong> a Dart
+          exception and not necessarily a sign of a real problem, unless it loops continuously or live events genuinely
+          stop arriving afterward.
+        </div>
+        <div class="callout callout-danger">
+          <strong>⚠️ Solved 2026-07-19 — private topics are full IRIs, not bare paths</strong>
+          <code>MercureController</code>'s topic matcher originally compared with <code>t.startsWith('users/')</code> /
+          <code>t.startsWith('business-partners/')</code>, assuming the backend would send bare paths like
+          <code>users/1/orders</code>. Real device logs showed the backend actually sends full IRIs:
+          <code>https://api.template.local/users/1/orders</code>. That never starts with <code>users/</code>, so
+          <code>userOrdersTopic</code>/<code>businessOrdersTopic</code>/<code>businessReviewsTopic</code> always
+          returned <code>null</code>, and <strong>every private-topic subscription silently never connected at
+            all</strong> — not "connects but receives nothing" (that would be the
+          missing-<code>Authorization</code>-header failure mode), the SSE call was never even made. Fixed by
+          <code>MercureController._topicPath()</code>, which strips a <code>scheme://host/</code> prefix (if present)
+          before the prefix/suffix comparison, so the matcher works for both shapes. Still returns the original
+          untouched string as the actual subscribed <code>topic:</code> — only the <em>comparison</em> operates on the
+          stripped path.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Reliability</span>
+        <span class="card-title">Order status live-refresh &amp; stock-restore-on-cancel</span>
+      </div>
+      <div class="card-body">
+        <p>Two related but separate real-time behaviors, both debugged end-to-end on 2026-07-19 via a live user report
+          ("status shows Pending", then "quantity not updated") plus device logs — kept together here since the fixes
+          build on each other chronologically.</p>
+
+        <h4>1. Order status not reflecting on the open detail screen</h4>
+        <p><code>OrderController.refreshAfterOrderChange()</code> (used by both the <code>users/{id}/orders</code>
+          Mercure handler and the <code>order_status_changed</code> FCM path) refreshes the flat <code>orders</code>
+          list <strong>and</strong>, if <code>selectedOrder</code> is currently set, re-fetches that specific order via
+          <code>fetchOrderById</code>. Before this fix, a list-only refresh left <code>OrderDetailScreen</code> (which
+          reads the separate <code>selectedOrder</code> field) stale even though the event genuinely arrived — the exact
+          same class of bug independently found and fixed in <code>BusinessOrderController.updateStatus()</code> (which
+          already correctly re-fetched <code>selectedOrder</code> when open) and in the two offer-detail screens'
+          Mercure conversion below.</p>
+
+        <h4>2. Quantity not restoring on cancel — the real chain of bugs</h4>
+        <p>Four call sites credit stock back after a cancellation: <code>OrderController.cancelOrder()</code> and
+          <code>.deleteOrder()</code> (customer-initiated), <code>BusinessOrderController.updateStatus()</code>
+          transitioning to <code>'cancelled'</code> (business-initiated), and
+          <code>OrderController.refreshAfterOrderChange()</code> (customer's view of a business-initiated cancellation,
+          via a before/after status-snapshot diff). Getting this reliable took four separate fixes:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Bug</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Weight-based offers never restored <code>weightAvailableKg</code> —
+                  <code>FoodOfferController.restoreQuantities()</code> unconditionally bumped
+                  <code>quantityAvailable</code> for every matched offer, which also corrupted weight-based offers
+                  (meant to keep that field <code>null</code>) with a bogus non-null value</td>
+                <td>Branch on <code>isWeightBased</code>: weight-based offers restore <code>weightAvailableKg</code> via
+                  <code>OrderItemModel.weightTotalKg</code>; everything else restores <code>quantityAvailable</code> as
+                  before</td>
+              </tr>
+              <tr>
+                <td><code>BusinessOrderController.updateStatus()</code> had zero restore logic — a partner
+                  cancelling/rejecting their own order never saw their own Menu tab's stock go back up</td>
+                <td>Added <code>BusinessOfferController.restoreQuantities()</code> (same weight-based branch, writes
+                  into the flat <code>myOffers</code> list), called from <code>updateStatus()</code> guarded against
+                  double-crediting a retry</td>
+              </tr>
+              <tr>
+                <td><code>refreshAfterOrderChange()</code> only refreshed order data — a business-initiated cancellation
+                  never restored the <em>customer's</em> stock view</td>
+                <td>Snapshot each order's status before <code>fetchOrders()</code> replaces the list, diff after,
+                  restore for any order that just transitioned to <code>'cancelled'</code> (guarded against misreading
+                  the very first fetch as a mass transition)</td>
+              </tr>
+              <tr>
+                <td><strong>The actual remaining blocker, found via device log</strong>
+                  (<code>restoreQuantities: crediting 1 item(s) for offer id(s) [0]</code>) — the orders <em>list</em>
+                  endpoint (<code>GET /orders?businessPartner=…</code> / <code>?user=…</code>) serializes
+                  <code>orderItems[].foodOffer</code> as <code>null</code>. <code>OrderItemModel.fromJson</code> falls
+                  back to <code>FoodOfferModel.fromIri('')</code>, which can't parse an id out of an empty string and
+                  defaults to <code>id: 0</code> — an id that can never match a real offer, so every restore call above
+                  silently credited nothing despite running correctly in every other respect</td>
+                <td>Added <code>_itemsForRestore(order)</code> to both order controllers: if any item's
+                  <code>foodOffer.id</code> looks like the null-fallback (<code>0</code>), fetches the full order via
+                  <code>getOrderById()</code> — which <em>does</em> reliably embed a real <code>foodOffer</code> — and
+                  restores using those items instead. All four call sites now <code>await</code> this before restoring.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-info">
+          <strong>Why placing an order was never affected by the id-0 bug</strong>
+          The stock-<em>decrement</em> path (<code>OrderController._reduceOfferQuantities</code>, called from
+          <code>placeOrder()</code>) builds offer ids from the customer's own locally-known checkout selection, never
+          from a backend-echoed <code>OrderItemModel</code> — so it was never exposed to the list endpoint's
+          <code>foodOffer: null</code> serialization gap in the first place. Only the restore path, which has no choice
+          but to read the offer id back off an already-placed order, hit it.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ NOTIFICATION CENTER ═══════════════════════════ -->
+    <h2 id="sh-notif">Notification Center (Bell + History)</h2>
+    <p class="lede">The bell icon + badge in both app bars, and the tappable history list behind it. Separate from the
+      live FCM/Mercure transport above — this is the persisted, browsable history.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">NotificationService</span>
+        <span class="card-path">lib/services/notification_service.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th></th>
+                <th>Endpoint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getNotifications({page, itemsPerPage})</code></td>
+                <td><span class="badge badge-get">GET</span></td>
+                <td><code>/notifications?page=&amp;itemsPerPage=&amp;order[createdAt]=desc</code></td>
+              </tr>
+              <tr>
+                <td><code>getUnreadCount()</code></td>
+                <td><span class="badge badge-get">GET</span></td>
+                <td><code>/notifications/unread-count</code> → <code>{"count": N}</code></td>
+              </tr>
+              <tr>
+                <td><code>markAsRead(id)</code></td>
+                <td><span class="badge badge-patch">PATCH</span></td>
+                <td><code>/notifications/{id}</code></td>
+              </tr>
+              <tr>
+                <td><code>markAllAsRead()</code></td>
+                <td><span class="badge badge-post">POST</span></td>
+                <td><code>/notifications/read-all</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Row shape: <code>{id, type, title, body, data, isRead, createdAt}</code>. <code>type</code> is one of
+          <code>new_order</code>, <code>order_status_changed</code>, <code>new_offer</code>, <code>review</code> (all
+          live) or <code>system</code> (reserved, not built).</p>
+        <div class="callout callout-warn">
+          <strong>⚠️ <code>data</code> values are API IRIs, not bare ids</strong>
+          e.g. <code>{"orderId": "/api/orders/122"}</code>, not a raw numeric/UUID string.
+          <code>NotificationsScreen._idFromIri()</code> strips everything up to and including the last <code>/</code>
+          before handing the id to <code>PushNotificationService.openOrder</code>/<code>.openOffer</code> — those two
+          methods build their own REST path by string-concatenating the id, so passing a full IRI through unstripped
+          would 404. The raw FCM push payload (a separate transport, handled directly in
+          <code>PushNotificationService</code>) is unaffected — it already sends bare ids.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">NotificationController</span>
+        <span class="card-path">lib/controllers/notification_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Registered <code>permanent: true</code> — shared by both apps. State: <code>notifications</code> (paginated
+          list), <code>unreadCount</code>, <code>isLoading</code>/<code>loadingMore</code>/<code>hasMore</code>.
+          <code>markAsRead</code>/<code>markAllAsRead</code> update optimistically and roll back on failure, same
+          pattern used elsewhere in the app (e.g. <code>BusinessPartnerController</code>'s toggles).</p>
+        <div class="callout callout-info">
+          <strong>Design choice — badge updates via FCM hook, not a third Mercure topic</strong>
+          Rather than negotiating another private Mercure topic just for the badge, <code>PushNotificationService</code>
+          calls <code>NotificationController.refreshUnreadCount()</code> (a cheap count-only poll) whenever any FCM push
+          arrives. The full history list is only fetched on-demand when the user actually opens the screen.
+        </div>
+      </div>
+    </div>
+
+    <h3>Widgets</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Widget</th>
+            <th>File</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>NotificationBell</code></td>
+            <td><code>widgets/common/notification_bell.dart</code></td>
+            <td>Bell icon + unread-count badge; opens <code>NotificationsScreen</code>. Used in both the customer header
+              and the business top bar.</td>
+          </tr>
+          <tr>
+            <td><code>NotificationCard</code></td>
+            <td><code>widgets/notification/notification_card.dart</code></td>
+            <td>Redesigned 2026-07-19 to read like a native OS push banner — dark rounded card, logo-tile icon per
+              <code>type</code>, bold headline + timestamp, muted body, glowing unread dot. <code>new_offer</code> rows
+              where <code>data.reason == "favorite"</code> (offer from a business the user favorited, vs a generic
+              nearby broadcast — same backend <code>type</code> either way) get a distinct running-person icon; purely a
+              client-side visual cue, not a new type.</td>
+          </tr>
+          <tr>
+            <td><code>NotificationsScreen</code></td>
+            <td><code>screens/shared/notifications_screen.dart</code></td>
+            <td>Full history: pull-to-refresh, infinite scroll, "mark all read", tap-to-navigate (reuses
+              <code>PushNotificationService.openOrder</code>/<code>.openOffer</code>). Scaffold/AppBar are also dark,
+              matching <code>NotificationCard</code> — the one screen in the app that intentionally departs from the
+              light theme. The empty state reuses the shared (light-themed) <code>EmptyStateWidget</code> inside a white
+              card rather than restyling that shared widget.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ CACHING ═══════════════════════════ -->
+    <h2 id="sh-cache">Caching</h2>
+    <p class="lede">Three independent caching layers, each with a different job.</p>
+
+    <div class="callout callout-info">
+      <strong>🔄 2026-07-19 — migrated the key/value layer from <code>get_storage</code> to <code>hive_ce</code>, added
+        a TTL</strong>
+      Two gaps existed before this change: (1) every cache entry recorded a <code>ts</code> timestamp but nothing ever
+      read it back, so stale data could sit on screen indefinitely instead of only briefly; (2) <code>get_storage</code>
+      is a flat JSON-file key/value store with no querying and no real scaling story for larger data sets. Fixed both —
+      see the <code>AppStorage</code> card and TTL note below — and used the same change to extend caching to screens
+      that had none before (Favorites, Business Menu, Business Orders, Admin Dashboard).
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">AppStorage</span>
+        <span class="card-path">lib/services/app_storage.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Thin wrapper around a single Hive box (<code>hive_ce</code> + <code>hive_ce_flutter</code>), deliberately
+          shaped like <code>get_storage</code>'s API — <code>read&lt;T&gt;(key)</code> / <code>write(key, value)</code>
+          / <code>remove(key)</code> / <code>hasData(key)</code> / <code>getKeys()</code> — so every one of the six
+          previous <code>GetStorage()</code> call sites (locale, avatar URLs, the offer/order/partner data cache, the
+          default-bank-account id, the FCM push-token id) only needed its constructor swapped, not its call shape.
+          Opened once in <code>main()</code> via <code>AppStorage.init()</code>, in parallel with
+          <code>Firebase.initializeApp()</code>.</p>
+        <div class="callout callout-info">
+          <strong>Why Hive instead of GetStorage, Isar, or Drift/SQLite?</strong>
+          <ul style="margin:6px 0 0 18px; padding:0;">
+            <li><strong>vs. GetStorage</strong> — GetStorage writes one JSON file to disk and re-parses the whole thing
+              on every read; fine for a handful of small blobs, but it doesn't scale and offers no querying. Hive is a
+              proper embedded key/value database (binary format, per-key reads) with a near-identical API, so the swap
+              was low-risk.</li>
+            <li><strong>vs. Isar</strong> — Isar gives real indexed queries, which this app doesn't need yet (every
+              cache lookup is "give me the blob for this one key," never "find all entries where…"). Isar's own
+              maintainer also stepped back from the project, making a community fork the only actively-maintained option
+              — extra risk for a feature this app isn't using.</li>
+            <li><strong>vs. Drift/SQLite</strong> — Drift is the right tool for relational data with joins (e.g.
+              querying order items across offers), but every cache entry here is a single self-contained JSON blob keyed
+              by name. A full SQL layer would be pure overhead for that shape of data.</li>
+          </ul>
+          <code>hive_ce</code> — the actively-maintained community fork — was picked specifically over the original
+          <code>hive</code> package, whose maintenance had also slowed.
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Library</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>API data cache</strong></td>
+            <td><code>hive_ce</code> (via <code>AppStorage</code>) through <code>DataCacheService</code></td>
+            <td>Shows the last-known data immediately on launch, before the network round-trip completes, so the UI
+              never opens blank. A yellow <code>StaleBanner</code> appears whenever the visible data is cached rather
+              than fresh.</td>
+          </tr>
+          <tr>
+            <td><strong>Image pixel cache</strong></td>
+            <td><code>cached_network_image</code> + <code>flutter_cache_manager</code></td>
+            <td>Avoids re-downloading offer photos/avatars on every screen visit — disk cache, not just memory.</td>
+          </tr>
+          <tr>
+            <td><strong>Avatar URL cache</strong></td>
+            <td><code>hive_ce</code> (via <code>AppStorage</code>), keys prefixed <code>avatar_url__</code></td>
+            <td>Stores the resolved CDN URL so it isn't re-fetched from the profile API on every app open.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>TTL — a cache entry that's too old is treated as no cache at all</h3>
+    <p><code>DataCacheService.load(key, parse, {maxAge = Duration(minutes: 5)})</code> compares the entry's saved
+      <code>ts</code> against <code>DateTime.now()</code> before returning anything. Past <code>maxAge</code> it returns
+      <code>null</code>, exactly as if nothing had ever been cached — the caller falls through to its normal
+      fetch-and-spinner path instead of briefly showing minutes- or days-old data. Previously <code>ts</code> was
+      written but never read back, so a cache entry from days ago could still flash on screen for a moment before the
+      fresh fetch replaced it.</p>
+
+    <h3>What's cached where</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Portal</th>
+            <th>Controller</th>
+            <th>Cache key</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Customer</td>
+            <td><code>FoodOfferController</code> (home/sections)</td>
+            <td><code>food_sections_v1</code></td>
+          </tr>
+          <tr>
+            <td>Customer</td>
+            <td><code>OrderController</code> (order list)</td>
+            <td><code>customer_orders</code></td>
+          </tr>
+          <tr>
+            <td>Customer</td>
+            <td><code>FavoritesOfferController</code></td>
+            <td><code>customer_favorites</code></td>
+          </tr>
+          <tr>
+            <td>Business</td>
+            <td><code>BusinessPartnerController</code> (own profile)</td>
+            <td><code>business_partner</code></td>
+          </tr>
+          <tr>
+            <td>Business</td>
+            <td><code>BusinessOfferController</code> (menu / my offers)</td>
+            <td><code>business_offers_&lt;partnerId&gt;</code></td>
+          </tr>
+          <tr>
+            <td>Business</td>
+            <td><code>BusinessOrderController</code> (order queue)</td>
+            <td><code>business_orders</code></td>
+          </tr>
+          <tr>
+            <td>Admin</td>
+            <td><code>AdminController</code></td>
+            <td><code>admin_stats</code>, <code>admin_partners</code>, <code>admin_customers</code>,
+              <code>admin_offers</code>, <code>admin_orders</code> — five keys, fetched/cached independently so one slow
+              endpoint doesn't block the others</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Not cached, deliberately:</strong> <code>BusinessOrderHistoryController</code> (its cache key would need
+      to encode the current date-range + status filters — real complexity for a screen rarely opened cold) and
+      <code>BusinessAnalyticsController</code>/<code>BusinessEarningsController</code> (still return static mock data —
+      no real API call exists yet to cache).</p>
+
+    <p><code>CacheService.confirmAndClear()</code> (used by the "Clear Cache" tile in both Customer and Business
+      Settings) clears all three layers in sequence, but deliberately <strong>never</strong> touches the language
+      preference (<code>locale_lang</code>) or auth tokens (a completely separate secure-storage system).</p>
+
+    <!-- ═══════════════════════════ I18N ═══════════════════════════ -->
+    <h2 id="sh-i18n">Multi-language (i18n)</h2>
+    <p>Full English + Persian (Farsi) support via GetX's <code>.tr</code> translation system — every user-visible string
+      in the app goes through a <code>*Strings</code> accessor class (e.g.
+      <code>NotificationsStrings.appBarTitle</code>) rather than being hardcoded in a widget tree, with matching keys in
+      <code>lib/l10n/app_translations.dart</code>'s <code>_en</code>/<code>_fa</code> maps.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Piece</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>LocaleController</code></td>
+            <td>Holds the current <code>Locale</code>, persisted to <code>AppStorage</code>/Hive
+              (<code>locale_lang</code> key), switches theme (Vazirmatn font for Farsi) alongside language.</td>
+          </tr>
+          <tr>
+            <td><code>AppTranslations</code></td>
+            <td>The EN/FA key→string maps GetX reads from.</td>
+          </tr>
+          <tr>
+            <td><code>Directionality(textDirection: TextDirection.ltr)</code> wrapper</td>
+            <td>Applied around content that must never mirror in RTL — phone numbers, emails, filter-chip rows.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ IMAGES ═══════════════════════════ -->
+    <h2 id="sh-images">Image Uploads</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-service">Service</span>
+        <span class="card-title">ImageService</span>
+        <span class="card-path">lib/services/image_service.dart</span>
+      </div>
+      <div class="card-body">
+        <p><code>uploadImage({fileBytes, filename, imageType, partnerIri?, foodOfferIri?, userIri?})</code> → <span
+            class="badge badge-post">POST</span> <code>/images</code> as multipart form data. <code>imageType</code> is
+          one of <code>business_logo</code>, <code>business_banner</code>, <code>food_product</code>, or
+          <code>avatar</code> — the backend uses it to know which entity the image belongs to. Used by
+          <code>UploadableAvatar</code> (user/business avatars), the offer create/edit flow (food photos), and
+          <code>BusinessPhotosScreen</code>'s logo section.</p>
+      </div>
+    </div>
+
+    <div class="part-divider customer">
+      <h2 id="customer-part">🛍️ Customer App</h2>
+      <p>Everything a shopper sees — browsing, ordering, tracking, and account management. Fully separate from the
+        Business app below.</p>
+    </div>
+
+    <!-- ═══════════════════════════ NAV SHELL + DASHBOARD ═══════════════════════════ -->
+    <h2 id="cust-nav">Navigation Shell &amp; Dashboard</h2>
+
+    <p>Perka is a <strong>multi-market</strong> app (Food and Cosmetic today, more later) built around one core
+      idea: <strong>the market tiles you see and what happens when you tap one both depend on your account's
+        per-market capabilities</strong> — not on a separate "customer app" vs. "business app" login. Every
+      logged-in, non-admin account (whether it's ever registered a business or not) lands on the exact same
+      Dashboard screen after login, and the very same tap on the very same tile can open a Business Dashboard for
+      one person and a plain Customer Home for another, depending on what that account can do in that specific
+      market.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">AppShellScreen</span>
+        <span class="card-path">screens/dashboard/view/app_shell_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>The one persistent, post-login shell for every customer-facing screen in every market — replaces what
+          used to be a separate <code>MainNavigationScreen</code> per market. Built on <code>DashboardShell</code>
+          (<code>screens/dashboard/view/dashboard_shell.dart</code>), which supplies the Scaffold/AppBar/Drawer/
+          BottomNav chrome and is itself shared with the Business Dashboard and Admin (each passes its own
+          <code>body</code>/flags — see <code>ShellAppBar</code>'s <code>showNotificationBell</code>/
+          <code>showCartButton</code>/<code>showLanguageSwitcher</code> booleans for how one shell serves very
+          different screens).</p>
+        <p><code>NavigationController.activeMarket</code> (<code>null</code> / <code>'food'</code> /
+          <code>'cosmetic'</code> / ...) is the single source of truth for what <code>AppShellScreen</code>'s Home
+          tab (index 0) is currently showing: <code>null</code> renders the Dashboard tile grid
+          (<code>DashboardHomeTiles</code>, below); any market key renders that market's own customer Home screen
+          in its place — same tab, same bottom-nav position, content swapped in place rather than pushing a new
+          route.</p>
+        <div class="navtree">
+          <div class="item">🏠 Home<br><small>Dashboard tiles, or the active market's Home</small></div>
+          <div class="item">❤️ Favorites<br><small>live count badge</small></div>
+          <div class="item">▦ Dashboard<br><small>always returns to the tile grid</small></div>
+          <div class="item">📦 Orders<br><small>badge scoped to the active market — see below</small></div>
+          <div class="item">👤 Profile</div>
+        </div>
+        <p>"Dashboard" sits visually in the middle of <code>GlobalBottomNav</code> but isn't index-adjacent to
+          Favorites/Orders in the underlying numbering — tapping it always calls <code>onDashboardTap</code>
+          (resets <code>activeMarket</code> to null), it's purely a shortcut back to the tile grid from wherever you
+          are. The Orders tab's badge count is scoped to whichever market you're currently in
+          (<code>activeMarket == 'food'</code> → Food's active-order count only, <code>'cosmetic'</code> →
+          Cosmetic's only, <code>null</code>/Dashboard → both combined) rather than always showing a combined total
+          regardless of context.</p>
+      </div>
+    </div>
+
+    <h3 id="cust-dashboard-landing">The Dashboard — what every user actually lands on after login</h3>
+    <div class="callout callout-info">
+      <strong>Not just a customer thing</strong>
+      <code>AuthGate</code> sends <em>everyone</em> non-admin here after login — a plain customer, a business
+      owner, and a staff member all land on the identical Dashboard tile screen. See the <code>AuthGate</code>
+      table row in <a href="#cust-auth">Auth / Onboarding</a> for exactly why (short version: a business isn't
+      locked to one market, so there's no single screen to route it to automatically anymore).
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-widget">Widget</span>
+        <span class="card-title">DashboardHomeTiles</span>
+        <span class="card-path">features/dashboard/dashboard_home_tiles.dart</span>
+      </div>
+      <div class="card-body">
+        <p><code>DashboardController</code> (<code>features/dashboard/dashboard_controller.dart</code>) fetches
+          <code>GET /dashboard</code> (cache-first, same pattern as <a href="#sh-cache">Shared → Caching</a>) —
+          the response lists every market as a <code>DashboardMarket</code> (<code>key</code>, <code>label</code>,
+          <code>enabled</code>, <code>businessRegistrationEnabled</code>, hero images) plus a
+          <code>comingSoon</code> list for markets with no screen built yet. Layout: the first enabled market gets a
+          big hero tile, the second rides beside it, anything further wraps into a 2-column grid below, and
+          <code>comingSoon</code> entries render in a visually separate greyed panel that opens a "coming soon"
+          sheet instead of navigating anywhere.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">DashboardController.onTileTap(marketKey)</span>
+        <span class="card-path">features/dashboard/dashboard_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>The one method that decides where a tile tap actually goes — this is the crux of the whole
+          multi-role/multi-market design:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Market state</th>
+                <th>This account's capability in <em>that</em> market</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Disabled, or unknown key</td>
+                <td>— (irrelevant)</td>
+                <td>"Coming soon" bottom sheet, no navigation</td>
+              </tr>
+              <tr>
+                <td>Enabled</td>
+                <td><code>'owner'</code> or <code>'staff'</code>, and not currently in "acting as customer" mode</td>
+                <td>That market's own <strong>Business Dashboard</strong> (Food →
+                  <code>AppRoutes.businessDashboard</code>; Cosmetic → <code>AppRoutes.cosmeticBusinessProducts</code>)
+                </td>
+              </tr>
+              <tr>
+                <td>Enabled</td>
+                <td>No capability in this market — <em>or</em> they do, but switched to "acting as customer"</td>
+                <td>That market's plain <strong>Customer Home</strong> — sets <code>activeMarket</code> and flips
+                  the shell's Home tab in place (no navigation; <code>AppShellScreen</code> is already the
+                  on-screen route)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The capability check reads <code>UserModel.businessCapabilities</code> — a
+          <code>Map&lt;marketKey, 'owner' | 'staff' | null&gt;</code> fetched fresh (never cached) on every
+          Dashboard load, precisely because this decision must never be stale.</p>
+      </div>
+    </div>
+
+    <h3 id="cust-dual-role">Same account, different roles per market — and switching between them</h3>
+    <p>This is the concrete scenario worth spelling out: <strong>one login can own a business in Food and still be
+        a plain customer everywhere else</strong> — including buying from a <em>different</em> restaurant in that
+      same Food market. Nothing about "having a business" locks the account out of shopping normally.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Where it lives</th>
+            <th>What it means concretely</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>UserModel.businessCapabilities</code></td>
+            <td>models/user_model.dart</td>
+            <td>Per-market, not account-wide. Example: <code>{"food": "owner", "cosmetic": null}</code> — the Food
+              tile opens that account's own Business Dashboard by default, while the Cosmetic tile always opens
+              Cosmetic's plain Customer Home, since this account has no Cosmetic capability at all.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessPartnerModel.markets</code></td>
+            <td>models/business_partner_model.dart</td>
+            <td>Which market(s) a given business operates in — set once at business registration (see below) and
+              what <code>businessCapabilities</code> is ultimately derived from on the backend.</td>
+          </tr>
+          <tr>
+            <td><code>NavigationController.actingAsCustomer</code></td>
+            <td>controllers/navigation_controller.dart</td>
+            <td>A plain <code>RxBool</code>, default <code>false</code>. When a business-capable user explicitly
+              flips it on, tapping their <em>own</em> market's tile no longer bounces them to their Business
+              Dashboard — it opens the plain Customer Home instead, letting them browse and order from
+              <strong>other</strong> stores in their own market exactly like anyone else. Resets to
+              <code>false</code> when they switch back.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pflow">
+      <div class="pflow-node entry">Owns a Food business (capability = 'owner')</div>
+      <div class="pflow-arrow">↓ wants to buy from a different pizza place as a customer</div>
+      <div class="pflow-branch">
+        <div class="pflow-path">
+          <div class="pflow-path-label">From the Business Dashboard drawer</div>
+          <div class="pflow-node alt">Tap the role badge<small>_BusinessAccountDrawer.roleBadge</small></div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">actingAsCustomer = true<br>activeMarket = null<small>back to Dashboard tiles</small>
+          </div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node done">Tap the Food tile → Food's Customer Home<small>browse/buy from any store,
+              including a competitor's</small></div>
+        </div>
+        <div class="pflow-path">
+          <div class="pflow-path-label">Switching back</div>
+          <div class="pflow-node alt">Tap the "Business View" role badge<small>_CustomerAccountDrawer.roleBadge</small>
+          </div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node done">actingAsCustomer = false<br>routes to their own business home
+            <small>AppRoutes.businessHomeForMarkets(partner.markets)</small></div>
+        </div>
+      </div>
+    </div>
+
+    <p><code>AccountDrawer</code> (<code>features/dashboard/widgets/account_drawer.dart</code>) is the single drawer
+      for the whole customer-facing app (business dashboards have their own separate drawer) — it picks between a
+      <code>_CustomerAccountDrawer</code> and a <code>_BusinessAccountDrawer</code> reactively, based on
+      <code>hasBusinessDashboardAccess</code> and <code>actingAsCustomer</code>, so the drawer's content updates
+      immediately without needing to be reopened.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">RegisterScreen — where a business's market gets chosen</span>
+        <span class="card-path">screens/auth/register_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Choosing the "business" account type on registration reveals a business-name field and a "Which market
+          is this business in?" dropdown, populated from the same <code>GET /dashboard</code> response's
+          <code>businessRegistrationEnabled</code> markets — so a market only becomes choosable at signup once it's
+          explicitly flagged ready on the backend. This is where <code>BusinessPartnerModel.markets</code> — and
+          therefore this account's initial <code>businessCapabilities</code> entry — first gets set.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ AUTH ═══════════════════════════ -->
+    <h2 id="cust-auth">Auth / Onboarding</h2>
+
+    <h3>Screens</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>File</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>AuthGate</code></td>
+            <td><code>screens/auth/auth_gate.dart</code></td>
+            <td>App entry route. Animated splash for a minimum 1.6s while resolving where to send the user: not
+              logged in → Login; admin → Admin dashboard; <strong>everyone else — plain customer, business owner,
+                or staff — lands on <code>AppRoutes.dashboard</code></strong> (the market-tile picker, see
+              <a href="#cust-nav">Navigation Shell &amp; Dashboard</a>). This is deliberate, not a fallback: a
+              business can operate in more than one market, so there's no longer a single "the" business screen to
+              jump to automatically — business-capable users still get their partner record warmed up in the
+              background first, but they choose which market/role to enter from the Dashboard tiles like anyone
+              else.</td>
+          </tr>
+          <tr>
+            <td><code>LoginScreen</code></td>
+            <td><code>screens/auth/login_screen.dart</code></td>
+            <td>Email/username + password form, "Forgot password" sheet, "Sign up" link. Decorative Google/Apple buttons
+              are non-functional.</td>
+          </tr>
+          <tr>
+            <td><code>RegisterScreen</code></td>
+            <td><code>screens/auth/register_screen.dart</code></td>
+            <td>Account-type selector (customer vs business), name/email/phone, an inline address sub-form, password
+              with live validation, terms text.</td>
+          </tr>
+          <tr>
+            <td><code>EmailVerificationNoticeScreen</code></td>
+            <td><code>screens/auth/email_verification_notice_screen.dart</code></td>
+            <td>Shown right after registration. Polls the backend every 5s for verification status; auto-navigates to
+              Login on success. Has a resend-email button.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Controllers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Controller</th>
+            <th>Key state</th>
+            <th>Key methods</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>LoginController</code></td>
+            <td><code>isLoading</code></td>
+            <td><code>signIn(username, password)</code> — logs in via Keycloak, saves the token, fires
+              push-registration, reads roles from the JWT, and navigates to the correct dashboard.</td>
+          </tr>
+          <tr>
+            <td><code>RegisterController</code></td>
+            <td><code>accountType</code>, <code>isLoading</code>, <code>fieldErrors</code> (server-side 422/409 field
+              errors)</td>
+            <td><code>submit({...})</code> — registers, then navigates to the email-verification screen (no auto-login).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Service</h3>
+    <div class="card">
+      <div class="card-body">
+        <p><code>RegistrationService</code> (<code>lib/services/registration_service.dart</code>) — its own bare Dio, no
+          auth header (there's no token yet). <code>register({...})</code> → <span class="badge badge-post">POST</span>
+          <code>/register</code>; maps 422→per-field errors, 409→email-taken.</p>
+        <p>Full auth token machinery (<code>KeycloakAuthService</code>, <code>AuthController</code>) is documented once
+          in <a href="#sh-auth">Shared / Core → Authentication</a> — not repeated here.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ HOME ═══════════════════════════ -->
+    <h2 id="cust-home">Home / Browse Offers</h2>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">CustomerFoodScreen</span>
+        <span class="card-path">screens/main_navigations/HomeScreen/customer_food_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Three modes, all driven by <code>FoodOfferController</code>:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mode</th>
+                <th>When</th>
+                <th>Data source</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Discovery</td>
+                <td>Default — "All" category, no search text</td>
+                <td>One horizontal row per non-empty category, from a single sections call</td>
+              </tr>
+              <tr>
+                <td>Category</td>
+                <td>A category pill tapped</td>
+                <td>One row, from the section-page call for that category</td>
+              </tr>
+              <tr>
+                <td>Search</td>
+                <td>Typing in the search box (500ms debounce)</td>
+                <td>A 2-column infinite-scroll grid from the flat offers list endpoint</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Renders <code>OfferCardCompact</code> per item, a <code>StaleBanner</code> when showing cached data, and
+          <code>EmptyStateWidget</code> for zero results.</p>
+        <div class="callout callout-warn"><strong>⚠️ Dead code</strong> Two unused alternate screens exist and are wired
+          into no route: <code>customer_food_offer_screen.dart</code> and
+          <code>customer_food_offer_screen_old.dart</code>.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">FoodOfferController</span>
+        <span class="card-path">controllers/food_offer_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>sections</code></td>
+                <td>Current rows shown (discovery or single category)</td>
+              </tr>
+              <tr>
+                <td><code>availableCategories</code></td>
+                <td>Stable category-key list from the last full discovery fetch — kept even when drilled into one
+                  category, so pills never disappear</td>
+              </tr>
+              <tr>
+                <td><code>offers</code> / <code>filteredOffers</code></td>
+                <td>Raw vs. filtered-for-expiry/stock — search mode</td>
+              </tr>
+              <tr>
+                <td><code>selectedCategory</code>, <code>selectedSort</code></td>
+                <td>Search/filter state</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fetchSections()</code></td>
+                <td>Discovery fetch; also caches to <code>DataCacheService</code></td>
+              </tr>
+              <tr>
+                <td><code>loadSectionPage(category)</code></td>
+                <td>Appends the next page to one row only — scrolling Pizza never touches Bakery</td>
+              </tr>
+              <tr>
+                <td><code>fetchOffers({loadMore})</code></td>
+                <td>Search-mode fetch; guards against stale-request races with a request-id counter</td>
+              </tr>
+              <tr>
+                <td><code>reduceQuantity(offerId, quantity, weightKg)</code></td>
+                <td>Called right after an order is placed, so browse screens reflect the new stock instantly without a
+                  re-fetch</td>
+              </tr>
+              <tr>
+                <td><code>restoreQuantities(items)</code></td>
+                <td>Called by <code>OrderController</code> after a cancel, to add stock back locally</td>
+              </tr>
+              <tr>
+                <td><code>refreshForNewOffer()</code></td>
+                <td>Re-fetches the currently visible section on a real-time <code>new_offer</code> event (Mercure or
+                  FCM)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getOffers({title, category, orderField, orderDirection, page})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/food-offers</code> (public, <code>noAuth: true</code>)</td>
+          </tr>
+          <tr>
+            <td><code>getSections({limit})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/food-offers/sections</code> (public)</td>
+          </tr>
+          <tr>
+            <td><code>getSectionPage(category, page, {limit})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/food-offers/sections/{category}</code> (public)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>FoodOfferService</code> (<code>lib/services/food_offer_service.dart</code>) is shared with the Business app
+      for offer management — see <a href="#biz-menu">Business → Menu Management</a> for its write methods.</p>
+
+    <h3>Notable widgets</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Widget</th>
+            <th>File</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>OfferCardCompact</code></td>
+            <td><code>widgets/cards/offer_card_compact.dart</code></td>
+            <td>Fixed-height card for rows/grids. Image, discount badge, rating, color-coded stock badge, price, pickup
+              window, 4 tap-states (orderable / sold-out / ended / business-closed).</td>
+          </tr>
+          <tr>
+            <td><code>GreenPageHeader</code></td>
+            <td><code>widgets/common/green_page_header.dart</code></td>
+            <td>Shared rounded gradient header + search field, reused on Home, Favorites, and Orders.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ OFFER DETAIL ═══════════════════════════ -->
+    <h2 id="cust-detail">Offer Detail</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">CustomerProductDetailScreen</span>
+        <span class="card-path">screens/customer/customer_product_detail_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Takes a <code>FoodOfferModel</code> directly (no own controller/service — reads
+          <code>FavoritesOfferController</code> and <code>LocationController</code> straight from the widget tree).
+          Collapsing hero image app bar, then info section (category, rating, distance, pickup window), location section
+          (address + "get directions" via Google Maps), about section, and a savings banner. Sticky bottom bar shows the
+          price and a "Reserve" CTA that opens <code>OrderCheckoutScreen</code> — or, if the business is closed, an info
+          dialog blocking the order entirely.</p>
+        <p><code>StatefulWidget</code> (not stateless) specifically to own two public Mercure subscriptions opened in
+          <code>initState</code> and closed in <code>dispose</code> — see <a
+            href="#sh-mercure"><code>food-offers/{offerId}</code> and <code>business-partners/{id}/status</code></a>.
+          Stock/status events patch local state directly rather than refetching the offer.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ CHECKOUT ═══════════════════════════ -->
+    <h2 id="cust-checkout">Checkout, Cart &amp; Payment</h2>
+
+    <p>Two ways to start an order, that both funnel into the exact same fulfillment + payment steps: <strong>Quick
+        Buy</strong> (one item, no cart, the original flow) and <strong>Add to Cart</strong> (build up several items
+      from one store, then check out once). Which controller ends up placing the order —
+      <code>OrderController</code> (Food) or <code>ProductOrderController</code> (Cosmetic) — depends only on which
+      market the item/cart came from; everything else on this page is market-agnostic.</p>
+
+    <div class="pflow">
+      <div class="pflow-node entry">Product Detail Screen<small>ProductDetailScreen (generic) — every market wires this
+          up</small></div>
+      <div class="pflow-arrow">↓</div>
+      <div class="pflow-branch">
+        <div class="pflow-path">
+          <div class="pflow-path-label">Quick Buy</div>
+          <div class="pflow-node">Tap "Reserve" / "Buy Now"</div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">OrderCheckoutScreen <small>Food</small><br>CosmeticCheckoutScreen
+            <small>Cosmetic</small><br><small>single item only</small></div>
+        </div>
+        <div class="pflow-path">
+          <div class="pflow-path-label">Add to Cart</div>
+          <div class="pflow-node alt">Tap the cart-icon button</div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">Same business already in cart?<br><small>no → confirm "start new order?" dialog,
+              clears cart first</small></div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">CartController.addItem()<br><small>merges into an existing line if it's the same
+              offer/product</small></div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">CartScreen<br><small>edit qty/weight, remove items — re-checks live stock on
+              open</small></div>
+          <div class="pflow-arrow">↓</div>
+          <div class="pflow-node">CartCheckoutScreen<br><small>same fulfillment step as Quick Buy, but for every item
+              in the cart</small></div>
+        </div>
+      </div>
+      <div class="pflow-arrow">↓ &nbsp;both paths converge here&nbsp; ↓</div>
+      <div class="pflow-node">Fulfillment step<small>pickup/delivery toggle → address (if delivery) → notes → price
+          breakdown</small></div>
+      <div class="pflow-arrow">↓</div>
+      <div class="pflow-node">PaymentScreen (generic)<small>Add to Cart path re-checks live stock again here, right
+          before paying</small></div>
+      <div class="pflow-arrow">↓</div>
+      <div class="pflow-branch">
+        <div class="pflow-path">
+          <div class="pflow-node">Cash<small>only shown if the business accepts it</small></div>
+        </div>
+        <div class="pflow-path">
+          <div class="pflow-node">Pay Online → pick a bank gateway<small>Saman (SEP) / Behpardakht Mellat today</small>
+          </div>
+        </div>
+      </div>
+      <div class="pflow-arrow">↓</div>
+      <div class="pflow-node">OrderController / ProductOrderController<br>.placeOrder(...)</div>
+      <div class="pflow-arrow">↓</div>
+      <div class="pflow-branch">
+        <div class="pflow-node done">Success<small>order created, cart cleared, snackbar, back to first screen</small>
+        </div>
+        <div class="pflow-node fail">Rejected<small>error snackbar (backend's message), stays put so the user can
+            fix it</small></div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>The actual bank-gateway API call isn't wired up yet</strong>
+      Picking "Pay Online" and a gateway is fully real UI/state — but the redirect-to-bank-and-confirm round-trip
+      itself doesn't exist yet (no PSP API integration on either app or backend). <code>placeOrder</code> is called
+      the same way regardless of payment method today. See <a href="#gaps">Mock &amp; Dead Code</a> for the precise
+      boundary of what's real vs. still pending here.
+    </div>
+
+    <h3>Why cash/card was replaced with cash/bank-gateway</h3>
+    <p>Perka launches in Iran, where international card networks (Visa/Mastercard) are unusable under sanctions —
+      so "pay online" here always means a redirect through a domestic interbank gateway, never an in-app
+      card-number field (that's not how any of these PSPs integrate — PAN capture stays on the bank's own page).
+      The old mocked "saved cards" UI (fake card list, fake "add card" form, card-number validation) was deleted
+      entirely rather than kept alongside — see <code>enums/app_enums.dart</code>'s <code>PspProvider</code> enum.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>File</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>PspProvider</code> <span class="tag tag-enum">enum</span></td>
+            <td>enums/app_enums.dart</td>
+            <td>All 6 Iranian gateways (Asan Pardakht, Saman/SEP, Behpardakht Mellat, Parsian/PEC, Sadad,
+              Pasargad/PEP). <code>PspProvider.enabledProviders</code> is the subset actually wired up
+              (Saman + Behpardakht Mellat today) — adding a 3rd later is a one-line change to that set.</td>
+          </tr>
+          <tr>
+            <td><code>PaymentController</code></td>
+            <td>profile_and_orders/orders/controllers/payment_controller.dart</td>
+            <td><code>paymentMethod</code> ('card' = pay online | 'cash'), <code>selectedPsp</code>,
+              <code>canPay</code>. Rebuilt from scratch — no more saved-card list, no card-entry form.</td>
+          </tr>
+          <tr>
+            <td><code>PspGatewaySelector</code></td>
+            <td>profile_and_orders/orders/views/psp_gateway_selector.dart</td>
+            <td>Lists all 6 providers — the 2 enabled ones are tappable, the rest show a "Coming soon" badge.
+              Reused as-is by both markets.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The generic Payment step</h3>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">PaymentScreen</span>
+        <span class="card-path">screens/shared_customer_business_screens/customer_dashboard/views/payment_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Market-agnostic — never imports <code>FoodOfferModel</code>/<code>ProductModel</code>. Takes a
+          <code>PaymentScreenConfig</code>: a list of <code>OrderLineItem</code> (title/image/quantity-label/price —
+          one entry for Quick Buy, one per item for a cart), subtotal/deliveryFee/total, whether cash is available,
+          and an <code>onConfirm(context, PaymentController)</code> callback that owns everything market-specific
+          about actually placing the order. Renders:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Piece</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hero banner</td>
+                <td>Bigger image up top via <code>ItemImageCarousel</code> (single photo, or a swipeable slider
+                  with dot indicators when there's more than one item) + the running total</td>
+              </tr>
+              <tr>
+                <td><code>OrderLineItemsCard</code></td>
+                <td>"N items" header + a thumbnail/name/qty/price row per item —
+                  profile_and_orders/orders/views/order_line_items_card.dart</td>
+              </tr>
+              <tr>
+                <td>Order summary card</td>
+                <td>Subtotal / delivery fee (hidden if 0) / total</td>
+              </tr>
+              <tr>
+                <td>Email-verification banner + gate</td>
+                <td>Owned here now (previously duplicated per-market) — Pay button disabled until verified</td>
+              </tr>
+              <tr>
+                <td>Payment method section</td>
+                <td>Cash/Online toggle (cash hidden if the business doesn't accept it) → <code>PspGatewaySelector</code>
+                  when Online is selected</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>CustomerPaymentScreen</code> (Food) and <code>CosmeticCheckoutScreen</code>'s payment step (Cosmetic)
+          are both thin wiring layers over this same screen — each builds its own <code>onConfirm</code> (address
+          validation, resolving the user IRI, building the exact <code>items</code> payload) and calls the right
+          market's <code>placeOrder</code>.</p>
+      </div>
+    </div>
+
+    <h3>The Cart</h3>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">CartController</span>
+        <span class="card-path">cart/controllers/cart_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Registered <strong>permanently</strong> (<code>Get.put(..., permanent: true)</code> in
+          <code>InitialBinding</code>) — not <code>lazyPut(fenix: true)</code> like most feature controllers,
+          because a cart has to survive browsing to several different screens before checkout, unlike a
+          per-flow controller such as <code>AddressController</code> that's fine to reset each time.</p>
+        <ul style="margin:8px 0 8px 22px">
+          <li><strong>Scoped to one business at a time</strong> — the same rule Uber Eats/DoorDash use. Adding
+            an item from a different business than what's already in the cart shows a confirm dialog
+            (<code>confirmCartSwitch</code>, cart/views/cart_conflict_dialog.dart) that clears the cart first if
+            the user agrees.</li>
+          <li><strong><code>revalidateAll()</code></strong> — re-fetches every item's live availability
+            (<code>CartItem.checkAvailability</code>, a closure captured at add-time that always re-fetches by
+            IRI, never the stale model). Removes anything sold out/expired/deleted, clamps quantity/weight down
+            if stock dropped. Called when <code>CartScreen</code> opens, and again right before
+            <code>CartCheckoutScreen</code> proceeds to payment — so a stale cart item is caught before a failed
+            payment attempt, not after.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cart/models/cart_item.dart</code></td>
+            <td><code>CartItem</code> (itemIri, payloadKey 'foodOffer'|'product', title/image/price, quantity or
+              weightKg, <code>checkAvailability</code>) + <code>CartItemAvailability</code> (the result of
+              re-checking one item)</td>
+          </tr>
+          <tr>
+            <td><code>cart/views/cart_screen.dart</code></td>
+            <td>Editable rows (qty/weight steppers, remove, clear-all), subtotal, "Proceed to Checkout"</td>
+          </tr>
+          <tr>
+            <td><code>cart/views/cart_checkout_screen.dart</code></td>
+            <td>The fulfillment step for a whole cart — reuses <code>DeliveryToggle</code>,
+              <code>BuildAddressPickerWidget</code>, <code>NoAddressBanner</code>,
+              <code>BuildPriceBreakDownrWidget</code> and <code>OrderLineItemsCard</code> rather than
+              reimplementing any of them</td>
+          </tr>
+          <tr>
+            <td><code>cart/views/cart_icon_button.dart</code></td>
+            <td>Icon + item-count badge (mirrors <code>NotificationBell</code>'s look), in <code>ShellAppBar</code>
+              behind a <code>showCartButton</code> flag — on for the customer shell only; the shared business/admin
+              dashboard shell never shows it</td>
+          </tr>
+          <tr>
+            <td><code>cart/views/cart_revalidation_dialog.dart</code></td>
+            <td>One shared "your cart was updated" dialog (reuses <code>InfoDialog</code>), shown from both
+              <code>CartScreen</code> and <code>CartCheckoutScreen</code> so the wording is identical everywhere</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ MY ORDERS ═══════════════════════════ -->
+    <h2 id="cust-orders">My Orders</h2>
+
+    <h3>Screens</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>File</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>OrderListScreen</code></td>
+            <td>main_navigations/OrdersScreen/order_list_screen.dart</td>
+            <td>Header with search + order-count badge, sort/status/date filter chips, infinite-scroll list. Pending
+              orders are swipe-to-delete and have inline edit/cancel icon buttons.</td>
+          </tr>
+          <tr>
+            <td><code>OrderDetailScreen</code></td>
+            <td>widgets/order/order_detail_screen.dart</td>
+            <td>Collapsing hero (item-photo carousel, or a gradient header if no photos), then
+              <code>RestaurantSection</code>, <code>OrderItemsSection</code>, <code>PaymentSummarySection</code>,
+              <code>DeliverySection</code>, <code>OrderActionsSection</code>. Refreshes with live data on open.</td>
+          </tr>
+          <tr>
+            <td><code>CustomerEditOrderScreen</code></td>
+            <td>screens/customer/customer_edit_order_screen.dart</td>
+            <td>Adjust a still-<em>pending</em> order — per-item quantity, delivery address, notes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">OrderController</span>
+        <span class="card-path">controllers/order_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>orders</code>, <code>totalOrders</code></td>
+                <td>The list + server-reported total (from <code>hydra:totalItems</code>) — used for the header badge
+                  and the Profile stat card, correct even before every page is loaded</td>
+              </tr>
+              <tr>
+                <td><code>selectedOrder</code></td>
+                <td>The order shown on the detail screen</td>
+              </tr>
+              <tr>
+                <td><code>searchQuery</code>, <code>sortOrder</code>, <code>statusFilter</code>, <code>dateFilter</code>
+                </td>
+                <td>List filter/sort state — <code>filteredOrders</code> getter applies all of them</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fetchUserIri()</code></td>
+                <td>3-tier fallback: <code>AuthController</code> → decode JWT → a dedicated service call — resilient to
+                  any one source being briefly unavailable</td>
+              </tr>
+              <tr>
+                <td><code>placeOrder({...})</code></td>
+                <td>Posts the order, decrements local offer stock via <code>FoodOfferController</code>, refreshes the
+                  list, pops back after a short delay</td>
+              </tr>
+              <tr>
+                <td><code>editOrder({...})</code></td>
+                <td>PATCHes notes/address, then each changed item quantity individually</td>
+              </tr>
+              <tr>
+                <td><code>cancelOrder(order, {reason})</code></td>
+                <td>Optimistic status update + restores stock via <code>FoodOfferController.restoreQuantities</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Subscribes to its own private <code>users/{id}/orders</code> Mercure topic in <code>onInit</code> (torn down
+          in <code>onClose</code>) — see <a href="#sh-mercure">Shared → Real-Time Updates</a>. Same
+          reconnect-on-token-refresh pattern as <code>BusinessOrderController</code>.</p>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getOrders({userIri, page})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/orders?user={iri}&amp;order[createdAt]=desc</code></td>
+          </tr>
+          <tr>
+            <td><code>getOrderById(id)</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/orders/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>placeOrder({...})</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/orders</code> (<code>deliveryAddress</code> field omitted entirely for pickup)</td>
+          </tr>
+          <tr>
+            <td><code>updateOrder(id, {notes, deliveryAddressIri})</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/orders/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>updateOrderItem(itemId, {quantity})</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/order-items/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>updateOrderStatus(id, status, {cancellationReason})</code></td>
+            <td><span class="badge badge-put">PUT</span></td>
+            <td><code>/orders/{id}/status</code></td>
+          </tr>
+          <tr>
+            <td><code>deleteOrder(id)</code></td>
+            <td><span class="badge badge-delete">DELETE</span></td>
+            <td><code>/orders/{id}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>OrderService</code> is shared with the Business app (order management) and Admin — see <a
+        href="#biz-orders">Business → Orders Management</a> for the business-side read methods.</p>
+
+    <h3>Notable widgets</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Widget</th>
+            <th>File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>StatusBadgeWidget</code></td>
+            <td>widgets/common/status_badge_widget.dart</td>
+          </tr>
+          <tr>
+            <td><code>RestaurantSection</code>, <code>OrderItemsSection</code>, <code>PaymentSummarySection</code>,
+              <code>DeliverySection</code>, <code>OrderActionsSection</code></td>
+            <td>widgets/order/*.dart — the order-detail page sections</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-warn"><strong>⚠️ Dead code</strong> <code>widgets/order/order_header_section.dart</code>
+      (<code>OrderHeaderSection</code>) is defined but unused — superseded by an inline header built directly in
+      <code>order_detail_screen.dart</code>.</div>
+
+    <!-- ═══════════════════════════ FAVORITES ═══════════════════════════ -->
+    <h2 id="cust-favorites">Favorites</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">FavoritesScreen</span>
+        <span class="card-path">screens/main_navigations/FavoritesScreen/favorites_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Search + filter chips (alphabetical/price sort, plus a category filter bar auto-derived from whichever
+          categories are actually favorited), a <code>StaleBanner</code> when showing cached favorites (added
+          2026-07-19, see <a href="#sh-cache">Shared → Caching</a>), then a list of full-width <code>OfferCard</code>s.
+          Two distinct empty states: "no favorites at all" (CTA jumps to Home) vs. "no results for current filters" (CTA
+          clears filters).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">FavoritesOfferController</span>
+        <span class="card-path">controllers/favorites_offer_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>State: <code>favoriteIds</code> (a <code>Set&lt;int&gt;</code> for O(1) heart-icon lookups on every offer
+          card everywhere), <code>favoriteOffers</code> (full models for this list screen), <code>isFromCache</code>
+          (true while showing the cached <code>customer_favorites</code> entry from the previous session — drives the
+          screen's <code>StaleBanner</code>). <code>toggleFavorite(offerId, {offer})</code> is optimistic (instant heart
+          flip, rollback on failure) and blocks adding a sold-out item while still allowing removal of one.</p>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getFavorites()</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/favorites</code></td>
+          </tr>
+          <tr>
+            <td><code>addFavorite(offerId)</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/favorites/{offerId}</code></td>
+          </tr>
+          <tr>
+            <td><code>removeFavorite(offerId)</code></td>
+            <td><span class="badge badge-delete">DELETE</span></td>
+            <td><code>/favorites/{offerId}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>FavoriteOfferService</code> — favorites are tied to the JWT user server-side, so no user id is ever sent
+      explicitly.</p>
+
+    <h3>Notable widget</h3>
+    <p><code>OfferCard</code> (<code>widgets/cards/offer_card.dart</code>) — the full-width vertical variant
+      (self-sizing, unlike the fixed-height <code>OfferCardCompact</code> used on Home), with a tappable distance row
+      that opens Maps.</p>
+
+    <!-- ═══════════════════════════ PROFILE ═══════════════════════════ -->
+    <h2 id="cust-profile">Profile</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">CustomerProfileScreen</span>
+        <span class="card-path">screens/customer/customer_profile_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>(<code>ProfileScreen</code> in <code>main_navigations/ProfileScreen/</code> is a thin shim delegating here.)
+          Header card (avatar, name/email, edit shortcut), a 3-up stat row (total orders, favorites count, and a
+          hardcoded mock "amount saved" figure), and a quick-action list: Edit Profile, Addresses, Payment Methods,
+          Settings, Help, About — each pushing its own screen. Ends with a logout button.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">CustomerEditProfileController</span>
+        <span class="card-path">controllers/customer_edit_profile_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p><code>_loadProfile()</code> pre-fills instantly from the JWT (so the form isn't blank while waiting), then
+          overwrites with the live <code>/users/me</code> response. <code>save()</code> PATCHes the profile, then
+          <strong>force-refreshes the Keycloak token</strong> so the app-wide
+          <code>firstName</code>/<code>fullName</code> getters reflect the change immediately, without requiring a
+          re-login.</p>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fetchMe()</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/users/me</code></td>
+          </tr>
+          <tr>
+            <td><code>updateMyProfile(uuid, fields)</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/users/{uuid}/profile</code> — syncs the local DB and Keycloak atomically</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>UserService</code> — also used for email verification (see <a href="#cust-auth">Auth</a>).</p>
+    <div class="callout callout-warn"><strong>⚠️ Dead code</strong> All four files under <code>widgets/profile/</code>
+      (<code>ProfileHeaderWidget</code>, <code>ProfileMenuWidget</code>, <code>ProfileStatsWidget</code>,
+      <code>ProfileSupportWidget</code>) are unused — this screen builds equivalent UI inline instead.</div>
+
+    <!-- ═══════════════════════════ ADDRESSES ═══════════════════════════ -->
+    <h2 id="cust-addresses">Addresses</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">CustomerAddressesScreen</span>
+        <span class="card-path">screens/customer/customer_addresses_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>List of address cards — each with a radio icon (select as default), a label chip, edit/delete buttons, and a
+          "Set as Default" action on non-default cards. A floating "Add" button opens the same
+          <code>AddressFormSheet</code> used inline from checkout.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">AddressController</span>
+        <span class="card-path">controllers/address_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>addresses</code></td>
+                <td>All saved addresses for the logged-in user</td>
+              </tr>
+              <tr>
+                <td><code>selectedAddress</code></td>
+                <td>The address chosen for the <em>current</em> order (used by checkout)</td>
+              </tr>
+              <tr>
+                <td><code>isDelivery</code></td>
+                <td>Default <code>false</code> — this is a pickup-first marketplace</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>setDelivery(bool)</code>: turning delivery ON pre-selects the primary address; turning it OFF
+          <strong>clears</strong> <code>selectedAddress</code> entirely (not just hides it) because the server derives
+          the delivery fee purely from whether an address is present in the order payload.
+          <code>resetDeliveryMode()</code> is called every time checkout opens, so it always defaults back to pickup.
+        </p>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getAddresses({userIri})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/addresses?user={iri}</code> — returns <code>[]</code> on error instead of throwing, for graceful
+              UI</td>
+          </tr>
+          <tr>
+            <td><code>createAddress(data)</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/addresses</code></td>
+          </tr>
+          <tr>
+            <td><code>updateAddress(id, data)</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/addresses/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>deleteAddress(id)</code></td>
+            <td><span class="badge badge-delete">DELETE</span></td>
+            <td><code>/addresses/{id}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>AddressService</code> is shared with the Business app's own locations screen — see <a
+        href="#biz-settings">Business → Settings</a>.</p>
+
+    <h3>Notable widgets</h3>
+    <p><code>AddressFormSheet</code> (widgets/dialog/address_form_sheet.dart) — modal used both by this screen and
+      inline from checkout. <code>AddressLabelSelector</code> / <code>AddressFormField</code>
+      (widgets/address_widgets.dart) — also reused by the registration screen's inline address section.</p>
+
+    <!-- ═══════════════════════════ PAYMENT METHODS ═══════════════════════════ -->
+    <h2 id="cust-payment-methods">Payment Methods (profile screen)</h2>
+    <div class="callout callout-danger">
+      <strong>⚠️ Not backed by any API — and unrelated to the real checkout flow</strong>
+      <code>CustomerPaymentMethodsScreen</code> renders a hardcoded mock card list; "Add Payment Method" opens a
+      sheet with no submit logic at all (the button just closes it). <code>ApiEndpoints.customerBankAccounts</code>
+      is defined but never consumed anywhere. This is a leftover, standalone profile screen — it is
+      <strong>not</strong> the same system as <a href="#cust-checkout">checkout's payment step</a> anymore (that
+      one genuinely selects cash or a real Iranian bank gateway, see <code>PaymentController</code>/
+      <code>PspProvider</code>). If you're asked to make this screen do something real, the natural fix is
+      deleting the mock card concept here entirely and pointing "Payment Methods" at the same
+      <code>PspProvider</code> list checkout already uses, rather than building a second, competing payment model.
+    </div>
+
+    <!-- ═══════════════════════════ SETTINGS ═══════════════════════════ -->
+    <h2 id="cust-settings">Settings</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">CustomerSettingsScreen</span>
+        <span class="card-path">screens/customer/customer_settings_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Controls</th>
+                <th>Backed by</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Language</td>
+                <td><code>LanguageSelectorWidget</code></td>
+                <td><code>LocaleController</code> — see <a href="#sh-i18n">Shared → i18n</a></td>
+              </tr>
+              <tr>
+                <td>Notifications</td>
+                <td>Push toggle</td>
+                <td><code>PushNotificationService.pushEnabled</code></td>
+              </tr>
+              <tr>
+                <td>Notifications</td>
+                <td>Email / marketing toggles</td>
+                <td><code>UserPreferencesController</code> — <span class="badge badge-get">GET</span>/<span
+                    class="badge badge-patch">PATCH</span> <code>/users/me/preferences</code></td>
+              </tr>
+              <tr>
+                <td>Privacy &amp; Security</td>
+                <td>Change password sheet</td>
+                <td><code>lib/services/change_password_service.dart</code></td>
+              </tr>
+              <tr>
+                <td>App</td>
+                <td>Clear cache</td>
+                <td><code>CacheService.confirmAndClear()</code> — see <a href="#sh-cache">Shared → Caching</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Biometric toggle, "Delete account", and "Rate app" are all present in the UI but non-functional.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ HELP ═══════════════════════════ -->
+    <h2 id="cust-help">Help / About</h2>
+    <p><code>CustomerHelpScreen</code> — contact-channel cards, a static FAQ accordion, opening-hours info.
+      <code>CustomerAboutScreen</code> — static app identity block, legal links (Privacy Policy, Terms, Open Source
+      Licenses), social buttons (non-functional). Neither has a controller or makes any backend call.</p>
+
+    <div class="part-divider business">
+      <h2 id="business-part">🏪 Business App</h2>
+      <p>Everything a restaurant/shop owner or staff member sees — managing offers, handling incoming orders in real
+        time, team and payout management. Fully separate from the Customer app above.</p>
+    </div>
+
+    <!-- ═══════════════════════════ NAV SHELL ═══════════════════════════ -->
+    <h2 id="biz-nav">Navigation Shell</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">BusinessDashboardScreen</span>
+        <span class="card-path">screens/business/business_dashboard_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>The shell for the entire business experience — one large file containing the top bar, drawer, sidebar (wide
+          screens), bottom nav (phones), and an <code>IndexedStack</code> of 7 tabs. Navigation state is a
+          <strong>local</strong> reactive index (<code>_navIndex</code>), not the shared
+          <code>NavigationController</code> the customer app uses.</p>
+        <div class="callout callout-info">
+          <strong>Why IndexedStack + local index?</strong> Each tab's <code>initState</code> only runs once
+          (IndexedStack keeps all tabs alive, just hidden). A worker on <code>_navIndex</code> re-fetches orders
+          whenever the user switches back to the Overview or Orders tab, working around that "only builds once"
+          behavior.
+        </div>
+        <h4>Sidebar (≥600px wide) &amp; Bottom nav (phones)</h4>
+        <div class="navtree">
+          <div class="item">📊 Overview<br><small>index 0</small></div>
+          <div class="item">🧾 Orders<br><small>index 1 · has a live-order dot</small></div>
+          <div class="item">🍽️ Menu<br><small>index 2</small></div>
+          <div class="item">📈 Analytics<br><small>index 3 · sidebar only</small></div>
+          <div class="item">💰 Earnings<br><small>index 4 · sidebar only</small></div>
+          <div class="item">⭐ Reviews<br><small>index 5 · placeholder, sidebar only</small></div>
+          <div class="item">👥 Team Members<br><small>index 6 · drawer only, not in sidebar/bottom nav</small></div>
+        </div>
+        <p>The phone bottom nav only shows the first 5 destinations (Overview / Orders / Menu / Analytics / Earnings) —
+          Reviews and Team Members are reachable only via the sidebar (wide layouts) or the drawer (any width).</p>
+        <h4>Drawer (all widths)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Items</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Business</td>
+                <td>Business Profile, Bank Accounts &amp; Payment, Operating Hours, Photos &amp; Branding, Locations
+                </td>
+                <td>Business Profile and Bank Accounts are hidden from <code>ROLE_MEMBER</code> staff — owner-only on
+                  the backend</td>
+              </tr>
+              <tr>
+                <td>Team</td>
+                <td>Team Members</td>
+                <td>Owner-only; flips <code>_navIndex</code> to 6 rather than pushing a route</td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <td>Settings</td>
+                <td>Fans out to Security, Help, About, Notifications, Email Alerts, Clear Cache</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Top bar: hamburger (opens drawer), an Open/Closed toggle pill
+          (<code>BusinessPartnerController.setIsOpen</code>), language switcher, <a
+            href="#sh-notif"><code>NotificationBell</code></a>. A role badge in the drawer header switches back to the
+          customer marketplace view.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ DASHBOARD ═══════════════════════════ -->
+    <h2 id="biz-dashboard">Dashboard / Overview</h2>
+    <p class="lede">Tab index 0 inside <code>BusinessDashboardScreen</code> — <code>_buildOverview</code>. Not a
+      separate screen file.</p>
+    <p>A <code>StaleBanner</code> when showing a cached partner profile (added 2026-07-19, see <a
+        href="#sh-cache">Shared → Caching</a>) sits above the tab's own padding — <code>_buildOverview</code> now
+      returns that banner plus an <code>Expanded</code> wrapping the actual scrollable content
+      (<code>_buildOverviewContent</code>), so the banner's built-in horizontal inset doesn't stack with the tab's 20px
+      padding. Below it: <code>BusinessSummaryCard</code> (business name, open/closed, today's earnings, rating, pending
+      payout), a KPI grid, and a "Live orders" list (up to 4 non-terminal orders from
+      <code>BusinessOrderController.orders</code>, tap Accept jumps straight to the Orders tab).</p>
+    <div class="callout callout-warn"><strong>⚠️ Partially mock</strong> The KPI grid values are hardcoded
+      <code>'—'</code> placeholders. The earnings figures shown here come from <code>BusinessEarningsController</code>,
+      which is itself entirely mock data (see <a href="#biz-analytics">Analytics &amp; Earnings</a>) — so the Overview
+      tab is currently showing fake numbers regardless of which tab is actually selected.</div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">BusinessPartnerController</span>
+        <span class="card-path">controllers/business_partner_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>The single source of truth for the logged-in partner's identity — created once at login and reused across the
+          entire business app, not just this tab.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>partner</code></td>
+                <td>The logged-in <code>BusinessPartnerModel</code>; null until first fetch</td>
+              </tr>
+              <tr>
+                <td><code>isTogglingStatus</code>, <code>isTogglingCash</code>, <code>isClosingBusiness</code>,
+                  <code>isSavingDeliveryFee</code></td>
+                <td>Per-action in-flight flags for their respective toggles</td>
+              </tr>
+              <tr>
+                <td><code>currentUserIri</code></td>
+                <td>Resolved once from <code>/users/me</code>, reused for avatar uploads etc. without a second call</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fetchMyPartner()</code></td>
+                <td>Cached partner first, then fresh — same pattern as elsewhere in the app. Sets
+                  <code>isFromCache</code>, which the Overview tab reads to show its <code>StaleBanner</code>.</td>
+              </tr>
+              <tr>
+                <td><code>setIsOpen(bool)</code></td>
+                <td>Optimistic open/closed toggle</td>
+              </tr>
+              <tr>
+                <td><code>setAcceptsCashPayment(bool)</code>, <code>setDeliveryFee(String)</code></td>
+                <td>Optimistic profile PATCHes</td>
+              </tr>
+              <tr>
+                <td><code>closeBusiness(reason)</code></td>
+                <td>Permanently closes the business (owner only). Forces a fresh Keycloak token immediately after — the
+                  backend strips business roles server-side, so the old token's roles go stale instantly.</td>
+              </tr>
+              <tr>
+                <td><code>assignMember(...)</code> / <code>removeMember(...)</code> / <code>fetchMembers()</code></td>
+                <td>Team management — see <a href="#biz-team">Team Members</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fetchMyPartner()</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/users/me</code> (follows to <code>/business-partners/{id}</code> if only an IRI is nested)</td>
+          </tr>
+          <tr>
+            <td><code>updateIsActive</code> / <code>updateAcceptsCashPayment</code> / <code>updateDeliveryFee</code>
+            </td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/business-partners/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>closeBusiness(id, reason)</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/business-partners/{id}/close</code></td>
+          </tr>
+          <tr>
+            <td><code>manageMember({partnerId, email, action})</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/business-partners/{id}/manage-member</code> (<code>action</code>: assign/remove)</td>
+          </tr>
+          <tr>
+            <td><code>fetchMembers(userIris)</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td>One call per member IRI, tagged <code>silent403</code> so a single failed lookup doesn't spam stacked
+              snackbars</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>BusinessPartnerService</code> no longer has a <code>fetchMercureToken()</code> method — the Mercure
+      subscriber credential moved to the global <a href="#sh-mercure"><code>MercureController</code></a>
+      (<code>GET /me/mercure-token</code>), fetched once per session for every user rather than per-business.</p>
+
+    <!-- ═══════════════════════════ ORDERS ═══════════════════════════ -->
+    <h2 id="biz-orders">Orders Management</h2>
+
+    <h3>Screens</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BusinessOrdersScreen</code></td>
+            <td>Three tabs — New / Active / Done — each backed by
+              <code>BusinessOrderController.filteredForBucket(bucket)</code>. Shared sort/date filter chips, a
+              <code>StaleBanner</code> when showing cached orders (added 2026-07-19 — mirrors the customer Orders
+              screen, see <a href="#sh-cache">Shared → Caching</a>). The Done tab has status chips with live counts and
+              a shortcut to <a href="#biz-history">Order History</a>.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessOrderDetailScreen</code></td>
+            <td>Shows the list-cached order immediately, re-fetches full detail in the background. Bottom action bar
+              changes by state: Accept/Reject for new orders, "Advance status" (label changes per status: "Start
+              preparing" → "Mark ready" → "Out for delivery"/"Mark complete") + Cancel for active ones.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">BusinessOrderController</span>
+        <span class="card-path">controllers/business_order_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>orders</code></td>
+                <td>All orders for this business</td>
+              </tr>
+              <tr>
+                <td><code>hasNewOrActiveOrders</code></td>
+                <td>Computed getter driving the attention dot on the Orders nav item</td>
+              </tr>
+              <tr>
+                <td><code>isFromCache</code></td>
+                <td>True while showing the cached order queue (<code>business_orders</code> key) from the previous
+                  session, before the first real fetch of this app launch completes — drives the screen's
+                  <code>StaleBanner</code></td>
+              </tr>
+              <tr>
+                <td><code>searchQuery</code>, <code>sortOrder</code>, <code>dateFilter</code>,
+                  <code>doneStatusFilter</code></td>
+                <td>List filter/sort state</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fetchOrders({force})</code></td>
+                <td>Throttled to a 30-second cooldown unless <code>force: true</code> — real-time pushes (FCM/Mercure)
+                  always pass <code>force: true</code> so they're never silently dropped by the throttle. Caches the
+                  result and clears <code>isFromCache</code> on success.</td>
+              </tr>
+              <tr>
+                <td><code>updateStatus(order, newStatus)</code></td>
+                <td>Optimistic status change, then re-fetches the full list to reconcile with server truth</td>
+              </tr>
+              <tr>
+                <td><code>accept()</code> / <code>reject()</code> / <code>markDelivered()</code> /
+                  <code>moveBack()</code></td>
+                <td>Convenience wrappers around <code>updateStatus</code> — <code>moveBack()</code> reverses one step
+                  via the status enum's <code>.previous</code></td>
+              </tr>
+              <tr>
+                <td><code>filteredForBucket(bucket)</code></td>
+                <td>Applies filters + sort per tab; Done bucket sorts by "best available" timestamp (completed →
+                  cancelled → updated → created)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Full detail on this controller's real-time Mercure subscription (<code>_connectMercure</code>, proactive
+          JWT-expiry-based token refresh) is documented once in <a href="#sh-mercure">Shared → Real-Time Updates</a>,
+          not repeated here.</p>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getBusinessOrders({businessPartnerIri})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/orders?businessPartner={iri}&amp;order[createdAt]=desc</code></td>
+          </tr>
+          <tr>
+            <td><code>updateOrderStatus(id, status, {cancellationReason})</code></td>
+            <td><span class="badge badge-put">PUT</span></td>
+            <td><code>/orders/{id}/status</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>OrderService</code> is shared with the Customer app — see <a href="#cust-orders">Customer → My Orders</a>
+      for the customer-facing methods (<code>placeOrder</code>, <code>cancelOrder</code>, etc.).</p>
+
+    <h3>Notable widgets</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Widget</th>
+            <th>File</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BusinessOrderCard</code></td>
+            <td>widgets/order/business_order_card.dart</td>
+            <td>One order row, accent color keyed to state (needs-decision/active/cancelled/done). Header: customer
+              name, order id, delivery/pickup pill, payment pill, total, elapsed time. Footer varies by bucket:
+              Accept/Reject, Advance + overflow menu, or a status banner.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessEmptyOrders</code></td>
+            <td>widgets/order/business_empty_orders.dart</td>
+            <td>Bucket-specific empty state; shows a "Listening for orders…" chip on the New tab.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ ORDER HISTORY ═══════════════════════════ -->
+    <h2 id="biz-history">Order History</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">BusinessOrderHistoryScreen</span>
+        <span class="card-path">screens/business/business_order_history_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Unlike most controllers in this app, <code>BusinessOrderHistoryController</code> is <strong>not</strong> a
+          global singleton — this screen creates and destroys its own instance (<code>Get.put</code> in
+          <code>initState</code>, deleted in <code>dispose</code>), since order history is only ever viewed transiently.
+        </p>
+        <p>Date preset chips, a gradient summary banner (total orders, revenue, completed/cancelled counts), and status
+          filter chips are fixed above the list — only the paginated, infinite-scroll order list scrolls underneath. In
+          landscape the banner switches to a compact single-row layout so the fixed header can't push the list into
+          overflow.</p>
+      </div>
+    </div>
+
+    <h3>Controller</h3>
+    <p><code>BusinessOrderHistoryController</code> — state: <code>preset</code>,
+      <code>dateFrom</code>/<code>dateTo</code>, <code>statusFilter</code>, <code>searchQuery</code>,
+      <code>orders</code>, pagination flags. Computed: <code>totalRevenue</code> (excludes cancelled orders),
+      <code>completedCount</code>, <code>cancelledCount</code>. <code>loadMore()</code> appends the next page.</p>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getOrderHistory({businessPartnerIri, dateFrom, dateTo, page, itemsPerPage})</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/orders?businessPartner=…&amp;createdAt[after]=…&amp;createdAt[before]=…&amp;page=…</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Same <code>OrderService</code> as live Orders — no separate service class.</p>
+
+    <!-- ═══════════════════════════ MENU ═══════════════════════════ -->
+    <h2 id="biz-menu">Menu / Offer Management</h2>
+
+    <h3>Screens</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BusinessMenuScreen</code></td>
+            <td>Offer count header and search + sort + status filter chips are fixed above the list (only the offer rows
+              scroll underneath), with a <code>StaleBanner</code> below them when showing cached offers (added
+              2026-07-19 — mirrors the customer Home screen, see <a href="#sh-cache">Shared → Caching</a>). Each row:
+              thumbnail, status badge, category, pickup window, price, and either a quantity pill or a weight-remaining
+              pill. Floating "New Offer" button.</td>
+          </tr>
+          <tr>
+            <td><code>CreateFoodOfferScreen</code></td>
+            <td>Photo picker, name/description/category, a <strong>"Sell by weight" switch</strong> that swaps the
+              pricing section between piece-based fields (original/deal price + quantity) and weight-based fields
+              (price/kg, weight available, min order kg), pickup window picker. Submitting opens a preview rather than
+              publishing directly.</td>
+          </tr>
+          <tr>
+            <td><code>OfferPreviewScreen</code></td>
+            <td>Read-only preview of the draft. Publishing creates the offer, then — if a local photo was picked —
+              uploads it via <code>ImageService</code> as a separate follow-up call (upload failure doesn't block the
+              publish).</td>
+          </tr>
+          <tr>
+            <td><code>BusinessOfferEditScreen</code></td>
+            <td>Full edit form mirroring create, plus a photo strip that uploads/deletes images immediately (not
+              deferred like create), and status chips (active/inactive/cancelled) saved together with the rest of the
+              form.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessOfferDetailScreen</code></td>
+            <td>Read-only detail with an image slider, "Edit" button, and a "Cancel offer" action. Subscribes to the
+              public <code>food-offers/{offerId}</code> Mercure topic (see <a href="#sh-mercure">Shared → Real-Time
+                Updates</a>) so a partner watching this screen sees quantity/weight/status update live as customers
+              order, instead of a static snapshot.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">BusinessOfferController</span>
+        <span class="card-path">controllers/business_offer_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Holds all create/edit form state as plain <code>TextEditingController</code>s, plus the menu list and its own
+          filters — one controller for the whole feature.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>isWeightBased</code></td>
+                <td>The piece-based/weight-based toggle — switches which set of price/quantity fields are shown and
+                  validated</td>
+              </tr>
+              <tr>
+                <td><code>myOffers</code>, <code>offerSearch</code>, <code>offerSort</code>,
+                  <code>offerStatusFilter</code></td>
+                <td>Menu list state</td>
+              </tr>
+              <tr>
+                <td><code>isFromCache</code></td>
+                <td>True while showing the cached menu (<code>business_offers_&lt;partnerId&gt;</code> key) from the
+                  previous session — drives the screen's <code>StaleBanner</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ensureOffersLoaded(partnerId)</code></td>
+                <td>Idempotent — loads the menu only once per partner, safe to call from every tab re-entry. Shows the
+                  cached menu first (if any) before the real fetch.</td>
+              </tr>
+              <tr>
+                <td><code>buildDraft()</code></td>
+                <td>Validates the form, builds a local <code>FoodOfferModel</code> via <code>.draft(...)</code> or
+                  <code>.draftWeight(...)</code> depending on the toggle</td>
+              </tr>
+              <tr>
+                <td><code>submitDraft(draft, partnerId)</code></td>
+                <td>POSTs the draft, resets the form on success</td>
+              </tr>
+              <tr>
+                <td><code>updateOffer(offerId, body)</code></td>
+                <td>PATCHes an existing offer</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getBusinessOffers(partnerId, page)</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/food-offers?businessPartner=/api/business-partners/{id}&amp;order[createdAt]=desc</code></td>
+          </tr>
+          <tr>
+            <td><code>createOffer(data)</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/food-offers</code></td>
+          </tr>
+          <tr>
+            <td><code>updateOffer(offerId, body)</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/food-offers/{offerId}</code></td>
+          </tr>
+          <tr>
+            <td><code>deleteOffer(offerId)</code></td>
+            <td><span class="badge badge-delete">DELETE</span></td>
+            <td><code>/food-offers/{offerId}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>FoodOfferService</code> is shared with the Customer app's browsing — see <a href="#cust-home">Customer →
+        Home</a> for the read-only public methods.</p>
+
+    <h3>Notable widgets</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Widget</th>
+            <th>File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>SearchFilterBar</code></td>
+            <td>widgets/common/search_filter_bar.dart</td>
+          </tr>
+          <tr>
+            <td><code>PickupWindowPicker</code> / <code>PickupWindowField</code></td>
+            <td>widgets/common/pickup_window_picker.dart</td>
+          </tr>
+          <tr>
+            <td><code>PrimaryActionFab</code></td>
+            <td>widgets/common/primary_action_fab.dart</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ TEAM ═══════════════════════════ -->
+    <h2 id="biz-team">Team Members</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">TeamMembersScreen</span>
+        <span class="card-path">screens/business/team_members_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Dual-mode: embedded (inside the dashboard's IndexedStack, reached from the drawer) or standalone (own route,
+          own AppBar). Local <code>StatefulWidget</code> state (not GetX) — loads via
+          <code>BusinessPartnerController.fetchMembers()</code>. Invite opens a bottom sheet (email + role + permission
+          toggles) → <code>assignMember</code>. Remove → <code>removeMember</code>, confirmed via a dialog. Owner rows
+          can't be edited or removed.</p>
+        <div class="callout callout-warn"><strong>⚠️ Edit-permissions is not implemented</strong> The edit-permissions
+          sheet's save button only updates local state — it has a
+          <code>// TODO: PATCH /api/users/{id}/permissions</code> comment and calls no controller/service method at all.
+        </div>
+        <p>No dedicated service — folded into <code>BusinessPartnerService.manageMember</code> and
+          <code>.fetchMembers</code>, documented in <a href="#biz-dashboard">Dashboard / Overview</a> above.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ BANK ═══════════════════════════ -->
+    <h2 id="biz-bank">Bank Account &amp; Payments</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">BusinessBankAccountScreen</span>
+        <span class="card-path">screens/business/business_bank_account_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Multi-account CRUD list with an add/edit bottom sheet and delete-with-confirm. Lazily registers
+          <code>BankAccountController</code> as a permanent singleton on first build.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-controller">Controller</span>
+        <span class="card-title">BankAccountController</span>
+        <span class="card-path">controllers/bank_account_controller.dart</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fetch()</code></td>
+                <td>If no account is marked default from the server (the collection endpoint may not serialize it),
+                  restores the default from a locally persisted <code>AppStorage</code>/Hive key</td>
+              </tr>
+              <tr>
+                <td><code>patch(id, fields)</code></td>
+                <td>Switching default: PATCHes the previously-default account to <code>false</code> first, then the new
+                  one to <code>true</code>; also persists the new default id locally since the PATCH response isn't
+                  fully trusted</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th></th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fetchForPartner(partnerIri)</code></td>
+            <td><span class="badge badge-get">GET</span></td>
+            <td><code>/business-bank-accounts?businessPartner={iri}</code> (404 treated as empty list)</td>
+          </tr>
+          <tr>
+            <td><code>create({partnerIri, data})</code></td>
+            <td><span class="badge badge-post">POST</span></td>
+            <td><code>/business-bank-accounts</code></td>
+          </tr>
+          <tr>
+            <td><code>update(id, fields)</code></td>
+            <td><span class="badge badge-patch">PATCH</span></td>
+            <td><code>/business-bank-accounts/{id}</code></td>
+          </tr>
+          <tr>
+            <td><code>delete(id)</code></td>
+            <td><span class="badge badge-delete">DELETE</span></td>
+            <td><code>/business-bank-accounts/{id}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════ PROFILE ═══════════════════════════ -->
+    <h2 id="biz-profile">Business Profile</h2>
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="card-title">BusinessProfileScreen</span>
+        <span class="card-path">screens/business/business_profile_screen.dart</span>
+      </div>
+      <div class="card-body">
+        <p>Gradient hero (logo, name, KYC status badge), a stats row (rating, delivery fee, open/closed, cash-accepted),
+          info cards (business details, tax info), a locations section, and a payment-settings section: cash-payment
+          switch + a per-business delivery-fee field with a "Save" button that appears only when the value has been
+          changed.</p>
+        <p>No dedicated controller/service — reuses <code>BusinessPartnerController</code>'s PATCH methods documented
+          under <a href="#biz-dashboard">Dashboard / Overview</a>. This screen does <strong>not</strong> expose "Close
+          business" — that destructive action lives only in Settings → Security's Danger Zone.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ SETTINGS ═══════════════════════════ -->
+    <h2 id="biz-settings">Settings / Security / Hours / Photos</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>What's real</th>
+            <th>What's not</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BusinessSettingsScreen</code></td>
+            <td>Pure navigation hub to the screens below, plus language switcher and Clear Cache</td>
+            <td>Team Members entry shows a static badge count (not wired to the real member count)</td>
+          </tr>
+          <tr>
+            <td><code>BusinessSecurityScreen</code></td>
+            <td>Change-password sheet; <strong>Close Business</strong> (real, calls
+              <code>BusinessPartnerController.closeBusiness</code>, requires a non-empty reason, forces a token refresh,
+              then routes to the customer app)</td>
+            <td>2FA toggle (local only), "Active Sessions" (two hardcoded fake rows), "Delete account" (TODO comment,
+              no-op)</td>
+          </tr>
+          <tr>
+            <td><code>BusinessAddressesScreen</code> + <code>BusinessAddressController</code></td>
+            <td>Full CRUD via <code>AddressService</code> (<code>createAddress</code> sends
+              <code>forBusiness: true</code> so the backend infers the owning business from the token);
+              <code>setPrimary(id)</code> is optimistic with a generation counter to discard stale concurrent results
+            </td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>BusinessOperatingHoursScreen</code></td>
+            <td>—</td>
+            <td><strong>Entirely mock.</strong> Save has a <code>// TODO: POST /api/business_partners/{id}/hours</code>
+              comment and fakes an 800ms delay before a success snackbar. No persistence at all.</td>
+          </tr>
+          <tr>
+            <td><code>BusinessPhotosScreen</code></td>
+            <td>Logo section (reuses <code>UploadableAvatar</code>, wired to <code>BusinessPartnerController</code>)
+            </td>
+            <td>Cover Photo and Gallery sections are explicit placeholders per the file's own doc comment</td>
+          </tr>
+          <tr>
+            <td><code>BusinessAboutScreen</code>, <code>BusinessHelpScreen</code></td>
+            <td>—</td>
+            <td>Purely presentational, no controller, no backend calls</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Notification &amp; email preference controllers</h3>
+    <p>Two controllers here talk to <code>Dio</code> directly (<code>Get.find&lt;ApiService&gt;().dio</code>) rather
+      than going through a separate Service class — worth knowing so you don't go looking for a service file that
+      doesn't exist:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>Controller</th>
+            <th>Endpoint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BusinessNotificationsScreen</code> <em>(preferences/toggles — not the notification history
+                list)</em></td>
+            <td><code>BpNotifPrefsController</code></td>
+            <td><span class="badge badge-get">GET</span>/<span class="badge badge-patch">PATCH</span>
+              <code>/business-partners/me/notification-preferences</code></td>
+          </tr>
+          <tr>
+            <td><code>BusinessEmailAlertsScreen</code></td>
+            <td><code>BpEmailPrefsController</code></td>
+            <td><span class="badge badge-get">GET</span>/<span class="badge badge-patch">PATCH</span>
+              <code>/business-partners/me/email-preferences</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-info"><strong>Naming note</strong> "BusinessNotificationsScreen" is easy to confuse with
+      the notification-history bell/list — they're unrelated. This screen is settings toggles for <em>which</em> events
+      should notify you; the bell/history list (shared with the customer app) is documented under <a
+        href="#sh-notif">Shared → Notification Center</a>.</div>
+
+    <!-- ═══════════════════════════ ANALYTICS ═══════════════════════════ -->
+    <h2 id="biz-analytics">Analytics &amp; Earnings</h2>
+    <div class="callout callout-danger">
+      <strong>⚠️ Both controllers here are 100% mock data — no service class, no HTTP calls at all</strong>
+      If you're asked to make either screen show real numbers, there is nothing to "fix" — it needs to be built from
+      scratch against whatever backend reporting endpoint gets created.
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="tag tag-mock">Mock data</span>
+        <span class="card-title">BusinessAnalyticsScreen</span>
+        <span class="card-path">tab index 3</span>
+      </div>
+      <div class="card-body">
+        <p>Period selector (Today/Week/Month/Last Month/Last 3 Months) is fixed above the content — only the KPI cards,
+          bar chart, "Top offers" list, and "Orders by status" breakdown underneath scroll. Bar chart is built from
+          plain <code>Container</code> widgets (no charting library).</p>
+        <p><code>BusinessAnalyticsController.currentData</code> switches over 5 static-const mock datasets keyed by the
+          selected period. <code>selectPeriod()</code> just flips the enum after an artificial 350ms delay to simulate
+          loading.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tag tag-screen">Screen</span>
+        <span class="tag tag-mock">Mock data</span>
+        <span class="card-title">BusinessEarningsScreen</span>
+        <span class="card-path">tab index 4</span>
+      </div>
+      <div class="card-body">
+        <p>Period selector is fixed above the content — only the hero card (net earnings + trend), breakdown card (gross
+          → service fee → adjustments → net), payout card (pending/paid/next payout date), bar chart, and transaction
+          list underneath scroll.</p>
+        <p><code>BusinessEarningsController.currentData</code> — same pattern, 5 static mock datasets. The same 5 mock
+          transactions are reused across every period. This is also where the Dashboard Overview's "today's
+          earnings"/"pending payout" figures come from — so that card is mock too, regardless of which tab is actually
+          open.</p>
+      </div>
+    </div>
+
+    <p>A 6th tab, "Reviews" (index 5), is a bare <code>Center(child: Text('Reviews'))</code> placeholder — no screen
+      file, no controller, nothing built yet.</p>
+
+  </main>
+</body>
+
+</html>

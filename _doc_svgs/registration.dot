@@ -1,0 +1,32 @@
+
+digraph Registration {
+    graph [rankdir=TB fontname="Helvetica" splines=ortho bgcolor="#FAFAFA" pad=0.6 nodesep=0.5 ranksep=0.7]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=1.8]
+
+    Start  [label="User fills Registration Form
+email, password, name, account type" shape=box fillcolor="#ECEFF1" color="#455A64" fontname="Helvetica Bold"]
+    Post   [label="POST /api/register" shape=box fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+
+    Step1  [label="Step 1: Get Admin Token
+Keycloak client_credentials flow" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    Step2  [label="Step 2: Create User in Keycloak
+POST /admin/realms/realm/users" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    Conflict [label="409 — Email already taken" shape=box fillcolor="#FFCDD2" color="#C62828" fontcolor="#B71C1C"]
+    Step3  [label="Step 3: Assign Role in Keycloak
+ROLE_USER or ROLE_BUSINESS_PARTNER" shape=box fillcolor="#E1BEE7" color="#6A1B9A" fontcolor="#4A148C"]
+    Step4a [label="Step 4a: Save User row in MySQL" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    IsBiz  [label="Account type
+= business?" shape=diamond fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"]
+    Step4b [label="Step 4b: Create BusinessPartner row
+kycStatus=pending, isActive=true" shape=box fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"]
+    Done   [label="201 Created — User can now log in" shape=box fillcolor="#DCEDC8" color="#2E7D32" fontcolor="#1B5E20" fontname="Helvetica Bold"]
+
+    Start -> Post -> Step1 -> Step2
+    Step2 -> Conflict [label="Email exists" color="#C62828" fontcolor="#C62828"]
+    Step2 -> Step3    [label="201 OK" color="#2E7D32" fontcolor="#2E7D32"]
+    Step3 -> Step4a -> IsBiz
+    IsBiz -> Step4b [label="Yes" color="#6A1B9A" fontcolor="#6A1B9A"]
+    IsBiz -> Done   [label="No (customer)" color="#2E7D32" fontcolor="#2E7D32"]
+    Step4b -> Done
+}

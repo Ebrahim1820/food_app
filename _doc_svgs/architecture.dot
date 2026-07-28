@@ -1,0 +1,118 @@
+
+digraph Architecture {
+    graph [rankdir=TB fontname="Helvetica" bgcolor="#FAFAFA"
+           pad=0.8 nodesep=0.8 ranksep=1.1 splines=curved]
+    node  [fontname="Helvetica" fontsize=12 style="filled,rounded" penwidth=2]
+    edge  [fontname="Helvetica" fontsize=10 penwidth=2]
+
+    /* ── PHONE (top) ─────────────────────────────── */
+    subgraph cluster_phone {
+        label="Your Phone  (Flutter App)"
+        style=filled fillcolor="#E3F2FD" color="#1565C0"
+        fontname="Helvetica Bold" fontsize=13 fontcolor="#0D47A1" penwidth=2.5
+
+        Customer [label="Customer
+Dashboard" fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+        Business [label="Business
+Dashboard" fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+        Admin    [label="Admin
+Dashboard"    fillcolor="#BBDEFB" color="#1565C0" fontcolor="#0D47A1"]
+    }
+
+    /* ── MIDDLE ROW ──────────────────────────────── */
+    Keycloak [label="KEYCLOAK
+Security Guard
+─────────────
+Checks passwords
+Issues digital keys"
+              shape=box fillcolor="#EDE7F6" color="#4527A0" fontcolor="#311B92"
+              fontname="Helvetica Bold" fontsize=12]
+
+    JWTStore [label="Digital Key (JWT Token)
+stored securely inside the phone
+─────────────────────────────
+Contains: who you are + your role
+Expires in 5 minutes"
+              shape=note fillcolor="#FFF9C4" color="#F57F17" fontcolor="#E65100"
+              fontname="Helvetica" fontsize=11]
+
+    Symfony  [label="SYMFONY API
+Brain of the System
+─────────────────
+All business logic:
+orders, offers, users"
+              shape=box fillcolor="#E8F5E9" color="#1B5E20" fontcolor="#1B5E20"
+              fontname="Helvetica Bold" fontsize=12]
+
+    /* ── BOTTOM ROW ──────────────────────────────── */
+    MySQL    [label="MySQL Database
+─────────────────
+All data lives here:
+users, orders, offers
+addresses, reviews"
+              shape=cylinder fillcolor="#FFE0B2" color="#E65100" fontcolor="#BF360C"
+              fontname="Helvetica" fontsize=11]
+
+    FCM      [label="Firebase FCM
+─────────────────
+Push Notifications
+to business staff"
+              shape=box fillcolor="#E1F5FE" color="#0288D1" fontcolor="#01579B"
+              fontname="Helvetica" fontsize=11]
+
+    /* ── ARROWS WITH NUMBERED STEPS ─────────────── */
+
+    /* Purple = Login flow (happens once when you open the app) */
+    Customer -> Keycloak [
+        label="  STEP 1
+  You log in with
+  email + password"
+        color="#6A1B9A" fontcolor="#4A148C" penwidth=2.5
+    ]
+    Business -> Keycloak [color="#6A1B9A" penwidth=2]
+    Admin    -> Keycloak [color="#6A1B9A" penwidth=2]
+
+    Keycloak -> JWTStore [
+        label="  STEP 2
+  Guard gives you
+  a digital key"
+        color="#6A1B9A" fontcolor="#4A148C" penwidth=2.5
+    ]
+
+    /* Green = Data flow (happens on every screen / button tap) */
+    JWTStore -> Symfony [
+        label="  STEP 3
+  Every request shows
+  the digital key"
+        color="#2E7D32" fontcolor="#1B5E20" penwidth=2.5
+    ]
+
+    /* Dashed purple = Background security check (invisible to user) */
+    Symfony -> Keycloak [
+        label="STEP 4  
+Background check:  
+'Is this key genuine?'  "
+        style=dashed color="#6A1B9A" fontcolor="#4A148C" penwidth=1.8
+        dir=both arrowhead=none arrowtail=normal
+    ]
+
+    /* Orange = Database read/write */
+    Symfony -> MySQL [
+        label="  STEP 5
+  Read or save data
+  (orders, offers...)"
+        color="#E65100" fontcolor="#BF360C" penwidth=2.5
+    ]
+
+    /* Blue = Push notification */
+    Symfony -> FCM [
+        label="  STEP 6
+  New order arrived!
+  Notify staff phone"
+        color="#0288D1" fontcolor="#01579B" penwidth=2
+    ]
+
+    /* Force layout order */
+    {rank=same Keycloak JWTStore Symfony}
+    {rank=same MySQL FCM}
+}
