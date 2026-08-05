@@ -5,6 +5,16 @@ class OrderItemModel {
   final String foodOrder;
   final FoodOfferModel foodOffer;
   final ProductModel product;
+
+  /// The real, always-present offer/product id — `OrderItem::$productId` on
+  /// the backend, a plain int column with no ORM relation since the Phase C
+  /// catalog-service split (Product/FoodOffer moved out of this database).
+  /// Because of that, the backend has nothing to serialize a nested
+  /// `foodOffer`/`product` object from anymore, so [foodOffer] and [product]
+  /// above always deserialize to an empty placeholder (id `0`) — use
+  /// [offerId] (which prefers this field) for any identity matching against
+  /// a real offer/product, not `foodOffer.id`/`product.id` directly.
+  final int productId;
   final int quantity;
   final double? weightKg; // weight per item (always 1 item for weight-based)
   final double? weightTotalKg; // total weight ordered (weightKg × quantity)
@@ -24,6 +34,7 @@ class OrderItemModel {
     required this.foodOrder,
     required this.foodOffer,
     required this.product,
+    this.productId = 0,
     required this.quantity,
     this.weightKg,
     this.weightTotalKg,
@@ -51,6 +62,7 @@ class OrderItemModel {
       foodOrder: json['foodOrder'] ?? '',
       foodOffer: offer,
       product: product,
+      productId: json['productId'] as int? ?? 0,
       quantity: json['quantity'] ?? 0,
       weightKg: double.tryParse(json['weightKg']?.toString() ?? ''),
       weightTotalKg: double.tryParse(json['weightTotalKg']?.toString() ?? ''),
@@ -68,8 +80,8 @@ class OrderItemModel {
   Map<String, dynamic> toJson() => {
     '@id': '/api/order-items/$id',
     'foodOrder': foodOrder,
-    'foodOffer': foodOffer.toJson(),
     'product': product.toJson(),
+    'productId': productId,
     'quantity': quantity,
     if (weightKg != null) 'weightKg': weightKg.toString(),
     if (weightTotalKg != null) 'weightTotalKg': weightTotalKg.toString(),
@@ -81,18 +93,19 @@ class OrderItemModel {
     'categorySnapshot': categorySnapshot,
   };
 
-  /// Resolves to whichever of [product]/[foodOffer] the backend actually
-  /// populated for this response (the order list endpoint is known to send
-  /// one of the two as null depending on market/endpoint — see the caller in
-  /// `OrderController._itemsForRestore`). Both now back the same underlying
-  /// row/id, so either is equally valid once non-zero.
-  int get offerId => product.id > 0 ? product.id : foodOffer.id;
+  /// The real offer/product id to match against — prefers [productId] (the
+  /// plain column the backend actually serializes today) and falls back to
+  /// [product]/[foodOffer]'s embedded id for older responses that might
+  /// still send one of those.
+  int get offerId =>
+      productId > 0 ? productId : (product.id > 0 ? product.id : foodOffer.id);
 
   OrderItemModel withOffer(FoodOfferModel offer) => OrderItemModel(
     id: id,
     foodOrder: foodOrder,
     foodOffer: offer,
     product: product,
+    productId: productId,
     quantity: quantity,
     weightKg: weightKg,
     weightTotalKg: weightTotalKg,

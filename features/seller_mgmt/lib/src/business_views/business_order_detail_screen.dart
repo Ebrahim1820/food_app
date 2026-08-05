@@ -357,7 +357,9 @@ class _BusinessOrderDetailScreenState extends State<BusinessOrderDetailScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            item.foodOffer.title,
+                            item.titleSnapshot.isNotEmpty
+                                ? item.titleSnapshot
+                                : item.foodOffer.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(

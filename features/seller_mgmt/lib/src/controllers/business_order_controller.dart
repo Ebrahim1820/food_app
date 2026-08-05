@@ -308,20 +308,15 @@ class BusinessOrderController extends GetxController {
 
   /// Returns items safe to pass to a stock-restore call.
   ///
-  /// [order] here usually comes from the orders *list* endpoint
-  /// (`GET /orders?businessPartner=...`), which — confirmed via device log
-  /// 2026-07-19 (`restoreQuantities: crediting 1 item(s) for offer id(s)
-  /// [0]`) — serializes `orderItems[].foodOffer` as `null` rather than an
-  /// IRI or embedded object. `OrderItemModel.fromJson` then falls back to
-  /// `FoodOfferModel.fromIri('')`, which can't parse anything out of an
-  /// empty string and defaults `id` to `0` — so those items can never match
-  /// a real offer in `BusinessOfferController.myOffers`, and the credit
-  /// silently no-ops. Only the single-order *detail* endpoint
-  /// (`GET /orders/{id}`) reliably embeds a real `foodOffer` reference. If
-  /// [order]'s items already look valid (defensive — in case this changes
-  /// or the caller already has fresh detail data), skip the extra call.
+  /// `productId` is a plain int column on `OrderItem` (no ORM relation since
+  /// the Phase C catalog-service split), so it's reliably present on both the
+  /// list endpoint (`GET /orders?businessPartner=...`) and the detail one
+  /// (`GET /orders/{id}`) — unlike the old embedded `foodOffer`/`product`
+  /// object, which the backend no longer serializes at all. Refetching detail
+  /// is now just a defensive fallback for the rare case [order]'s items don't
+  /// have it yet.
   Future<List<OrderItemModel>> _itemsForRestore(OrderModel order) async {
-    if (order.orderItems.every((i) => i.foodOffer.id > 0)) {
+    if (order.orderItems.every((i) => i.productId > 0)) {
       return order.orderItems;
     }
     try {

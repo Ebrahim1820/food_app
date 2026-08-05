@@ -12,7 +12,7 @@
 // StatefulWidget so it can own two live Mercure subscriptions (public, no
 // auth needed) opened on entry and closed on exit — "subscribe per screen,
 // not globally":
-//   - `food-offers/{offerId}`        → stock/expiry patched into [_offer]
+//   - `food-products/{offerId}`      → stock/expiry patched into [_offer]
 //   - `business-partners/{id}/status` → open/closed patched into local state
 // Both patch local state via setState instead of refetching the offer, so
 // only the rebuilt config (and therefore only the affected badge/pill/
@@ -130,8 +130,6 @@ class _CustomerProductDetailScreenState
     if (partner == null) return;
 
     final cart = Get.find<CartController>();
-    final canAdd = await confirmCartSwitch(context, cart, partner.iri);
-    if (!canAdd) return;
 
     cart.addItem(
       businessIri: partner.iri,
@@ -141,7 +139,7 @@ class _CustomerProductDetailScreenState
       marketValue: 'food',
       item: CartItem(
         itemIri: _offer.iri,
-        payloadKey: 'product',
+        productId: _offer.id,
         title: _offer.title,
         imageUrl: _offer.images.isNotEmpty ? _offer.images.first.url : null,
         unitPrice: _offer.isWeightBased

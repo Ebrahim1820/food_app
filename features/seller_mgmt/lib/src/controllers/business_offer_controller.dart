@@ -330,12 +330,12 @@ class BusinessOfferController extends GetxController {
     AppLogger.info(
       _tag,
       'restoreQuantities: crediting ${items.length} item(s) for offer id(s) '
-      '${items.map((i) => i.foodOffer.id).toList()} across '
+      '${items.map((i) => i.offerId).toList()} across '
       '${myOffers.length} myOffers row(s)',
     );
     var matched = 0;
     for (final item in items) {
-      final idx = myOffers.indexWhere((o) => o.id == item.foodOffer.id);
+      final idx = myOffers.indexWhere((o) => o.id == item.offerId);
       if (idx == -1) continue;
       matched++;
       final offer = myOffers[idx];

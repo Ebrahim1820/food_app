@@ -143,6 +143,15 @@ class OrderController extends GetxController {
   StreamSubscription? _mercureSub;
   Worker? _mercureTokenWorker;
 
+  /// Order ids whose stock has already been credited back — see
+  /// [_restoreStockOnce]. A customer-initiated cancel/delete restores stock
+  /// directly, but the backend's `users/{id}/orders` Mercure push for that
+  /// same status change also reaches this same client and independently
+  /// triggers [refreshAfterOrderChange]'s own pending→cancelled scan; without
+  /// this guard, whichever of the two races arrive both restore the same
+  /// order's stock, double-crediting it.
+  final Set<String> _stockRestoredOrderIds = {};
+
   @override
   void onInit() {
     super.onInit();
@@ -247,7 +256,6 @@ class OrderController extends GetxController {
       );
       return;
     }
-    final foodCtrl = Get.find<FoodOfferController>();
     var restoredAny = false;
     for (final order in orders) {
       // Must have actually seen this order before with a different status —
@@ -266,12 +274,12 @@ class OrderController extends GetxController {
           'refreshAfterOrderChange: order ${order.id} pending→cancelled — '
               'restoring ${order.orderItems.length} item(s)',
         );
-        final restoreItems = await _itemsForRestore(order);
-        foodCtrl.restoreQuantities(restoreItems);
-        if (Get.isRegistered<FavoritesOfferController>()) {
-          Get.find<FavoritesOfferController>().restoreQuantities(restoreItems);
-        }
-        _restoreProductQuantities(restoreItems);
+        // Guarded against double-crediting the same order twice — see
+        // _restoreStockOnce. This is exactly the redundant path it exists
+        // for: cancelOrder() already restores a self-initiated cancel
+        // directly, and the Mercure push for that same status change often
+        // reaches this client and reruns this scan before/after it does.
+        await _restoreStockOnce(order);
       }
     }
     if (!restoredAny) {
@@ -288,20 +296,19 @@ class OrderController extends GetxController {
   /// Returns items safe to pass to a stock-restore call.
   ///
   /// [order] here usually comes from the orders *list* endpoint
-  /// (`GET /orders?user=...`), which — confirmed via device log on the
-  /// business-side equivalent of this exact bug (2026-07-19,
-  /// `restoreQuantities: crediting 1 item(s) for offer id(s) [0]`) —
-  /// serializes `orderItems[].foodOffer` as `null` rather than an IRI or
-  /// embedded object. `OrderItemModel.fromJson` then falls back to
-  /// `FoodOfferModel.fromIri('')`, which can't parse anything out of an
-  /// empty string and defaults `id` to `0` — so those items can never match
-  /// a real offer in `FoodOfferController`'s cached lists, and the credit
-  /// silently no-ops. Only the single-order *detail* endpoint
-  /// (`GET /orders/{id}`) reliably embeds a real `foodOffer` reference. If
-  /// [order]'s items already look valid (defensive — in case this changes
-  /// or the caller already has fresh detail data), skip the extra call.
+  /// (`GET /orders?user=...`). Since the Phase C catalog-service split,
+  /// `OrderItem::$product` is a plain `productId` int column with no ORM
+  /// relation, so the backend never sends a nested `foodOffer`/`product`
+  /// object at all anymore — `OrderItemModel.fromJson` always falls back to
+  /// an empty placeholder for those (id `0`). Worse, `productId` itself is
+  /// only in the `order:item:get` serialization group, not
+  /// `order:collection:get`, so even the real id is missing from the list
+  /// response — only the single-order *detail* endpoint (`GET
+  /// /orders/{id}`) reliably includes it. If [order]'s items already look
+  /// valid (defensive — in case this changes or the caller already has
+  /// fresh detail data), skip the extra call.
   Future<List<OrderItemModel>> _itemsForRestore(OrderModel order) async {
-    if (order.orderItems.every((i) => i.foodOffer.id > 0)) {
+    if (order.orderItems.every((i) => i.productId > 0)) {
       return order.orderItems;
     }
     try {
@@ -393,6 +400,16 @@ class OrderController extends GetxController {
     // page counter would be wrong and the append would race with the replace.
     if (loadMore) {
       if (!hasMore.value || isLoadingMore.value || isLoading.value) return;
+    } else if (isLoading.value) {
+      // A page-1 fetch is already in flight — without this, a screen whose
+      // widget gets rebuilt/recreated while that fetch is still running
+      // (e.g. AppShellScreen's single top-level Obx also reads isLoading/
+      // orders/totalOrders, so the fetch's own state changes re-trigger the
+      // rebuild that reconstructs whichever screen called this from
+      // initState) would kick off a second, third, fourth... identical
+      // fetch before the first even resolves, each one re-triggering the
+      // same rebuild again.
+      return;
     }
 
     if (userIri.value.isEmpty) {
@@ -466,20 +483,23 @@ class OrderController extends GetxController {
     try {
       var order = await _service.getOrderById(id);
 
-      // The order API often omits images inside nested foodOffer objects.
+      // The order API no longer embeds a foodOffer/product object at all —
+      // only the flat productId column (see OrderItemModel doc comment).
       // Fetch missing offer images in parallel so the photo hero can appear.
       final needsImages = order.orderItems
           .where(
-            (item) => item.foodOffer.images.isEmpty && item.foodOffer.id > 0,
+            (item) => item.foodOffer.images.isEmpty && item.offerId > 0,
           )
           .toList();
       if (needsImages.isNotEmpty) {
         final enriched = await Future.wait(
           order.orderItems.map((item) async {
-            if (item.foodOffer.images.isNotEmpty || item.foodOffer.id == 0) {
+            if (item.foodOffer.images.isNotEmpty || item.offerId == 0) {
               return item;
             }
-            final full = await _service.getFoodOfferByIri(item.foodOffer.iri);
+            final full = await _service.getFoodOfferByIri(
+              '/api/products/${item.offerId}',
+            );
             return full != null ? item.withOffer(full) : item;
           }),
         );
@@ -603,8 +623,11 @@ class OrderController extends GetxController {
         : null;
     if (foodCtrl == null && favCtrl == null && productCtrl == null) return;
     for (final item in items) {
-      final iri = item['product'] as String?;
-      final id = iri == null ? null : int.tryParse(iri.split('/').last);
+      // Payload items key the product by plain 'productId' int (see
+      // CartCheckoutScreen._itemsPayload/CustomerPaymentScreen — the
+      // "product": "/api/products/{id}" IRI shape was retired with the
+      // Phase C catalog-service split's order-creation contract change).
+      final id = item['productId'] as int?;
       if (id == null) continue;
       final quantity = item['quantity'] as int? ?? 0;
       final weightKg = double.tryParse(item['weightTotalKg']?.toString() ?? '');
@@ -612,6 +635,27 @@ class OrderController extends GetxController {
       favCtrl?.reduceQuantity(id, quantity: quantity, weightKg: weightKg);
       productCtrl?.reduceQuantity(id, quantity: quantity, weightKg: weightKg);
     }
+  }
+
+  /// Restores [order]'s stock across every cached list, but at most once —
+  /// see [_stockRestoredOrderIds]. `Set.add` returns false if [order.id] is
+  /// already present, and does so synchronously (before the first `await`
+  /// below), so this check-and-mark can't itself race even though the two
+  /// call paths it's guarding against are both async.
+  Future<void> _restoreStockOnce(OrderModel order) async {
+    if (!_stockRestoredOrderIds.add(order.id)) {
+      AppLogger.info(
+        'OrderController',
+        'Stock already restored for order ${order.id} — skipping duplicate credit',
+      );
+      return;
+    }
+    final restoreItems = await _itemsForRestore(order);
+    Get.find<FoodOfferController>().restoreQuantities(restoreItems);
+    if (Get.isRegistered<FavoritesOfferController>()) {
+      Get.find<FavoritesOfferController>().restoreQuantities(restoreItems);
+    }
+    _restoreProductQuantities(restoreItems);
   }
 
   /// Restores stock on the tagged food [ProductController] too — see the
@@ -628,7 +672,10 @@ class OrderController extends GetxController {
 
   final isUpdating = false.obs;
 
-  /// Updates a pending order's items, notes, and delivery address.
+  /// Updates a pending order's notes, delivery address, and item quantities.
+  /// [itemQuantities] maps order-item id → new quantity; only entries whose
+  /// quantity actually changed trigger a reserve()/release() call on the
+  /// backend — see `UpdateOrderDetailsInputDTO`.
   Future<void> editOrder({
     required String orderId,
     required String notes,
@@ -637,14 +684,12 @@ class OrderController extends GetxController {
   }) async {
     isUpdating.value = true;
     try {
-      await _service.updateOrder(
+      await _service.updateOrderDetails(
         orderId,
         notes: notes,
         deliveryAddressIri: deliveryAddressIri,
+        itemQuantities: itemQuantities,
       );
-      for (final entry in itemQuantities.entries) {
-        await _service.updateOrderItem(entry.key, quantity: entry.value);
-      }
       await fetchOrderById(orderId);
       Get.back(result: true);
       AppSnackbar.success(
@@ -680,12 +725,7 @@ class OrderController extends GetxController {
       }
       // Restore quantityAvailable on the affected offers immediately so the
       // home screen reflects the freed-up stock without a manual refresh.
-      final restoreItems = await _itemsForRestore(order);
-      Get.find<FoodOfferController>().restoreQuantities(restoreItems);
-      if (Get.isRegistered<FavoritesOfferController>()) {
-        Get.find<FavoritesOfferController>().restoreQuantities(restoreItems);
-      }
-      _restoreProductQuantities(restoreItems);
+      await _restoreStockOnce(order);
       AppSnackbar.success(
         CustomerOrderStrings.cancelledTitle,
         CustomerOrderStrings.cancelledBody(order.id),
@@ -713,12 +753,7 @@ class OrderController extends GetxController {
     try {
       await _service.deleteOrder(order.id);
       // Restore stock for any pending order that gets hard-deleted.
-      final restoreItems = await _itemsForRestore(order);
-      Get.find<FoodOfferController>().restoreQuantities(restoreItems);
-      if (Get.isRegistered<FavoritesOfferController>()) {
-        Get.find<FavoritesOfferController>().restoreQuantities(restoreItems);
-      }
-      _restoreProductQuantities(restoreItems);
+      await _restoreStockOnce(order);
     } catch (e, s) {
       // 3. Failed — put it back where it was and tell the user.
       orders.insert(index, order);

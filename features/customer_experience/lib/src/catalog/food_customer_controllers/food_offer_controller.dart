@@ -314,22 +314,32 @@ class FoodOfferController extends GetxController {
     AppLogger.info(
       _tag,
       'restoreQuantities: crediting ${items.length} item(s) for offer id(s) '
-      '${items.map((i) => i.foodOffer.id).toList()} across '
+      '${items.map((i) => i.offerId).toList()} across '
       '${sections.length} section(s) / ${offers.length} flat offer(s)',
     );
 
     FoodOfferModel apply(FoodOfferModel offer) {
-      final match = items.firstWhereOrNull((i) => i.foodOffer.id == offer.id);
+      final match = items.firstWhereOrNull((i) => i.offerId == offer.id);
       if (match == null) return offer;
-      return offer.isWeightBased
-          ? offer.copyWith(
-              weightAvailableKg:
-                  (offer.weightAvailableKg ?? 0) + (match.weightTotalKg ?? 0),
-            )
-          : offer.copyWith(
-              quantityAvailable:
-                  (offer.quantityAvailable ?? 0) + match.quantity,
-            );
+      // Clamped at the offer's original total — see ProductController.
+      // restoreQuantities for why this guard exists.
+      if (offer.isWeightBased) {
+        final restored =
+            (offer.weightAvailableKg ?? 0) + (match.weightTotalKg ?? 0);
+        final ceiling = offer.weightTotalKg;
+        return offer.copyWith(
+          weightAvailableKg: (ceiling != null && restored > ceiling)
+              ? ceiling
+              : restored,
+        );
+      }
+      final restored = (offer.quantityAvailable ?? 0) + match.quantity;
+      final ceiling = offer.quantityTotal;
+      return offer.copyWith(
+        quantityAvailable: (ceiling != null && restored > ceiling)
+            ? ceiling
+            : restored,
+      );
     }
 
     var sectionsMatched = 0;
@@ -359,7 +369,7 @@ class FoodOfferController extends GetxController {
     // Also update flat search results if visible.
     var offersMatched = 0;
     for (final item in items) {
-      final idx = offers.indexWhere((o) => o.id == item.foodOffer.id);
+      final idx = offers.indexWhere((o) => o.id == item.offerId);
       if (idx != -1) {
         offersMatched++;
         offers[idx] = apply(offers[idx]);
